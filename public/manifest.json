@@ -1,6 +1,8 @@
 {
   "short_name": "React App",
   "name": "Create React App Sample",
+  "lang": "ko",
+  "description": "이 웹앱은 Create React App으로 생성된 샘플 애플리케이션입니다.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -16,6 +18,18 @@
       "src": "logo512.png",
       "type": "image/png",
       "sizes": "512x512"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshot1.png",
+      "sizes": "540x720",
+      "type": "image/png"
+    },
+    {
+      "src": "screenshot2.png",
+      "sizes": "540x720",
+      "type": "image/png"
     }
   ],
   "start_url": ".",
