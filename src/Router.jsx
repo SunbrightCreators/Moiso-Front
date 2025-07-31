@@ -1,15 +1,14 @@
-import './styles/reset.css';
-import { ThemeProvider } from 'styled-components';
-import { theme } from './styles/theme';
-import GlobalStyle from './styles/global';
-
-const App = () => {
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+const Router = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <div>앱 시작!</div>
-    </ThemeProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<div>홈</div>} />
+        <Route path="/about" element={<div>소개</div>} />
+      </Routes>
+    </BrowserRouter>
   );
-}
+};
 
-export default App;
+export default Router;
+
