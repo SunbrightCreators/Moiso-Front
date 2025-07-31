@@ -1,52 +1,34 @@
-import { api, apiAuth } from './api';
+// src/apis/exampleApiFunctions.js
+import { apiAuth } from './authInstance';
 
-// GET 요청 예시
+// GET 요청
 export const getExample = async () => {
-  try {
-    const response = await apiAuth.get(`/요청 주소`);
-    return response;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiAuth.get(`/example`);
+  return response.data;
 };
 
-// POST 요청 예시
+// POST 요청
 export const postExample = async (title, content) => {
-  try {
-    const response = await apiAuth.post(
-      `/요청 주소`,
-      {
-        title: title,
-        content: content,
-      },
-      { headers: { 'Content-Type': 'application/json' } }, // 필요한 경우 추가 헤더 설정
-    );
-    return response;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiAuth.post(
+    `/example`,
+    { title, content },
+    { headers: { 'Content-Type': 'application/json' } }
+  );
+  return response.data;
 };
 
-// PATCH 요청 예시
+// PATCH 요청
 export const patchExample = async (content) => {
-  try {
-    const response = await apiAuth.patch(
-      `/요청 주소`,
-      { content: content },
-      { headers: { 'Content-Type': 'application/json' } }, // 필요한 경우 추가 헤더 설정
-    );
-    return response;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiAuth.patch(
+    `/example`,
+    { content },
+    { headers: { 'Content-Type': 'application/json' } }
+  );
+  return response.data;
 };
 
-// DELETE 요청 예시
+// DELETE 요청
 export const deleteExample = async () => {
-  try {
-    const response = await apiAuth.delete(`/요청 주소`);
-    return response;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiAuth.delete(`/example`);
+  return response.data;
 };
