@@ -1,4 +1,4 @@
-const apiInterceptor = {
+const clientInterceptor = {
   request: {
     onFulfilled: (config) => {
       return Promise.resolve(config);
@@ -19,7 +19,7 @@ const apiInterceptor = {
   },
 };
 
-const authApiInterceptor = {
+const authClientInterceptor = {
   request: {
     onFulfilled: (config) => {
       return Promise.resolve(config);
@@ -40,4 +40,4 @@ const authApiInterceptor = {
   },
 };
 
-export { apiInterceptor, authApiInterceptor };
+export { clientInterceptor, authClientInterceptor };

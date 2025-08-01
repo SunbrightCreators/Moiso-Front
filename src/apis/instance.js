@@ -1,22 +1,22 @@
 import axios from 'axios';
-import { apiInterceptor, authApiInterceptor } from './interceptor';
+import { clientInterceptor, authClientInterceptor } from './interceptor';
 
 /**
  * 일반 요청
  */
-const api = axios.create({
+const client = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   timeout: 5000,
 });
-api.interceptors.request.use(
-  apiInterceptor.request.onFulfilled,
-  apiInterceptor.request.onRejected,
-  apiInterceptor.request.options,
+client.interceptors.request.use(
+  clientInterceptor.request.onFulfilled,
+  clientInterceptor.request.onRejected,
+  clientInterceptor.request.options,
 );
-api.interceptors.response.use(
-  apiInterceptor.response.onFulfilled,
-  apiInterceptor.response.onRejected,
-  apiInterceptor.response.options,
+client.interceptors.response.use(
+  clientInterceptor.response.onFulfilled,
+  clientInterceptor.response.onRejected,
+  clientInterceptor.response.options,
 );
 
 const getAuthHeader = () => {
@@ -31,19 +31,19 @@ const getAuthHeader = () => {
 /**
  * 인증이 필요한 요청 (일반 요청을 상속함)
  */
-const authInstance = api.create({
+const authClient = client.create({
   headers: { Authorization: getAuthHeader() },
   withCredentials: true,
 });
-authInstance.interceptors.request.use(
-  authApiInterceptor.request.onFulfilled,
-  authApiInterceptor.request.onRejected,
-  authApiInterceptor.request.options,
+authClient.interceptors.request.use(
+  authClientInterceptor.request.onFulfilled,
+  authClientInterceptor.request.onRejected,
+  authClientInterceptor.request.options,
 );
-authInstance.interceptors.response.use(
-  authApiInterceptor.response.onFulfilled,
-  authApiInterceptor.response.onRejected,
-  authApiInterceptor.response.options,
+authClient.interceptors.response.use(
+  authClientInterceptor.response.onFulfilled,
+  authClientInterceptor.response.onRejected,
+  authClientInterceptor.response.options,
 );
 
-export { api, authInstance };
+export { client, authClient };
