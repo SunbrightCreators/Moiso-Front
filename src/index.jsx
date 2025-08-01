@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { ThemeProvider } from 'styled-components';
+import './styles/reset.css';
 import { theme } from './styles/theme';
 import GlobalStyle from './styles/global';
-import Router from './Router'; // App → Router로 변경
-import './styles/reset.css';
+import Router from './Router';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -13,5 +13,5 @@ root.render(
       <GlobalStyle />
       <Router />
     </ThemeProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
