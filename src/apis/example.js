@@ -3,7 +3,7 @@ import { authClient } from './instance';
 /**
  * GET 요청
  */
-export const getExample = async () => {
+const getExample = async () => {
   const response = await authClient.get(`/example`);
   return response;
 };
@@ -11,7 +11,7 @@ export const getExample = async () => {
 /**
  * POST 요청
  */
-export const postExample = async (title, content) => {
+const postExample = async (title, content) => {
   const response = await authClient.post(
     `/example`,
     { title, content },
@@ -23,7 +23,7 @@ export const postExample = async (title, content) => {
 /**
  * PUT 요청
  */
-export const putExample = async (title, content) => {
+const putExample = async (title, content) => {
   const response = await authClient.put(
     `/example`,
     { title, content },
@@ -35,7 +35,7 @@ export const putExample = async (title, content) => {
 /**
  * PATCH 요청
  */
-export const patchExample = async (content) => {
+const patchExample = async (content) => {
   const response = await authClient.patch(
     `/example`,
     { content },
@@ -47,7 +47,9 @@ export const patchExample = async (content) => {
 /**
  * DELETE 요청
  */
-export const deleteExample = async () => {
+const deleteExample = async () => {
   const response = await authClient.delete(`/example`);
   return response;
 };
+
+export { getExample, postExample, putExample, patchExample, deleteExample };
