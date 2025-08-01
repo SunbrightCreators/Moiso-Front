@@ -5,7 +5,6 @@ const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<div>홈</div>} />
-        <Route path='/about' element={<div>소개</div>} />
       </Routes>
     </BrowserRouter>
   );
