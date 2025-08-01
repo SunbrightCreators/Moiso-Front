@@ -21,6 +21,18 @@ export const postExample = async (title, content) => {
 };
 
 /**
+ * PUT 요청
+ */
+export const putExample = async (title, content) => {
+  const response = await authClient.put(
+    `/example`,
+    { title, content },
+    { headers: { 'Content-Type': 'application/json' } },
+  );
+  return response;
+};
+
+/**
  * PATCH 요청
  */
 export const patchExample = async (content) => {
