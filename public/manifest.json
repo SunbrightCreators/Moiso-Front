@@ -1,8 +1,12 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
   "lang": "ko",
+  "name": "Create React App Sample",
+  "short_name": "React App",
   "description": "이 웹앱은 Create React App으로 생성된 샘플 애플리케이션입니다.",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
   "icons": [
     {
       "src": "favicon.ico",
@@ -31,9 +35,5 @@
       "sizes": "540x720",
       "type": "image/png"
     }
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  ]
 }
