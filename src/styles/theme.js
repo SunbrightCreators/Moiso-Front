@@ -3,8 +3,11 @@ const colors = {
   gray: '#bdc3c7',
 };
 
+const fonts = {};
+
 const theme = {
   colors,
+  fonts,
 };
 
 export { theme };
