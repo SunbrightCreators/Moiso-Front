@@ -1,18 +1,43 @@
-import axiosInstance from './axiosInstance';
-
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) config.headers.Authorization = `Bearer ${token}`;
-    return config;
+const apiInterceptor = {
+  request: {
+    onFulfilled: (config) => {
+      return Promise.resolve(config);
+    },
+    onRejected: (error) => {
+      return Promise.reject(error);
+    },
+    options: null,
   },
-  (error) => Promise.reject(error)
-);
+  response: {
+    onFulfilled: (config) => {
+      return Promise.resolve(config);
+    },
+    onRejected: (error) => {
+      return Promise.reject(error);
+    },
+    options: null,
+  },
+};
 
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    console.error('API Error:', error);
-    return Promise.reject(error);
-  }
-);
+const authApiInterceptor = {
+  request: {
+    onFulfilled: (config) => {
+      return Promise.resolve(config);
+    },
+    onRejected: (error) => {
+      return Promise.reject(error);
+    },
+    options: null,
+  },
+  response: {
+    onFulfilled: (config) => {
+      return Promise.resolve(config);
+    },
+    onRejected: (error) => {
+      return Promise.reject(error);
+    },
+    options: null,
+  },
+};
+
+export { apiInterceptor, authApiInterceptor };
