@@ -9,16 +9,36 @@
   "background_color": "#ffffff",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "logo.svg",
+      "type": "image/svg+xml",
+      "sizes": "150x150",
+      "purpose": "maskable"
+    },
+    {
+      "src": "logo.svg",
+      "type": "image/svg+xml",
+      "sizes": "150x150",
+      "purpose": "any"
+    },
+    {
+      "src": "logo_512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
     }
   ],
   "screenshots": [
     {
-      "src": "screenshot.png",
+      "src": "screenshot_narrow.svg",
+      "type": "image/svg+xml",
       "sizes": "540x720",
-      "type": "image/png"
+      "form_factor": "narrow"
+    },
+    {
+      "src": "screenshot_wide.svg",
+      "type": "image/svg+xml",
+      "sizes": "720x540",
+      "form_factor": "wide"
     }
   ]
 }
