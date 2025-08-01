@@ -1,18 +1,18 @@
-const CACHE_NAME = "my-pwa-cache-v1";
-const urlsToCache = ["/", "/index.html"];
+const CACHE_NAME = 'my-pwa-cache-v1';
+const urlsToCache = ['/', '/index.html'];
 
 // 설치 이벤트
-self.addEventListener("install", (event) => {
+self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache)),
   );
 });
 
 // 요청 이벤트
-self.addEventListener("fetch", (event) => {
+self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches
       .match(event.request)
-      .then((response) => response || fetch(event.request))
+      .then((response) => response || fetch(event.request)),
   );
 });
