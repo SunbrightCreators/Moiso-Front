@@ -19,20 +19,10 @@ client.interceptors.response.use(
   clientInterceptor.response.options,
 );
 
-const getAuthHeader = () => {
-  let token = localStorage.getItem('token');
-  if (token) {
-    token = JSON.parse(token);
-    return `${token.grantType} ${token.accessToken}`;
-  } else {
-    return null;
-  }
-};
 /**
  * 인증이 필요한 요청 (일반 요청을 상속함)
  */
 const authClient = client.create({
-  headers: { Authorization: getAuthHeader() },
   withCredentials: true,
 });
 authClient.interceptors.request.use(

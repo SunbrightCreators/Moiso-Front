@@ -22,6 +22,11 @@ const clientInterceptor = {
 const authClientInterceptor = {
   request: {
     onFulfilled: (config) => {
+      let token = localStorage.getItem('token');
+      if (token) {
+        token = JSON.parse(token);
+        config.headers.Authorization = `${token.grantType} ${token.accessToken}`;
+      }
       return Promise.resolve(config);
     },
     onRejected: (error) => {
