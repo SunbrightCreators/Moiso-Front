@@ -23,8 +23,8 @@ root.render(
 
 window.addEventListener('load', async () => {
   const registration = await register();
-  const isGranted = await hasNotificationPermission();
-  if (isGranted) {
+  if (registration) {
+    const isGranted = await hasNotificationPermission();
     const subscription = await subscribePush(registration);
   }
 });
