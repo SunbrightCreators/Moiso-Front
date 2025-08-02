@@ -8,6 +8,15 @@ self.addEventListener('install', (event) => {
   );
 });
 
+// 요청 이벤트
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches
+      .match(event.request)
+      .then((response) => response || fetch(event.request)),
+  );
+});
+
 // 푸시 이벤트
 self.addEventListener('push', (event) => {
   const data = event.data.json();
