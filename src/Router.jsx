@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SpinnerComponent from './components/common/SpinnerComponent';
+import { Button } from 'antd';
 const Router = () => {
   return (
     <BrowserRouter>
@@ -9,12 +10,11 @@ const Router = () => {
           element={
             <div>
               <h1>홈</h1>
-              <h2>스피너 테스트</h2>
               <SpinnerComponent />
+              <Button type='primary'>테스트 버튼</Button>
             </div>
           }
-        />{' '}
-        <Route path='/' element={<div>홈</div>} />
+        />
       </Routes>
     </BrowserRouter>
   );
