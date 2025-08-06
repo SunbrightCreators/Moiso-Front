@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SpinnerComponent from './components/common/SpinnerComponent';
-import { Button } from 'antd';
 const Router = () => {
   return (
     <BrowserRouter>
@@ -19,5 +18,4 @@ const Router = () => {
     </BrowserRouter>
   );
 };
-
 export default Router;
