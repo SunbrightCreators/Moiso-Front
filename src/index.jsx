@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { ThemeProvider } from 'styled-components';
-import { theme } from './styles/theme';
-import GlobalStyle from './styles/global';
+import { ChakraProvider } from '@chakra-ui/react';
+import { system, theme } from './styles/theme';
 import Router from './Router';
 import {
   register,
@@ -13,10 +13,12 @@ import {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-   <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <Router />
-    </ThemeProvider>
+    {/* ChakraProvider에는 theme가 아니라 value로 system을 전달해야 합니다 */}
+    <ChakraProvider value={system}>
+      <ThemeProvider theme={theme}>
+        <Router />
+      </ThemeProvider>
+    </ChakraProvider>
   </React.StrictMode>,
 );
 
