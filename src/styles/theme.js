@@ -21,8 +21,9 @@ const tokens = defineTokens({
 // prettier-ignore
 const globalCss = {
   'body': {
-    @supports (height: 100svh) {
-      height: '100svh',}
+    '@supports (height: 100svh)': {
+      height: '100svh',
+    },
     '@supports not (height: 100svh)': {
       height: '100vh',
     },
