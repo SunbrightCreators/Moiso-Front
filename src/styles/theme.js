@@ -47,7 +47,7 @@ export const theme = {
 
 // 3) Chakra 설정(config) 정의
 const config = defineConfig({
-  cssVarsPrefix: 'ck', // CSS 변수 앞에 붙일 접두사
+  cssVarsPrefix: '',
   preflight: true, // CSS Reset 켜기
   theme: { tokens },
   globalCss: GlobalStyle,
