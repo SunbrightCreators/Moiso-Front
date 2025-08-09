@@ -1,4 +1,3 @@
-// src/styles/system.js
 import {
   defineConfig,
   defineTokens,
@@ -33,24 +32,16 @@ const globalCss = {
     },
   },
 };
-export const theme = {
-  colors: {
-    primary: tokens.colors.primary.value,
-    gray: tokens.colors.gray.value,
-  },
-  fonts: {
-    body: tokens.fonts.body.value,
-    heading: tokens.fonts.heading.value,
-  },
-};
 
 // 3) Chakra 설정(config) 정의
 const config = defineConfig({
   cssVarsPrefix: '',
   preflight: true, // CSS Reset 켜기
   theme: { tokens },
-  globalCss: GlobalStyle,
+  globalCss,
 });
 
 // 4) 실제 Provider에 전달할 “시스템” 생성
-export const system = createSystem(defaultConfig, config);
+const system = createSystem(defaultConfig, config);
+
+export { system, tokens };
