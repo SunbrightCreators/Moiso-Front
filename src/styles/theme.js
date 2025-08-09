@@ -51,7 +51,7 @@ const config = defineConfig({
   initialColorMode: 'light',
   useSystemColorMode: false,
   preflight: true, // CSS Reset 켜기
-  tokens,
+  theme: { tokens },
   globalStyles: GlobalStyle,
 });
 
