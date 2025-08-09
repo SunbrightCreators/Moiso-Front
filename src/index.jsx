@@ -12,11 +12,9 @@ import {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ChakraProvider value={system}>
-      <Provider>
-        <Router />
-      </Provider>
-    </ChakraProvider>
+    <Provider>
+      <Router />
+    </Provider>
   </React.StrictMode>,
 );
 
