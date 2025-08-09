@@ -43,7 +43,6 @@ export const theme = {
     body: tokens.fonts.body.value,
     heading: tokens.fonts.heading.value,
   },
-  // spacing, sizes 등도 tokens에서 꺼내 넣어주면 됩니다
 };
 
 // 3) Chakra 설정(config) 정의
