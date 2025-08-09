@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { ChakraProvider } from '@chakra-ui/react';
 import { system } from './styles/theme';
 import { Provider } from './styles/snippets/provider';
 import Router from './Router';
