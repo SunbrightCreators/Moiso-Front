@@ -44,4 +44,4 @@ const config = defineConfig({
 // 4) 실제 Provider에 전달할 “시스템” 생성
 const system = createSystem(defaultConfig, config);
 
-export { system, tokens };
+export { system };
