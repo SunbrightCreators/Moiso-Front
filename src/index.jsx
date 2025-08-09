@@ -13,7 +13,6 @@ import {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    {/* ChakraProvider에는 theme가 아니라 value로 system을 전달해야 합니다 */}
     <ChakraProvider value={system}>
       <ThemeProvider theme={theme}>
         <Router />
