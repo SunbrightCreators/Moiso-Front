@@ -52,7 +52,7 @@ const config = defineConfig({
   useSystemColorMode: false,
   preflight: true, // CSS Reset 켜기
   theme: { tokens },
-  globalStyles: GlobalStyle,
+  globalCss: GlobalStyle,
 });
 
 // 4) 실제 Provider에 전달할 “시스템” 생성
