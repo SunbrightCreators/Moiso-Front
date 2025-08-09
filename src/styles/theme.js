@@ -20,20 +20,13 @@ const tokens = defineTokens({
 // 2) 글로벌 스타일 정의
 // prettier-ignore
 const globalCss = {
+  
   'body': {
-    '@supports (height: 100svh)': {
-      height: '100svh',
-    },
-    '@supports not (height: 100svh)': {
-      height: '100vh',
-    },
+    '@supports (height: 100svh)': { height: '100svh' },
+    '@supports not (height: 100svh)': { height: '100vh' },
     '@media (max-width: 360px)': {
-      '@supports (width: 100svw)': {
-        width: '100svw',
-      },
-      '@supports not (width: 100svw)': {
-        width: '100vw',
-      },
+      '@supports (width: 100svw)': { width: '100svw' },
+      '@supports not (width: 100svw)': { width: '100vw' },
     },
     '@media (min-width: 360px)': {
       width: '360px',
