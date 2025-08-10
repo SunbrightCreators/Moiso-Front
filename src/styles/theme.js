@@ -9,7 +9,6 @@ import {
 const tokens = defineTokens({
   colors: {
     primary: { value: '#3498db' },
-    gray: { value: '#bdc3c7' },
   },
   fonts: {
     body: { value: 'system-ui, sans-serif' },
