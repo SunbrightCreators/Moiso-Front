@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { system } from './styles/theme';
 import { Provider } from './styles/snippets/provider';
 import Router from './Router';
 import {
@@ -8,6 +7,9 @@ import {
   hasNotificationPermission,
   subscribePush,
 } from './serviceWorkerRegistration';
+
+document.documentElement.className = 'light';
+document.documentElement.style.colorScheme = 'light';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
