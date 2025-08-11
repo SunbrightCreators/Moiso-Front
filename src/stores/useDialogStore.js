@@ -23,6 +23,7 @@ const useDialogStore = create((set) => ({
     }),
   
   // 확인/취소 버튼이 있는 다이얼로그
+  
   setConfirmDialog: ({ title, content, actionText = '확인', onAction, onCancel }) => 
     set({ 
       title, 
