@@ -23,6 +23,10 @@ const CarouselContainer = styled.div`
   &:active {
     cursor: grabbing;
   }
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-use-select: none;
+user-select: none;
 `;
 
 /* 공통 트랙: 아이템 가로 나열 */
