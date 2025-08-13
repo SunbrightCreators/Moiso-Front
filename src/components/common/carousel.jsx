@@ -1,4 +1,4 @@
-import React from 'react';
+import { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 /* 공통 컨테이너: 가로 스크롤 + 스냅 + 스크롤바 숨김 */
@@ -23,58 +23,77 @@ const CarouselContainer = styled.div`
   &:active {
     cursor: grabbing;
   }
--webkit-user-select: none;
--moz-user-select: none;
--ms-use-select: none;
-user-select: none;
-`;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-use-select: none;
+  user-select: none;
 
-/* 공통 트랙: 아이템 가로 나열 */
-const CarouselTrack = styled.div`
   display: flex;
-  gap: var(--gap, 0px);
+
+  > * {
+    flex: 0 0 ${({ $itemWidth = '100%' }) => $itemWidth};
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  gap: ${({ $gap }) => $gap};
 `;
 
-/* 공통 아이템: 폭과 스냅은 CSS 변수로 제어 */
-const CarouselItem = styled.div`
-  flex: 0 0 var(--item-width, 100%);
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-`;
+const Carousel = ({ children, gap = 0, itemWidth = '100%' }) => {
+  const ref = useRef(null);
 
-/* 1) 풀스크린 캐러셀 */
-function FullscreenCarousel({ children, gap = 0 }) {
-  const styleVars = {
-    '--gap': `${gap / 16}rem`,
-    '--item-width': '100%',
-  };
+  const [firstX, setFirstX] = useState(-1);
+  const [lastX, setLastX] = useState(-1);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const itemWidthPx = ref.current?.firstElementChild?.clientWidth || 0;
+  const containerWidth = ref.current?.clientWidth || 0;
+
+  let itemsPerPage;
+  if (itemWidthPx / containerWidth > 0.9) {
+    // 거의 꽉 차면 풀스크린 취급
+    itemsPerPage = 1;
+  } else {
+    itemsPerPage = Math.max(1, Math.floor(containerWidth / itemWidthPx));
+  }
+
+  const pageWidth = itemsPerPage * itemWidthPx;
+  const pageLength = Math.ceil(children.length / itemsPerPage);
+
+  // 스와이프 방향 감지
+  useEffect(() => {
+    if (firstX != -1 && lastX != -1) {
+      if (firstX - lastX < 0) {
+        if (currentPage != 0) setCurrentPage(currentPage - 1);
+      } else if (firstX - lastX > 0) {
+        if (currentPage != pageLength - 1) setCurrentPage(currentPage + 1);
+      }
+      setFirstX(-1);
+      setLastX(-1);
+    }
+  }, [firstX, lastX]);
+
+  // 페이지 이동
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.scrollTo({
+        left: pageWidth * currentPage,
+        behavior: 'smooth',
+      });
+    }
+  }, [currentPage]);
+
   return (
-    <CarouselContainer style={styleVars}>
-      <CarouselTrack>
-        {React.Children.map(children, (child, i) => (
-          <CarouselItem key={i}>{child}</CarouselItem>
-        ))}
-      </CarouselTrack>
+    <CarouselContainer
+      ref={ref}
+      $gap={gap}
+      $itemWidth={itemWidth}
+      onPointerDown={(e) => setFirstX(e.clientX)}
+      onPointerUp={(e) => setLastX(e.clientX)}
+    >
+      {children}
     </CarouselContainer>
   );
-}
+};
 
-/* 2) 멀티 아이템 캐러셀 */
-function MultiItemCarousel({ children, itemWidth = 280, gap = 18 }) {
-  const styleVars = {
-    '--gap': `${gap / 16}rem`,
-    '--item-width':
-      typeof itemWidth === 'number' ? `${itemWidth}px` : itemWidth,
-  };
-  return (
-    <CarouselContainer style={styleVars}>
-      <CarouselTrack>
-        {React.Children.map(children, (child, i) => (
-          <CarouselItem key={i}>{child}</CarouselItem>
-        ))}
-      </CarouselTrack>
-    </CarouselContainer>
-  );
-}
-
-export { FullscreenCarousel, MultiItemCarousel };
+export { Carousel };
