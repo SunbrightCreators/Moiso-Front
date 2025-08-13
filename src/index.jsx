@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Provider from './styles/snippets/provider';
+import Provider from './styles/provider';
 import Router from './Router';
 import {
   register,
