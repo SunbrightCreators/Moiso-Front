@@ -1,6 +1,6 @@
 import {
-  defineConfig,
   defineTokens,
+  defineConfig,
   createSystem,
   defaultConfig,
 } from '@chakra-ui/react';
@@ -19,7 +19,6 @@ const tokens = defineTokens({
 // 2) 글로벌 스타일 정의
 // prettier-ignore
 const globalCss = {
-  
   'body': {
     '@supports (height: 100svh)': { height: '100svh' },
     '@supports not (height: 100svh)': { height: '100vh' },
@@ -33,6 +32,7 @@ const globalCss = {
     },
   },
 };
+
 // 3) Chakra 설정(config) 정의
 const config = defineConfig({
   cssVarsPrefix: '',
