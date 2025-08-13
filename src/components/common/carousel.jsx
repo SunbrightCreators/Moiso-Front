@@ -1,12 +1,12 @@
-// carousel.jsx
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, Children, cloneElement } from 'react';
 import styled from 'styled-components';
 
-/* 가로 스크롤 + 스냅 + 스크롤바 숨김 */
 const CarouselContainer = styled.div`
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
+  display: flex;
+  gap: ${({ $gap }) => $gap};
 
   /* 스크롤바 숨김 */
   scrollbar-width: none;
@@ -28,37 +28,65 @@ const CarouselContainer = styled.div`
   -moz-user-select: none;
   user-select: none;
 
-  /* 모바일에서 세로 스크롤 허용 */
   touch-action: pan-y;
 
-  display: flex;
-  gap: ${({ $gap }) => $gap};
-
   > * {
-    /* itemWidth로 한 칸의 폭을 고정 */
-    flex: 0 0 ${({ $itemWidth = '100%' }) => $itemWidth};
+    flex: 0 0 100%; // 각 아이템이 컨테이너 너비를 100% 차지하도록 수정
     scroll-snap-align: start;
     scroll-snap-stop: always;
   }
 `;
 
-const Carousel = ({ gap, children }) => {
+const Carousel = ({ children, gap }) => {
   const carouselRef = useRef(null);
   const [firstX, setFirstX] = useState(0);
   const [lastX, setLastX] = useState(0);
 
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const observerRef = useRef(null);
+
   useEffect(() => {
     if (!carouselRef.current) return;
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        if (entries.length > 0) {
+          const index = parseInt(entries[0].target.dataset.index);
+          setCurrentIndex(index);
+        }
+      },
+      {
+        root: carouselRef.current,
+        threshold: 1.0,
+        rootMargin: '0px',
+      },
+    );
+
+    const domChildren = carouselRef.current.children;
+    Array.from(domChildren).forEach((child) => {
+      observerRef.current.observe(child);
+    });
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     if (firstX === 0 || lastX === 0) return;
 
     const diff = firstX - lastX;
-    const THRESHOLD = 50; // 스와이프 감지 임계값 (px)
+    const THRESHOLD = 50;
 
     if (Math.abs(diff) > THRESHOLD) {
       const el = carouselRef.current;
-
       el.scrollBy({
-        left: diff > 0 ? 1 : -1, // 왼쪽으로 끌면 다음, 오른쪽으로 끌면 이전
+        left: diff > 0 ? 1 : -1,
         behavior: 'smooth',
       });
     }
@@ -68,9 +96,10 @@ const Carousel = ({ gap, children }) => {
     setLastX(0);
   }, [firstX, lastX]);
 
-  return (
+  const CarouselComponent = (
     <CarouselContainer
       ref={carouselRef}
+      $gap={gap}
       onPointerDown={(e) => setFirstX(e.clientX ?? 0)}
       onPointerUp={(e) => setLastX(e.clientX ?? 0)}
       onPointerCancel={() => {
@@ -81,12 +110,18 @@ const Carousel = ({ gap, children }) => {
         setFirstX(0);
         setLastX(0);
       }}
-      onDragStart={(e) => e.preventDefault()} // 이미지/텍스트 드래그 방지
-      $gap={gap}
+      onDragStart={(e) => e.preventDefault()}
     >
-      {children}
+      {Children.map(children, (child, index) =>
+        cloneElement(child, { 'data-index': index }),
+      )}
     </CarouselContainer>
   );
+
+  return {
+    CarouselComponent,
+    currentIndex,
+  };
 };
 
 export default Carousel;
