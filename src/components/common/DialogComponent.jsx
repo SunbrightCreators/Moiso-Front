@@ -1,6 +1,11 @@
 import React from 'react';
-import { Button, Dialog, Portal, CloseButton } from "@chakra-ui/react";
+import { Button, Dialog, Portal, CloseButton } from '@chakra-ui/react';
+import styled from 'styled-components';
 import useDialogStore from '../../stores/useDialogStore';
+
+const SContent = styled.div`
+  white-space: pre-line;
+`;
 
 const DialogComponent = () => {
   const {
@@ -11,7 +16,7 @@ const DialogComponent = () => {
     showCancelButton,
     onAction,
     onCancel,
-    closeDialog
+    closeDialog,
   } = useDialogStore();
 
   const handleClose = () => {
@@ -43,7 +48,7 @@ const DialogComponent = () => {
               <Dialog.Title>{title}</Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
-              <div style={{ whiteSpace: 'pre-line' }}>{content}</div>
+              <SContent>{content}</SContent>
             </Dialog.Body>
             <Dialog.Footer gap={2} justifyContent="flex-end">
               {showCancelButton && (

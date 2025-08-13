@@ -20,7 +20,7 @@ const useDialogStore = create((set) => ({
       showCancelButton: false,
       onCancel: null,
       isOpen: true 
-    }),
+    }), 
   
   // 확인/취소 버튼이 있는 다이얼로그
   
