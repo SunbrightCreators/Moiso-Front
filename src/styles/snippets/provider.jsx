@@ -1,8 +1,10 @@
 'use client';
 
 import { ChakraProvider } from '@chakra-ui/react';
-import { system } from '../theme';
+import system from '../theme';
 
-export function Provider(props) {
+function Provider(props) {
   return <ChakraProvider value={system}>{props.children}</ChakraProvider>;
 }
+
+export default Provider;
