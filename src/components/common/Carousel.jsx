@@ -37,7 +37,6 @@ const CarouselContainer = styled.div`
 `;
 
 const SlideWrapper = styled.div`
-  /* 이 Wrapper가 슬라이드의 너비를 책임집니다. */
   flex: 0 0 ${({ $slideWidth }) => $slideWidth};
   min-width: 0;
   scroll-snap-align: start;
