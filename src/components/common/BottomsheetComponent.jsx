@@ -15,6 +15,8 @@ const SHandleBar = styled.div`
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
   cursor: grab;
+  touch-action: none;
+  user-select: none;
 
   &:active {
     cursor: grabbing;
@@ -33,7 +35,7 @@ const SContent = styled.div`
   width: 100%;
   background-color: white;
   overflow-y: auto;
-  transition: height 0.3s ease;
+  transition: height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 `;
 
 // 지도 탐색용 바텀시트 (non-modal)
@@ -56,11 +58,11 @@ const SMapBottomsheetContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  transform: ${({ level }) => {
-    if (level === 1) return 'translateY(calc(100% - 1.5rem))';
+  transform: ${({ $level }) => {
+    if ($level === 1) return 'translateY(calc(100% - 1.5rem))';
     return 'translateY(0)';
   }};
-  transition: transform 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 `;
 
 // 모달 바텀시트 (modal)
@@ -75,6 +77,8 @@ const SModalBottomsheetScrim = styled.div`
   display: flex;
   justify-content: center;
   align-items: flex-end;
+  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
+  transition: opacity 0.3s ease;
 `;
 
 const SModalBottomsheetLayout = styled.div`
@@ -86,12 +90,12 @@ const SModalBottomsheetContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  transform: ${({ level }) => {
-    if (level === 2) return 'translateY(calc(100% - 51.5%))'; // 50% + 1.5rem
-    if (level === 3) return 'translateY(calc(100% - 81.5%))'; // 80% + 1.5rem
+  transform: ${({ $level }) => {
+    if ($level === 2) return 'translateY(calc(100% - 51.5%))'; // 50% + 1.5rem
+    if ($level === 3) return 'translateY(calc(100% - 81.5%))'; // 80% + 1.5rem
     return 'translateY(100%)';
   }};
-  transition: transform 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 `;
 
 // 지도 탐색용 바텀시트 컴포넌트
@@ -106,25 +110,43 @@ const MapBottomsheet = () => {
 
   const startYRef = useRef(0);
   const startLevelRef = useRef(1);
+  const isDraggingRef = useRef(false);
+
+  const getContentHeight = (level) => {
+    if (level === 1) return '0';
+    if (level === 2) return '40vh';
+    return '70vh';
+  };
 
   const handlePointerDown = (e) => {
-    startYRef.current = e.clientY;
+    e.preventDefault();
+    startYRef.current = e.clientY || e.touches?.[0]?.clientY || 0;
     startLevelRef.current = mapBottomsheetLevel;
+    isDraggingRef.current = true;
+  };
+
+  const handlePointerMove = (e) => {
+    if (!isDraggingRef.current) return;
+    e.preventDefault();
   };
 
   const handlePointerUp = (e) => {
-    const deltaY = startYRef.current - e.clientY;
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
+
+    const currentY = e.clientY || e.changedTouches?.[0]?.clientY || 0;
+    const deltaY = startYRef.current - currentY;
     const threshold = 50;
 
     if (Math.abs(deltaY) < threshold) return;
 
     if (deltaY > 0) {
-      // 위로 스와이프 - 레벨 uo
+      // 위로 스와이프 - 레벨 증가
       if (startLevelRef.current < 3) {
         setMapBottomsheetLevel(startLevelRef.current + 1);
       }
     } else {
-      // 아래로 스와이프 - 레벨 ↓↓
+      // 아래로 스와이프 - 레벨 감소
       if (startLevelRef.current > 1) {
         setMapBottomsheetLevel(startLevelRef.current - 1);
       } else {
@@ -133,23 +155,35 @@ const MapBottomsheet = () => {
     }
   };
 
+  // 터치 이벤트 핸들러
+  const handleTouchStart = (e) => {
+    handlePointerDown(e);
+  };
+
+  const handleTouchMove = (e) => {
+    handlePointerMove(e);
+  };
+
+  const handleTouchEnd = (e) => {
+    handlePointerUp(e);
+  };
+
   if (!isMapBottomsheetOpen) return null;
 
   return (
     <SMapBottomsheetLayout>
-      <SMapBottomsheetContainer level={mapBottomsheetLevel}>
+      <SMapBottomsheetContainer $level={mapBottomsheetLevel}>
         <SHandleBar
           onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         />
         <SContent
           style={{
-            height:
-              mapBottomsheetLevel === 1
-                ? '0'
-                : mapBottomsheetLevel === 2
-                ? '40vh'
-                : '70vh',
+            height: getContentHeight(mapBottomsheetLevel),
           }}
         >
           {mapBottomsheetChildren}
@@ -171,6 +205,12 @@ const ModalBottomsheet = () => {
 
   const startYRef = useRef(0);
   const startLevelRef = useRef(2);
+  const isDraggingRef = useRef(false);
+
+  const getContentHeight = (level) => {
+    if (level === 2) return '50vh';
+    return '80vh';
+  };
 
   useEffect(() => {
     if (isModalBottomsheetOpen) {
@@ -185,29 +225,53 @@ const ModalBottomsheet = () => {
   }, [isModalBottomsheetOpen]);
 
   const handlePointerDown = (e) => {
-    startYRef.current = e.clientY;
+    e.preventDefault();
+    startYRef.current = e.clientY || e.touches?.[0]?.clientY || 0;
     startLevelRef.current = modalBottomsheetLevel;
+    isDraggingRef.current = true;
+  };
+
+  const handlePointerMove = (e) => {
+    if (!isDraggingRef.current) return;
+    e.preventDefault();
   };
 
   const handlePointerUp = (e) => {
-    const deltaY = startYRef.current - e.clientY;
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
+
+    const currentY = e.clientY || e.changedTouches?.[0]?.clientY || 0;
+    const deltaY = startYRef.current - currentY;
     const threshold = 50;
 
     if (Math.abs(deltaY) < threshold) return;
 
     if (deltaY > 0) {
-      // 위로 스와이프 - 레벨 ↑
+      // 위로 스와이프 - 레벨 증가
       if (startLevelRef.current < 3) {
         setModalBottomsheetLevel(3);
       }
     } else {
-      // 아래로 스와이프 - 레벨 ↓↓ ro 닫기
+      // 아래로 스와이프 - 레벨 감소 또는 닫기
       if (startLevelRef.current > 2) {
         setModalBottomsheetLevel(2);
       } else {
         closeModalBottomsheet();
       }
     }
+  };
+
+  // 터치 이벤트 핸들러
+  const handleTouchStart = (e) => {
+    handlePointerDown(e);
+  };
+
+  const handleTouchMove = (e) => {
+    handlePointerMove(e);
+  };
+
+  const handleTouchEnd = (e) => {
+    handlePointerUp(e);
   };
 
   const handleScrimClick = (e) => {
@@ -219,16 +283,23 @@ const ModalBottomsheet = () => {
   if (!isModalBottomsheetOpen) return null;
 
   return createPortal(
-    <SModalBottomsheetScrim onClick={handleScrimClick}>
+    <SModalBottomsheetScrim
+      $isVisible={isModalBottomsheetOpen}
+      onClick={handleScrimClick}
+    >
       <SModalBottomsheetLayout>
-        <SModalBottomsheetContainer level={modalBottomsheetLevel}>
+        <SModalBottomsheetContainer $level={modalBottomsheetLevel}>
           <SHandleBar
             onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           />
           <SContent
             style={{
-              height: modalBottomsheetLevel === 2 ? '50vh' : '80vh',
+              height: getContentHeight(modalBottomsheetLevel),
             }}
           >
             {modalBottomsheetChildren}
