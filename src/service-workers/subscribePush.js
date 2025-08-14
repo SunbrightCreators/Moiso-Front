@@ -20,16 +20,19 @@ const base64urlToUint8Array = (base64urlString) => {
 
 const subscribePush = async (registration) => {
   const vapidPublicKey = process.env.REACT_APP_VAPID_PUBLIC_KEY;
-
   const applicationServerKey = base64urlToUint8Array(vapidPublicKey);
 
-  const subscription = await registration.pushManager.subscribe({
-    userVisibleOnly: true,
-    applicationServerKey,
-  });
-
-  console.log('푸시 구독 정보:', subscription);
-  return subscription;
+  try {
+    const subscription = await registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey,
+    });
+    console.log('푸시 구독 정보:', subscription);
+    return subscription;
+  } catch (error) {
+    console.error('푸시 구독 중 오류:', error);
+    return error;
+  }
 };
 
 export default subscribePush;
