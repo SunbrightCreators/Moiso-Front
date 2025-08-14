@@ -2,11 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from './styles/snippets/provider';
 import Router from './Router';
-import {
-  register,
-  hasNotificationPermission,
-  subscribePush,
-} from './serviceWorkerRegistration';
+import register from './service-workers/register';
+import hasNotificationPermission from './service-workers/hasNotificationPermission';
+import subscribePush from './service-workers/subscribePush';
 
 document.documentElement.className = 'light';
 document.documentElement.style.colorScheme = 'light';
