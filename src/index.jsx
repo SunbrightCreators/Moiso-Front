@@ -22,6 +22,6 @@ window.addEventListener('load', async () => {
   const registration = await registerServiceWorker();
   if (registration) {
     const isGranted = await requestNotificationPermission();
-    const subscription = await subscribePush(registration);
+    if (isGranted) await subscribePush(registration);
   }
 });
