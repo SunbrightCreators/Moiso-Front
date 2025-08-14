@@ -11,7 +11,7 @@ const requestNotificationPermission = async () => {
     case 'denied':
       console.log('알림 권한이 거부되어 있습니다. 브라우저 설정에서 수동으로 변경해야 합니다.');
       return false;
-    case 'default':
+    default:
       console.log('알림 권한을 요청합니다...');
       try {
         const permission = await Notification.requestPermission();
