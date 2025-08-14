@@ -6,7 +6,7 @@ import {
   CloseButton,
 } from '@chakra-ui/react';
 import useDialogStore from '../../stores/useDialogStore';
-// dd
+
 const Dialog = () => {
   const {
     isOpen,
