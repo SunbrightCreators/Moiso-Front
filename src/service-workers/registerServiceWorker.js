@@ -1,4 +1,4 @@
-const register = async () => {
+const registerServiceWorker = async () => {
   if (!('serviceWorker' in navigator)) {
     console.log('이 브라우저는 서비스워커를 지원하지 않습니다.');
     return null;
@@ -14,4 +14,4 @@ const register = async () => {
   }
 };
 
-export default register;
+export default registerServiceWorker;

@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from './styles/snippets/provider';
 import Router from './Router';
-import register from './service-workers/register';
-import hasNotificationPermission from './service-workers/hasNotificationPermission';
+import registerServiceWorker from './service-workers/registerServiceWorker';
+import requestNotificationPermission from './service-workers/requestNotificationPermission';
 import subscribePush from './service-workers/subscribePush';
 
 document.documentElement.className = 'light';
@@ -19,9 +19,9 @@ root.render(
 );
 
 window.addEventListener('load', async () => {
-  const registration = await register();
+  const registration = await registerServiceWorker();
   if (registration) {
-    const isGranted = await hasNotificationPermission();
+    const isGranted = await requestNotificationPermission();
     const subscription = await subscribePush(registration);
   }
 });

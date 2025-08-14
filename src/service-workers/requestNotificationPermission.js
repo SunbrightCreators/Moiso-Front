@@ -1,4 +1,4 @@
-const hasNotificationPermission = async () => {
+const requestNotificationPermission = async () => {
   if (!('Notification' in window)) {
     console.log('이 브라우저는 알림을 지원하지 않습니다.');
     return false;
@@ -23,4 +23,4 @@ const hasNotificationPermission = async () => {
   }
 };
 
-export default hasNotificationPermission;
+export default requestNotificationPermission;
