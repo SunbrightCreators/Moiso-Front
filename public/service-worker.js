@@ -1,14 +1,11 @@
-// 설치 이벤트
 self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// 활성화 이벤트
 self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// 푸시 이벤트
 self.addEventListener('push', (event) => {
   if (!event.data) {
     console.warn('Push 데이터가 없습니다.');
