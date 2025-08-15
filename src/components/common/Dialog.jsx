@@ -15,7 +15,6 @@ const Dialog = () => {
     actionText,
     showCancelButton,
     onAction,
-    onCancel,
     closeDialog,
   } = useDialogStore();
 
@@ -31,11 +30,7 @@ const Dialog = () => {
   };
 
   const handleCancel = () => {
-    if (onCancel) {
-      onCancel();
-    } else {
-      handleClose();
-    }
+    handleClose(); // 수정 (단순히 닫는 걸로)
   };
 
   return (
