@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from './styles/snippets/provider';
 import Router from './Router';
-import DialogComponent from './components/common/DialogComponent';
+import Dialog from './components/common/DialogComponent';
 import {
   register,
   hasNotificationPermission,
@@ -17,7 +17,7 @@ root.render(
   <React.StrictMode>
     <Provider>
       <Router />
-      <DialogComponent />
+      <Dialog />
     </Provider>
   </React.StrictMode>,
 );
