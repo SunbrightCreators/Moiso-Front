@@ -26,7 +26,9 @@ const SHandleBar = styled.div`
     content: '';
     width: 2.5rem;
     height: 0.25rem;
-    background-color: #d1d5db;
+    background-color: var(
+      --colors-bg-emphasized
+    ); //Chakra UI에서 정의하는 CSS 변수 사용
     border-radius: 0.125rem;
   }
 `;
@@ -36,6 +38,16 @@ const SContent = styled.div`
   background-color: white;
   overflow-y: auto;
   transition: height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  height: ${({ $level, $type }) => {
+    if ($type === 'map') {
+      if ($level === 1) return '0';
+      if ($level === 2) return '40vh';
+      return '70vh';
+    } else {
+      if ($level === 2) return '50vh';
+      return '80vh';
+    }
+  }};
 `;
 
 // 지도 탐색용 바텀시트 (non-modal)
@@ -146,11 +158,9 @@ const MapBottomsheet = () => {
         setMapBottomsheetLevel(startLevelRef.current + 1);
       }
     } else {
-      // 아래로 스와이프 - 레벨 감소
+      // 아래로 스와이프 - 레벨 감소 (최소 1단이고 '닫기' 없음)
       if (startLevelRef.current > 1) {
         setMapBottomsheetLevel(startLevelRef.current - 1);
-      } else {
-        closeMapBottomsheet();
       }
     }
   };
@@ -196,10 +206,9 @@ const MapBottomsheet = () => {
 // 모달 바텀시트 컴포넌트
 const ModalBottomsheet = () => {
   const {
+    // * modalBottomsheetLevel은 ModalBottomsheet 컴포넌트에서 관리 (바텀시트 컴포넌트에서만 사용하는 값)
     isModalBottomsheetOpen,
-    modalBottomsheetLevel,
     modalBottomsheetChildren,
-    setModalBottomsheetLevel,
     closeModalBottomsheet,
   } = useBottomsheetStore();
 
