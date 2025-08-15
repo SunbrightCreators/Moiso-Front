@@ -5,8 +5,7 @@ const register = async () => {
   }
 
   try {
-    const registration =
-      await navigator.serviceWorker.register('/service-worker.js');
+    const registration = await navigator.serviceWorker.register('/service-worker.js');
     console.log('SW registered: ', registration);
     return registration;
   } catch (error) {
@@ -26,9 +25,7 @@ const hasNotificationPermission = async () => {
       console.log('알림 권한이 이미 허용되어 있습니다.');
       return true;
     case 'denied':
-      console.log(
-        '알림 권한이 거부되어 있습니다. 브라우저 설정에서 수동으로 변경해야 합니다.',
-      );
+      console.log('알림 권한이 거부되어 있습니다. 브라우저 설정에서 수동으로 변경해야 합니다.');
       return false;
     case 'default':
       console.log('알림 권한을 요청합니다...');
