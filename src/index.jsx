@@ -2,11 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Provider from './styles/provider';
 import Router from './Router';
-import {
-  register,
-  hasNotificationPermission,
-  subscribePush,
-} from './serviceWorkerRegistration';
+import registerServiceWorker from './service-workers/registerServiceWorker';
+import requestNotificationPermission from './service-workers/requestNotificationPermission';
+import subscribePush from './service-workers/subscribePush';
 
 document.documentElement.className = 'light';
 document.documentElement.style.colorScheme = 'light';
@@ -21,9 +19,9 @@ root.render(
 );
 
 window.addEventListener('load', async () => {
-  const registration = await register();
+  const registration = await registerServiceWorker();
   if (registration) {
-    const isGranted = await hasNotificationPermission();
-    const subscription = await subscribePush(registration);
+    const isGranted = await requestNotificationPermission();
+    if (isGranted) await subscribePush(registration);
   }
 });
