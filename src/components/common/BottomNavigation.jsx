@@ -46,7 +46,7 @@ const BottomNavigation = () => {
       }}
     >
       {navItems.map((item) => {
-        const isActive = currentPath === item.path;
+        const isActive = currentPath.startsWith(item.path);
         const { Icon, label, path } = item;
 
         return (
