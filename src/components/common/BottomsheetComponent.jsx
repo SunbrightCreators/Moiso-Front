@@ -52,10 +52,11 @@ const SMapBottomsheetLayout = styled.div`
   background-color: var(--colors-bg);
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 10;
   width: 100%;
+  max-width: 360px; // 이거 안 하면 화면에 넘쳐서 추가하였습니다.
 `;
 
 const SMapBottomsheetContainer = styled.div`
@@ -76,6 +77,7 @@ const SModalBottomsheetScrim = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
+  max-width: 360px; // 이것도 마찬가지로.. 안 하면 화면에 넘쳐서 추가하였습니다.
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1300;
   display: flex;
@@ -209,7 +211,7 @@ const MapBottomsheet = ({ children }) => {
         >
           <SHandleBar />
         </SHandleBarLayout>
-        <SContent $level={mapBottomsheetLevel} $type="map">
+        <SContent $level={mapBottomsheetLevel} $type='map'>
           {children}
         </SContent>
       </SMapBottomsheetContainer>
@@ -273,7 +275,7 @@ const ModalBottomsheet = () => {
         >
           <SHandleBar />
         </SHandleBarLayout>
-        <SContent $level={modalBottomsheetLevel} $type="modal">
+        <SContent $level={modalBottomsheetLevel} $type='modal'>
           {modalBottomsheetChildren}
         </SContent>
       </SModalBottomsheetContainer>
