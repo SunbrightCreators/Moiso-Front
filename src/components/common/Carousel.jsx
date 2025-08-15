@@ -36,15 +36,11 @@ const CarouselContainer = styled.div`
   }
 `;
 
-const SlideWrapper = styled.div`
-  flex: 0 0 ${({ $slideWidth }) => $slideWidth};
-  min-width: 0;
-  scroll-snap-align: start;
-`;
-
-const Carousel = ({ children, gap = 0, setIndex, slideWidth = '100%' }) => {
+const Carousel = ({ children, gap = 0, setIndex }) => {
   /**
-   * @param {string} slideWidth - 각 슬라이드의 너비를 지정
+   * Carousel의 직계 자식 컴포넌트에 flex를 지정해 주세요.
+   * 한 슬라이드에 하나의 요소만 보여주고 싶다면 `flex: 0 0 100%`을 지정해 주세요.
+   * 여러 요소를 동시에 보여주고 싶다면 `flex: 0 0 아이템너비`를 지정해 주세요.
    * @param gap - 직계 자식 컴포넌트 간 간격을 지정해요.
    * @param setIndex - 부모 컴포넌트에 index state를 만들어 setter를 넘겨 주세요.
    */
@@ -114,15 +110,9 @@ const Carousel = ({ children, gap = 0, setIndex, slideWidth = '100%' }) => {
       }}
       onDragStart={(e) => e.preventDefault()}
     >
-      {Children.map(children, (child, index) => (
-        <SlideWrapper
-          key={index}
-          data-index={index + 1}
-          $slideWidth={slideWidth}
-        >
-          {child}
-        </SlideWrapper>
-      ))}
+      {Children.map(children, (child, index) =>
+        cloneElement(child, { 'data-index': index + 1 }),
+      )}
     </CarouselContainer>
   );
 };
