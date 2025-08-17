@@ -32,7 +32,6 @@ const SearchInput = styled.input`
   }
 `;
 
-// 돋보기 아이콘을 클릭 가능한 버튼으로 만듭니다.
 const SearchButton = styled.button`
   /* 아이콘 크기 및 정렬 */
   display: flex;
@@ -76,7 +75,6 @@ const InputSearch = React.forwardRef(
       }
     };
 
-    // 4. 사용자님이 원하셨던 바로 그 코드! handleClear도 아주 간단해집니다.
     const handleClear = () => {
       setValue('');
       if (onChangeFromProps) {
@@ -95,15 +93,11 @@ const InputSearch = React.forwardRef(
           type='search'
           placeholder={placeholder}
           ref={ref}
-          // name을 input에 직접 전달해야 RHF가 인식합니다.
           name={name}
           {...props}
-          // input의 값과 onChange는 우리 내부 상태와 함수를 사용합니다.
           value={value}
           onChange={handleChange}
         />
-
-        {/* 내부 상태 value를 기준으로 X 버튼을 보여줍니다. */}
         {value && (
           <ClearButton type='button' onClick={handleClear}>
             <ClearIcon />
