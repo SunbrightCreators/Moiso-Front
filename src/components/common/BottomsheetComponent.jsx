@@ -77,7 +77,7 @@ const SModalBottomsheetScrim = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  max-width: 360px; // 이것도 마찬가지로.. 안 하면 화면에 넘쳐서 추가하였습니다.
+  max-width: 480px;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1300;
   display: flex;
