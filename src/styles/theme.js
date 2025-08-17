@@ -7,6 +7,19 @@ import {
 
 // 1) 토큰 정의 (colors, fonts 등)
 const tokens = defineTokens({
+  colors: {
+    text: {
+      default: 'var(--colors-gray-800)',
+      muted: 'var(--colors-gray-600)',
+      subtle: 'var(--colors-gray-400)',
+      subtle2: 'var(--colors-gray-300)',
+      inverted: 'var(--colors-gray-50)',
+      error: 'var(--colors-red-500)',
+      warning: 'var(--colors-yellow-600)',
+      success: 'var(--colors-green-600)',
+      info: 'var(--colors-blue-600)',
+    },
+  },
 });
 
 // 2) 글로벌 스타일 정의
