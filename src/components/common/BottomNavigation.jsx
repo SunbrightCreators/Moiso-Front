@@ -48,12 +48,11 @@ const SLabel = styled.span`
 `;
 
 const BottomNavigation = () => {
-  const { userMode: mode } = useModeStore();
+  const { isProposerMode } = useModeStore();
   const location = useLocation();
   const currentPath = location.pathname;
 
-  if (!mode) return null;
-  const navItems = mode === 'founder' ? founderNavItems : proposerNavItems;
+  const navItems = isProposerMode ? proposerNavItems : founderNavItems;
 
   return (
     <SNavigationContainer>
