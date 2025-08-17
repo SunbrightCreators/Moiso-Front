@@ -33,8 +33,6 @@ const BottomNavigation = () => {
   return (
     <div
       style={{
-        left: '50%', // 1. 왼쪽 끝을 화면 중앙으로
-        transform: 'translateX(-50%)', // 2. 자신의 너비 절반만큼 왼쪽으로 이동
         width: '100%',
         backgroundColor: 'white',
         borderTop: '0.5px solid #E4E4E7',
