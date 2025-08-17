@@ -56,7 +56,7 @@ const SMapBottomsheetLayout = styled.div`
   transform: translateX(-50%);
   z-index: 10;
   width: 100%;
-  max-width: 360px; // 이거 안 하면 화면에 넘쳐서 추가하였습니다.
+  max-width: 480px;
 `;
 
 const SMapBottomsheetContainer = styled.div`
