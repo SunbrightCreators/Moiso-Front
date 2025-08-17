@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as SearchIcon } from '../../assets/icons/search.svg';
 import { ReactComponent as ClearIcon } from '../../assets/icons/x.svg';
@@ -55,45 +55,63 @@ const ClearButton = styled.button`
 `;
 // ---------------------------------------------
 
-const InputSearch = ({ onSearch, placeholder, initialValue = '' }) => {
-  const [value, setValue] = useState(initialValue);
+const InputSearch = React.forwardRef(
+  ({ placeholder, onChange: onChangeFromProps, name, ...props }, ref) => {
+    // 1. 전처럼 useState로 내부 상태를 관리합니다. 이게 유일한 "진실의 원천"이 됩니다.
+    const [value, setValue] = useState('');
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
+    // 2. useEffect를 사용해서, 우리 내부의 value가 바뀔 때
+    useEffect(() => {
+      if (onChangeFromProps) {
+        const event = { target: { name, value } };
+        onChangeFromProps(event);
+      }
+    }, [value, name, onChangeFromProps]);
 
-  // 없애기 아이콘 클릭했을 때 실행될 함수
-  const handleClear = () => {
-    setValue('');
-  };
+    // 3. 이제 handleChange는 전처럼 아주 간단해집니다.
+    const handleChange = (e) => {
+      setValue(e.target.value);
+      if (onChangeFromProps) {
+        onChangeFromProps(e);
+      }
+    };
 
-  // 돋보기 아이콘을 클릭했을 때 실행될 검색 함수
-  const handleSearch = () => {
-    if (onSearch) {
-      onSearch(value);
-    }
-  };
+    // 4. 사용자님이 원하셨던 바로 그 코드! handleClear도 아주 간단해집니다.
+    const handleClear = () => {
+      setValue('');
+      if (onChangeFromProps) {
+        const event = { target: { name: props.name, value: '' } };
+        onChangeFromProps(event);
+      }
+    };
 
-  return (
-    <SearchBarContainer>
-      <SearchButton onClick={handleSearch}>
-        <SearchIcon />
-      </SearchButton>
+    return (
+      <SearchBarContainer>
+        <SearchButton type='submit'>
+          <SearchIcon />
+        </SearchButton>
 
-      <SearchInput
-        type='text'
-        value={value}
-        onChange={handleChange}
-        placeholder={placeholder}
-      />
+        <SearchInput
+          type='search'
+          placeholder={placeholder}
+          ref={ref}
+          // name을 input에 직접 전달해야 RHF가 인식합니다.
+          name={name}
+          {...props}
+          // input의 값과 onChange는 우리 내부 상태와 함수를 사용합니다.
+          value={value}
+          onChange={handleChange}
+        />
 
-      {value && (
-        <ClearButton onClick={handleClear}>
-          <ClearIcon />
-        </ClearButton>
-      )}
-    </SearchBarContainer>
-  );
-};
+        {/* 내부 상태 value를 기준으로 X 버튼을 보여줍니다. */}
+        {value && (
+          <ClearButton type='button' onClick={handleClear}>
+            <ClearIcon />
+          </ClearButton>
+        )}
+      </SearchBarContainer>
+    );
+  },
+);
 
 export default InputSearch;
