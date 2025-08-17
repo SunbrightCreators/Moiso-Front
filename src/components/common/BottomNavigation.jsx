@@ -62,7 +62,7 @@ const BottomNavigation = () => {
 
         return (
           <SLink key={path} to={path} isActive={isActive}>
-            <Icon /> {/* ✅ 빠뜨렸던 아이콘을 여기에 다시 추가했습니다! */}
+            <Icon />
             <SLabel isActive={isActive}>{label}</SLabel>
           </SLink>
         );
