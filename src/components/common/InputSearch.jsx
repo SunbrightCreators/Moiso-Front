@@ -7,13 +7,13 @@ import { ReactComponent as ClearIcon } from '../../assets/icons/x.svg';
 const SearchBarContainer = styled.div`
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem; /* 8px */
+  gap: var(--chakra-space-2);
   width: 100%;
-  padding: 0 0.75rem; /* 12px */
+  padding: 0 var(--chakra-space-3)
   height: 3rem; /* 48px */
   box-sizing: border-box;
   background-color: var(--colors-gray-100, #f4f4f5);
-  border-radius: 0.375rem; /* 6px */
+  border-radius: var(--chakra-radii-md); 
   overflow: hidden;
 `;
 
@@ -35,12 +35,6 @@ const SearchInput = styled.input`
 
 // 돋보기 아이콘을 클릭 가능한 버튼으로 만듭니다.
 const SearchButton = styled.button`
-  /* 버튼 기본 스타일 제거 */
-  padding: 0;
-  border: none;
-  background: none;
-  cursor: pointer;
-
   /* 아이콘 크기 및 정렬 */
   display: flex;
   align-items: center;
