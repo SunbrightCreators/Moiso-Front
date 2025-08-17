@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import useModeStore from '../../stores/useModeStore';
+import styled from 'styled-components';
 
 import { ReactComponent as ProposalIcon } from '../../assets/icons/BNB_proposal.svg';
 import { ReactComponent as FundingIcon } from '../../assets/icons/BNB_funding.svg';
@@ -8,7 +9,7 @@ import { ReactComponent as RewardIcon } from '../../assets/icons/BNB_reward.svg'
 import { ReactComponent as MyIcon } from '../../assets/icons/BNB_my.svg';
 import { ReactComponent as RecommendIcon } from '../../assets/icons/BNB_rec.svg';
 
-const residentNavItems = [
+const proposerNavItems = [
   { path: '/proposal', label: '제안', Icon: ProposalIcon },
   { path: '/funding', label: '펀딩', Icon: FundingIcon },
   { path: '/reward', label: '리워드', Icon: RewardIcon },
@@ -21,6 +22,30 @@ const founderNavItems = [
   { path: '/funding', label: '펀딩', Icon: FundingIcon },
   { path: '/my', label: '마이', Icon: MyIcon },
 ];
+const SNavigationContainer = styled.nav`
+  width: 100%;
+  background-color: white;
+  border-top: 0.5px solid #e4e4e7;
+  display: flex;
+  padding: 8px 4px;
+`;
+const SLink = styled(Link)`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5;
+  textdecoration: none;
+  color: ${({ isActive }) =>
+    isActive
+      ? 'var(--colors-fg-default, #27272A)'
+      : 'var(--text-subtle2, #D4D4D8)'};
+`;
+const SLabel = styled.span`
+  font-size: 10px;
+  font-family: 'Inter', sans-serif;
+  font-weight: ${({ isActive }) => (isActive ? '600' : '500')};
+`;
 
 const BottomNavigation = () => {
   const { userMode: mode } = useModeStore();
@@ -28,50 +53,22 @@ const BottomNavigation = () => {
   const currentPath = location.pathname;
 
   if (!mode) return null;
-  const navItems = mode === 'founder' ? founderNavItems : residentNavItems;
+  const navItems = mode === 'founder' ? founderNavItems : proposerNavItems;
 
   return (
-    <div
-      style={{
-        width: '100%',
-        backgroundColor: 'white',
-        borderTop: '0.5px solid #E4E4E7',
-        display: 'flex',
-        padding: '8px 4px',
-      }}
-    >
+    <SNavigationContainer>
       {navItems.map((item) => {
         const isActive = currentPath.startsWith(item.path);
         const { Icon, label, path } = item;
 
         return (
-          <Link
-            key={path}
-            to={path}
-            style={{
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '2px',
-              textDecoration: 'none',
-              color: isActive ? '#27272A' : '#D4D4D8',
-            }}
-          >
-            <Icon />
-            <span
-              style={{
-                fontSize: '10px',
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: isActive ? '600' : '500',
-              }}
-            >
-              {label}
-            </span>
-          </Link>
+          <SLink key={path} to={path} isActive={isActive}>
+            <Icon /> {/* ✅ 빠뜨렸던 아이콘을 여기에 다시 추가했습니다! */}
+            <SLabel isActive={isActive}>{label}</SLabel>
+          </SLink>
         );
       })}
-    </div>
+    </SNavigationContainer>
   );
 };
 
