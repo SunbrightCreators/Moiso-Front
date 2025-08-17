@@ -1,36 +1,51 @@
 import { create } from 'zustand';
 
 const useBottomsheetStore = create((set) => ({
-  // 모달 바텀시트 상태
-  isModalBottomsheetOpen: false,
-  modalBottomsheetChildren: null,
+  // 바텀시트 상태
+  isOpen: false,
+  transition: 'close',
+  children: null,
 
-  // 모달 바텀시트 액션
-  setModalBottomsheetOpen: (isOpen) =>
+  open: (children) => {
+    // 스크롤 금지
+    document.body.style.overflow = 'hidden';
+
+    // 1. 컴포넌트를 먼저 마운트
     set((state) => ({
       ...state,
-      isModalBottomsheetOpen: isOpen,
-    })),
+      isOpen: true,
+      children: children,
+    }));
 
-  setModalBottomsheetChildren: (children) =>
+    // 2. 마운트되는 동안 기다리고
+    setTimeout(() => {
+      // 3. 트랜지션을 'open'으로 변경
+      set((state) => ({
+        ...state,
+        transition: 'open',
+      }));
+    }, 30);
+  },
+
+  close: () => {
+    // 1. 트랜지션을 'close'로 변경
     set((state) => ({
       ...state,
-      modalBottomsheetChildren: children,
-    })),
+      transition: 'close',
+    }));
 
-  openModalBottomsheet: (children, level = 2) =>
-    set((state) => ({
-      ...state,
-      isModalBottomsheetOpen: true,
-      modalBottomsheetChildren: children,
-    })),
+    // 2. 애니메이션이 끝난 후 언마운트
+    setTimeout(() => {
+      // 스크롤 금지 해제
+      document.body.style.overflow = '';
 
-  closeModalBottomsheet: () =>
-    set((state) => ({
-      ...state,
-      isModalBottomsheetOpen: false,
-      modalBottomsheetChildren: null,
-    })),
+      set((state) => ({
+        ...state,
+        isOpen: false,
+        children: null,
+      }));
+    }, 300); // transition 시간과 맞춤
+  },
 }));
 
 export default useBottomsheetStore;
