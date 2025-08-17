@@ -11,7 +11,6 @@ const SearchBarContainer = styled.div`
   width: 100%;
   padding: 0 var(--chakra-space-3)
   height: 3rem; /* 48px */
-  box-sizing: border-box;
   background-color: var(--colors-gray-100, #f4f4f5);
   border-radius: var(--chakra-radii-md); 
   overflow: hidden;
