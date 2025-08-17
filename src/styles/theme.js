@@ -7,13 +7,6 @@ import {
 
 // 1) 토큰 정의 (colors, fonts 등)
 const tokens = defineTokens({
-  colors: {
-    primary: { value: '#3498db' },
-  },
-  fonts: {
-    body: { value: 'system-ui, sans-serif' },
-    heading: { value: 'Georgia, serif' },
-  },
 });
 
 // 2) 글로벌 스타일 정의
