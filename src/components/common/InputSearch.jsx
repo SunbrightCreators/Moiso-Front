@@ -56,10 +56,8 @@ const ClearButton = styled.button`
 
 const InputSearch = React.forwardRef(
   ({ placeholder, onChange: onChangeFromProps, name, ...props }, ref) => {
-    // 1. 전처럼 useState로 내부 상태를 관리합니다. 이게 유일한 "진실의 원천"이 됩니다.
     const [value, setValue] = useState('');
 
-    // 2. useEffect를 사용해서, 우리 내부의 value가 바뀔 때
     useEffect(() => {
       if (onChangeFromProps) {
         const event = { target: { name, value } };
@@ -67,7 +65,6 @@ const InputSearch = React.forwardRef(
       }
     }, [value, name, onChangeFromProps]);
 
-    // 3. 이제 handleChange는 전처럼 아주 간단해집니다.
     const handleChange = (e) => {
       setValue(e.target.value);
       if (onChangeFromProps) {
