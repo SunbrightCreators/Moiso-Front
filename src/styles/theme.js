@@ -20,6 +20,15 @@ const tokens = defineTokens({
       info: 'var(--colors-blue-600)',
     },
   },
+  lineHeights: {
+    '2xs': '0.875',
+    xs: '1',
+    sm: '1.25',
+    md: '1.5',
+    lg: '1.75',
+    xl: '1.875',
+    '2xl': '2',
+  },
 });
 
 // 2) 글로벌 스타일 정의
