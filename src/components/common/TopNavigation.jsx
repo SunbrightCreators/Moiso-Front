@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import CloseIcon from '../../../src/assets/icons/Topnavigation_X.svg';
-import BackIcon from '../../../src/assets/icons/Topnavigation_Back.svg';
-import BellIcon from '../../../src/assets/icons/Topnavigation_bell.svg';
+import { ReactComponent as CloseIcon } from '../../../src/assets/icons/Topnavigation_X.svg';
+import { ReactComponent as BackIcon } from '../../../src/assets/icons/Topnavigation_Back.svg';
+import { ReactComponent as BellIcon } from '../../../src/assets/icons/Topnavigation_bell.svg';
 
 /**
  * TopNavigation 컴포넌트
@@ -43,7 +43,7 @@ const TopNavigation = ({ left, title, subTitle, right }) => {
         <SLeftWrapper>
           {left === 'back' && (
             <SIconBtn onClick={handleBackClick}>
-              <img src={BackIcon} alt='Back' />
+              <BackIcon />
             </SIconBtn>
           )}
         </SLeftWrapper>
@@ -56,12 +56,12 @@ const TopNavigation = ({ left, title, subTitle, right }) => {
         <SRightWrapper>
           {right === 'close' && (
             <SIconBtn onClick={handleCloseClick}>
-              <img src={CloseIcon} alt='Close' />
+              <CloseIcon />
             </SIconBtn>
           )}
           {right === 'notification' && (
             <SIconBtn onClick={handleNotificationClick}>
-              <img src={BellIcon} alt='Notification' />
+              <BellIcon />
             </SIconBtn>
           )}
         </SRightWrapper>
@@ -73,13 +73,13 @@ const TopNavigation = ({ left, title, subTitle, right }) => {
 export default TopNavigation;
 
 // Styled Components
-const SLayout = styled.div`
+const SLayout = styled.header`
+  // 시멘틱 태그 활아ㅛㅇ
   position: sticky;
   top: 0;
   width: 100%;
-  background: var(--bg-default, #ffffff);
-  border-bottom: var(--borders-xs, 0.5px) solid
-    var(--colors-border-default, #e4e4e7);
+  background: #ffffff;
+  border-bottom: 1px solid #e4e4e7;
   z-index: 100;
 `;
 
@@ -135,7 +135,7 @@ const SIconBtn = styled.button`
   background-color: transparent;
   cursor: pointer;
 
-  img {
+  svg {
     width: 1.5rem;
     height: 1.5rem;
   }
