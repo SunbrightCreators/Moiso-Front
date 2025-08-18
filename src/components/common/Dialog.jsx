@@ -6,7 +6,7 @@ import {
   CloseButton,
 } from '@chakra-ui/react';
 import styled from 'styled-components';
-import useDialogStore from '../../stores/useDialogStore';
+import useDialogStore from '../../stores/useDialogStore'; //
 
 const ContentDiv = styled.div`
   white-space: pre-line;
