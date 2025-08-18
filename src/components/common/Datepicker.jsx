@@ -53,13 +53,10 @@ const Datepicker = ({
         />
       </SDateInputWrapper>
 
-      <SDivider>
-        <img src={Separator} alt='separator' />
-      </SDivider>
+      <SDivider />
 
       <SDateInputWrapper>
         <SDateInput
-          as={Input}
           type='date'
           min={startDate || min}
           max={max}
@@ -112,7 +109,6 @@ const SDateInput = styled.input`
 
   &:focus {
     outline: none;
-    border-color: var(--colors-border-focused, #3182ce);
     box-shadow: 0 0 0 3px var(--colors-focus-ring, rgba(49, 130, 206, 0.1));
   }
 
@@ -133,10 +129,9 @@ const SDivider = styled.div`
   align-items: center;
   justify-content: center;
 
-  img {
-    stroke-width: 1px;
-    stroke: var(--colors-border-default, #e4e4e7);
-  }
+  width: 1rem;
+  height: 1px;
+  background-color: var(--colors-border-default, #e4e4e7);
 `;
 
 export default Datepicker;
