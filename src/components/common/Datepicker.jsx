@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Input } from '@chakra-ui/react';
-import Separator from '../../assets/icons/Datepicker_Separator.svg';
 
 /**
  * Datepicker 컴포넌트
@@ -38,36 +37,32 @@ const Datepicker = ({
 
   return (
     <SContainer>
-      <SDateInputWrapper>
-        <SDateInput
-          as={Input}
-          type='date'
-          min={min}
-          max={endDate || max}
-          required={required}
-          disabled={disabled}
-          {...register('startDate', {
-            required,
-            onChange: handleStartDateChange,
-          })}
-        />
-      </SDateInputWrapper>
+      <SDateInput
+        as={Input}
+        type='date'
+        min={min}
+        max={endDate || max}
+        required={required}
+        disabled={disabled}
+        {...register('startDate', {
+          required,
+          onChange: handleStartDateChange,
+        })}
+      />
 
       <SDivider />
 
-      <SDateInputWrapper>
-        <SDateInput
-          type='date'
-          min={startDate || min}
-          max={max}
-          required={required}
-          disabled={disabled}
-          {...register('endDate', {
-            required,
-            onChange: handleEndDateChange,
-          })}
-        />
-      </SDateInputWrapper>
+      <SDateInput
+        type='date'
+        min={startDate || min}
+        max={max}
+        required={required}
+        disabled={disabled}
+        {...register('endDate', {
+          required,
+          onChange: handleEndDateChange,
+        })}
+      />
     </SContainer>
   );
 };
@@ -81,31 +76,18 @@ const SContainer = styled.div`
   max-width: 22.375rem;
 `;
 
-const SDateInputWrapper = styled.div`
+const SDateInput = styled.input`
   display: flex;
   flex: 1;
   align-items: center;
+  justify-items: flex-start;
   align-self: stretch;
-
+  flex-direction: column;
   width: auto;
   height: var(--sizes-12, 3rem);
-  padding: var(--spacing-1, 0.2rem) var(--spacing-1, 0.2rem);
-
-  border: var(--borders-sm, 1px) solid var(--colors-border-default, #e4e4e7);
+  padding: var(--spacing-2, 0.4rem) var(--spacing-1, 0.2rem)
+    var(--spacing-0-5, 0.1rem) var(--spacing-1, 0.2rem);
   border-radius: var(--radii-Semantic_tokens-l2, 0.25rem);
-`;
-
-const SDateInput = styled.input`
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  justify-content: space-between;
-
-  width: 9.25rem;
-  padding-top: var(--spacing-2, 0.2rem);
-  gap: var(--spacing-0-5, 0.1rem);
-
-  border-radius: 0.5rem;
 
   &:focus {
     outline: none;
@@ -132,6 +114,7 @@ const SDivider = styled.div`
   width: 1rem;
   height: 1px;
   background-color: var(--colors-border-default, #e4e4e7);
+  margin: 0 var(--spacing-2, 0.5rem);
 `;
 
 export default Datepicker;
