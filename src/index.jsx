@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from './styles/snippets/provider';
 import Router from './Router';
-import Dialog from './components/common/DialogComponent';
+import Dialog from './components/common/Dialog';
 import {
   register,
   hasNotificationPermission,
