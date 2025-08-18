@@ -5,7 +5,12 @@ import {
   Portal,
   CloseButton,
 } from '@chakra-ui/react';
+import styled from 'styled-components';
 import useDialogStore from '../../stores/useDialogStore';
+
+const ContentDiv = styled.div`
+  white-space: pre-line;
+`;
 
 const Dialog = () => {
   const {
@@ -15,28 +20,25 @@ const Dialog = () => {
     actionText,
     showCancelButton,
     onAction,
+    onCancel,
     closeDialog,
   } = useDialogStore();
-
-  const handleClose = () => {
-    closeDialog();
-  };
 
   const handleAction = () => {
     if (onAction) {
       onAction();
     }
-    handleClose();
+    closeDialog();
   };
 
   const handleCancel = () => {
-    handleClose(); // 수정 (단순히 닫는 걸로)
+    closeDialog();
   };
 
   return (
     <ChakraDialog.Root
       open={isOpen}
-      onOpenChange={(e) => !e.open && handleClose()}
+      onOpenChange={(e) => !e.open && closeDialog()}
     >
       <Portal>
         <ChakraDialog.Backdrop />
@@ -46,7 +48,7 @@ const Dialog = () => {
               <ChakraDialog.Title>{title}</ChakraDialog.Title>
             </ChakraDialog.Header>
             <ChakraDialog.Body>
-              <div style={{ whiteSpace: 'pre-line' }}>{content}</div>
+              <ContentDiv>{content}</ContentDiv>
             </ChakraDialog.Body>
             <ChakraDialog.Footer gap={2} justifyContent='flex-end'>
               {showCancelButton && (
