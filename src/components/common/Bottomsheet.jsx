@@ -160,7 +160,6 @@ const useDragHandler = (
 
 // 지도 탐색용 바텀시트 컴포넌트
 const MapBottomsheet = ({ children }) => {
-  const [isMapBottomsheetOpen, setIsMapBottomsheetOpen] = useState(false);
   const [mapBottomsheetLevel, setMapBottomsheetLevel] = useState(1);
 
   const { handlePointerDown, handlePointerMove, handlePointerUp } =
@@ -171,33 +170,6 @@ const MapBottomsheet = ({ children }) => {
       3, // 최대 레벨
       null, // 지도 바텀시트는 완전히 닫지 X
     );
-
-  const openMapBottomsheet = (level = 2) => {
-    setIsMapBottomsheetOpen(true);
-    setMapBottomsheetLevel(Math.max(1, Math.min(3, level)));
-  };
-
-  const closeMapBottomsheet = () => {
-    setMapBottomsheetLevel(1);
-  };
-
-  // 외부에서 호출할 수 있도록 useEffect로 전역 함수 등록
-  useEffect(() => {
-    window.openMapBottomsheet = openMapBottomsheet;
-    window.closeMapBottomsheet = closeMapBottomsheet;
-
-    return () => {
-      delete window.openMapBottomsheet;
-      delete window.closeMapBottomsheet;
-    };
-  }, []);
-
-  // 초기에 바텀시트를 열린 상태로 설정
-  useEffect(() => {
-    setIsMapBottomsheetOpen(true);
-  }, []);
-
-  if (!isMapBottomsheetOpen) return null;
 
   return (
     <SMapBottomsheetLayout $level={mapBottomsheetLevel}>
