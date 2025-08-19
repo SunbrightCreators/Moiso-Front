@@ -60,10 +60,6 @@ const SMapBottomsheetLayout = styled.div`
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
   padding-top: 1.5rem;
-  transform: ${({ $level }) => {
-    if ($level === 1) return 'translateX(-50%) translateY(calc(100% - 1.5rem))';
-    return 'translateX(-50%) translateY(0)';
-  }};
   transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 `;
 
