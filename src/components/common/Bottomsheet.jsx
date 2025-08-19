@@ -201,11 +201,6 @@ const ModalBottomsheet = () => {
       close, // 완전히 닫을 수 O
     );
 
-  useEffect(() => {
-    if (isOpen) {
-      setModalBottomsheetLevel(2);
-    }
-  }, [isOpen]);
 
   const handleScrimClick = (e) => {
     if (e.target === e.currentTarget) {
