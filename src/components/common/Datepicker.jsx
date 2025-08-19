@@ -38,7 +38,6 @@ const Datepicker = ({
   return (
     <SContainer>
       <SDateInput
-        as={Input}
         type='date'
         min={min}
         max={endDate || max}
@@ -76,7 +75,7 @@ const SContainer = styled.div`
   max-width: 22.375rem;
 `;
 
-const SDateInput = styled.input`
+const SDateInput = styled(Input)`
   display: flex;
   flex: 1;
   align-items: center;
@@ -85,9 +84,9 @@ const SDateInput = styled.input`
   flex-direction: column;
   width: auto;
   height: var(--sizes-12, 3rem);
-  padding: var(--spacing-2, 0.4rem) var(--spacing-1, 0.2rem)
-    var(--spacing-0-5, 0.1rem) var(--spacing-1, 0.2rem);
-  border-radius: var(--radii-Semantic_tokens-l2, 0.25rem);
+  padding: var(--spacing-2, 0.5rem) var(--spacing-1, 0.25rem)
+    var(--spacing-0\.5, 0.1rem) var(--spacing-1, 0.25rem);
+  border-radius: var(--radii-sm, 0.25rem);
 
   &:focus {
     outline: none;
@@ -95,8 +94,8 @@ const SDateInput = styled.input`
   }
 
   &:disabled {
-    background-color: var(--colors-bg-muted, #f7fafc);
-    color: var(--colors-fg-muted, #a0aec0);
+    background-color: var(--colors-gray-100, #f4f4f5);
+    color: var(--colors-gray-600, #52525b);
     cursor: not-allowed;
   }
 
@@ -113,7 +112,7 @@ const SDivider = styled.div`
 
   width: 1rem;
   height: 1px;
-  background-color: var(--colors-border-default, #e4e4e7);
+  background-color: var(--colors-border, #e4e4e7);
   margin: 0 var(--spacing-2, 0.5rem);
 `;
 
