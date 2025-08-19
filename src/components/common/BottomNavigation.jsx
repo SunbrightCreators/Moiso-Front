@@ -30,16 +30,15 @@ const SNavigationContainer = styled.nav`
   padding: 8px 4px;
 `;
 const SLink = styled(Link)`
-  flex: 1;
+  width: 25%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5;
   textdecoration: none;
   color: ${({ isActive }) =>
     isActive
-      ? 'var(--colors-fg-default, #27272A)'
-      : 'var(--text-subtle2, #D4D4D8)'};
+      ? 'var(--colors-text-default, #27272A)'
+      : 'var(--colors-text-subtle2, #D4D4D8)'};
 `;
 const SLabel = styled.span`
   font-size: 10px;
