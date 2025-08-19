@@ -16,6 +16,9 @@ const ContentArea = styled.main`
   flex-grow: 1;
   overflow-y: auto;
   padding: 24px 16px;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const ButtonArea = styled.div`
@@ -131,6 +134,7 @@ const ErrorMessage = styled.p`
 `;
 
 const Button = styled.button`
+  position: fixied;
   width: 100%;
   height: 56px;
   border: none;
@@ -324,11 +328,10 @@ function SignUpPage() {
           </div>
         </Form>
       </ContentArea>
-
       <ButtonArea>
         <Button
           type='submit'
-          onClick={handleSubmit(onSubmit)}
+          // onClick={handleSubmit(onSubmit)} // Form 태그의 onSubmit이 역할을 대신하므로 이 줄은 삭제해도 됩니다.
           disabled={!isValid}
         >
           다음
