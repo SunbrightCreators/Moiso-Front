@@ -12,7 +12,7 @@ const SearchBarContainer = styled.div`
   padding: 0 var(--spacing-3)
   height: 3rem; /* 48px */
   background-color: var(--colors-gray-100, #f4f4f5);
-  border-radius: var(--radii-md);  
+  border-radius: var(--radii-md); 
   overflow: hidden;
 `;
 
@@ -29,6 +29,9 @@ const SearchInput = styled.input`
   line-height: 1.5rem; /* 24px */
   &::placeholder {
     color: var(--colors-gray-400, #a1a1aa);
+  }
+  &[type='search'] {
+    -webkit-appearance: textfield; /* 
   }
 `;
 

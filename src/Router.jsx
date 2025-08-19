@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 const Router = () => {
   return (
     <BrowserRouter>
@@ -8,4 +9,5 @@ const Router = () => {
     </BrowserRouter>
   );
 };
+
 export default Router;
