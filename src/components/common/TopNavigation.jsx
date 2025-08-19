@@ -74,7 +74,7 @@ export default TopNavigation;
 
 // Styled Components
 const SLayout = styled.header`
-  // 시멘틱 태그 활아ㅛㅇ
+  // 시멘틱 태그 활용
   position: sticky;
   top: 0;
   width: 100%;
