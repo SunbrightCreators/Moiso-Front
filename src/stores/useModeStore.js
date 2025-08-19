@@ -8,7 +8,7 @@ const useModeStore = create(
       isProposerMode: true,
 
       // 상태 변경 함수들
-      setProposerMode: (v) => set({ isProposerMode: v }),
+      setIsProposerMode: (v) => set({ isProposerMode: v }),
       toggleMode: () => set({ isProposerMode: !get().isProposerMode }),
     }),
     {
