@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { useForm } from 'react-hook-form';
+import TopNavigation from '../components/common/TopNavigation';
 
 // --- 스타일 정의 ---
 
@@ -15,9 +16,6 @@ const ContentArea = styled.main`
   flex-grow: 1;
   overflow-y: auto;
   padding: 24px 16px;
-  &::-webkit-scrollbar {
-    display: none;
-  }
 `;
 
 const ButtonArea = styled.div`
@@ -70,8 +68,13 @@ const ChevronIcon = styled.span`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-12, 3rem);
 
+  > div {
+    margin-bottom: 24px;
+  }
+  .gender-container {
+    margin-bottom: 32px;
+  }
   > div:last-child {
     margin-bottom: 0;
   }
@@ -82,8 +85,8 @@ const Form = styled.form`
     width: 100%;
     height: 56px;
     padding: 0 16px;
-    border-radius: var(--Radii-Semantic_tokens-l2, 0.25rem);
-    border: var(--Borders-sm, 1px) solid var(--border-default, #e4e4e7);
+    border-radius: 8px;
+    border: 1px solid #cad1db;
     font-size: 16px;
     box-sizing: border-box;
     &::placeholder {
@@ -129,10 +132,9 @@ const ErrorMessage = styled.p`
 
 const Button = styled.button`
   width: 100%;
-  min-width: var(--sizes-16, 4rem);
-  height: var(--sizes-12, 3rem);
+  height: 56px;
   border: none;
-  border-radius: var(--radii-md, 0.375rem);
+  border-radius: 8px;
   color: white;
   font-size: 16px;
   font-weight: 700;
@@ -174,6 +176,7 @@ function SignUpPage() {
 
   return (
     <Container>
+      <TopNavigation left='back' title='회원가입' />
       <ContentArea>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div>
