@@ -1,11 +1,12 @@
 import axios from 'axios';
+import { API_URL } from '../constants/env';
 import { clientInterceptor, authClientInterceptor } from './interceptor';
 
 /**
  * 일반 요청
  */
 const client = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: API_URL,
   timeout: 5000,
 });
 client.interceptors.request.use(
