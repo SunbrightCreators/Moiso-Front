@@ -7,12 +7,12 @@ import { ReactComponent as ClearIcon } from '../../assets/icons/x.svg';
 const SearchBarContainer = styled.div`
   display: inline-flex;
   align-items: center;
-  gap: var(--chakra-space-2);
+  gap: var(--spacing-2);
   width: 100%;
-  padding: 0 var(--chakra-space-3)
+  padding: 0 var(--spacing-3)
   height: 3rem; /* 48px */
   background-color: var(--colors-gray-100, #f4f4f5);
-  border-radius: var(--chakra-radii-md); 
+  border-radius: var(--radii-md);  
   overflow: hidden;
 `;
 
@@ -25,7 +25,7 @@ const SearchInput = styled.input`
   font-family: 'Inter', sans-serif;
   font-size: 1rem; /* 16px */
   font-weight: 500;
-  color: var(--text-default, #27272a);
+  color: var(--colors-text-default, #27272a);
   line-height: 1.5rem; /* 24px */
   &::placeholder {
     color: var(--colors-gray-400, #a1a1aa);
