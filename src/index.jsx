@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Provider from './styles/provider';
 import Router from './Router';
+import Dialog from './components/common/Dialog';
 import registerServiceWorker from './service-workers/registerServiceWorker';
 import requestNotificationPermission from './service-workers/requestNotificationPermission';
 import subscribePush from './service-workers/subscribePush';
@@ -14,6 +15,7 @@ root.render(
   <React.StrictMode>
     <Provider>
       <Router />
+      <Dialog />
     </Provider>
   </React.StrictMode>,
 );
