@@ -150,7 +150,7 @@ const Button = styled.button`
 
 // --- 리액트 컴포넌트 정의 ---
 
-function SignUpPage() {
+function SignUpPage2() {
   const {
     register,
     handleSubmit,
@@ -329,11 +329,7 @@ function SignUpPage() {
         </Form>
       </ContentArea>
       <ButtonArea>
-        <Button
-          type='submit'
-          // onClick={handleSubmit(onSubmit)} // Form 태그의 onSubmit이 역할을 대신하므로 이 줄은 삭제해도 됩니다.
-          disabled={!isValid}
-        >
+        <Button type='submit' disabled={!isValid}>
           다음
         </Button>
       </ButtonArea>
@@ -341,4 +337,4 @@ function SignUpPage() {
   );
 }
 
-export default SignUpPage;
+export default SignUpPage2;
