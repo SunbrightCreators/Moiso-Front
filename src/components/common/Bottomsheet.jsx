@@ -43,7 +43,7 @@ const SModalContent = styled(SContent)`
     if ($level === 3) return '80vh';
     return '50vh'; // 기본값
   }};
-  max-height: calc(90vh - 1.5rem); // 핸들바 높이ㄴ,ㄴ 제외!!
+  max-height: calc(90vh - 1.5rem); // 핸들바 높이는 제외!!
 `;
 
 // 지도 탐색용 바텀시트 (non-modal)
