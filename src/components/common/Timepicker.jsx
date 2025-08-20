@@ -23,7 +23,7 @@ const Timepicker = ({
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
 
-  // 시작일 변경 → 종료일 최소값 설정
+  // 시작시간 변경 → 종료시간 최소값 설정
   const handleStartTimeChange = (e) => {
     const value = e.target.value;
     setStartTime(value);
