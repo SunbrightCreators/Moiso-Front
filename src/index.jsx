@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from './styles/snippets/provider';
 import Router from './Router';
+import { ModalBottomsheet } from './components/common/Bottomsheet';
 import {
   register,
   hasNotificationPermission,
@@ -16,6 +17,7 @@ root.render(
   <React.StrictMode>
     <Provider>
       <Router />
+      <ModalBottomsheet />
     </Provider>
   </React.StrictMode>,
 );
