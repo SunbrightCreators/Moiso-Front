@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import useBottomsheetStore from '../../stores/useBottomsheetStore';
+import useModalBottomsheetStore from '../../stores/useModalBottomsheetStore';
 
 // 공통 styled-components
 const SHandleBar = styled.div`
@@ -25,7 +25,6 @@ const SHandleBar = styled.div`
 const SContent = styled.div`
   width: 100%;
   overflow-y: auto;
-  transition: height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 `;
 
 const SMapContent = styled(SContent)`
@@ -34,6 +33,7 @@ const SMapContent = styled(SContent)`
     if ($level === 2) return '40vh';
     if ($level === 3) return '70vh';
   }};
+  transition: height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 `;
 
 const SModalContent = styled(SContent)`
@@ -45,25 +45,28 @@ const SModalContent = styled(SContent)`
   max-height: calc(90vh - 1.5rem); // 핸들바 높이는 제외!!
 `;
 
-// 지도 탐색용 바텀시트 (non-modal)
-const SMapBottomsheetLayout = styled.div`
-  background-color: var(--colors-bg);
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  width: 100%;
-  max-width: 480px;
+// 공통 레이아웃 —————————————————————————————————————————————————
+const SLayout = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
+  background-color: var(--colors-bg);
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  max-width: 480px;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
   padding-top: 1.5rem;
-  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 `;
 
-// 그 외 페이지용 바텀시트 (modal)
+// 지도 탐색용 바텀시트 (non-modal) —————————————————————————————————
+const SMapBottomsheetLayout = styled(SLayout)`
+  z-index: 10;
+`;
+
+// 그 외 페이지용 바텀시트 (modal) ——————————————————————————————————
 const SModalBottomsheetScrim = styled.div`
   position: fixed;
   top: 0;
@@ -80,23 +83,15 @@ const SModalBottomsheetScrim = styled.div`
   transition: opacity 0.3s ease;
 `;
 
-const SModalBottomsheetLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  background-color: var(--colors-bg);
-  position: fixed;
-  left: 50%;
-  bottom: 0;
+const SModalBottomsheetLayout = styled(SLayout)`
   transform: translateX(-50%)
     translateY(${({ $transition }) => ($transition === 'open' ? '0' : '100%')});
   max-height: 90vh;
   border-radius: 1rem 1rem 0 0;
-  padding-top: 1.5rem;
   transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 `;
 
-// 공통 드래그 핸들러 훅
+// 공통 드래그 핸들러 훅 —————————————————————————————————————————————
 const useDragHandler = (
   currentLevel,
   setLevel,
@@ -152,15 +147,29 @@ const useDragHandler = (
     handlePointerUp,
   };
 };
+// ———————————————————————————————————————————————————————————————
+//
 
-// 지도 탐색용 바텀시트 컴포넌트
-const MapBottomsheet = ({ children }) => {
-  const [mapBottomsheetLevel, setMapBottomsheetLevel] = useState(1);
+// 지도 탐색용 바텀시트 (non-Modal)
+const MapBottomsheet = ({ children, level = 1, onLevelChange }) => {
+  const [mapBottomsheetLevel, setMapBottomsheetLevel] = useState(level);
+
+  // level prop이 변경되면 내부 상태도 업데이트
+  useEffect(() => {
+    setMapBottomsheetLevel(level);
+  }, [level]);
+
+  const handleLevelChange = (newLevel) => {
+    setMapBottomsheetLevel(newLevel);
+    if (onLevelChange) {
+      onLevelChange(newLevel);
+    }
+  };
 
   const { handlePointerDown, handlePointerMove, handlePointerUp } =
     useDragHandler(
       mapBottomsheetLevel,
-      setMapBottomsheetLevel,
+      handleLevelChange,
       1, // 최소 레벨
       3, // 최대 레벨
       null, // 지도 바텀시트는 완전히 닫지 X
@@ -181,9 +190,9 @@ const MapBottomsheet = ({ children }) => {
   );
 };
 
-// 모달 바텀시트 컴포넌트
+// 그 외 페이지용 바텀시트 (Modal)
 const ModalBottomsheet = () => {
-  const { isOpen, transition, children, close } = useBottomsheetStore();
+  const { isOpen, transition, children, close } = useModalBottomsheetStore();
 
   const [modalBottomsheetLevel, setModalBottomsheetLevel] = useState(2);
 
@@ -195,7 +204,6 @@ const ModalBottomsheet = () => {
       3, // 최대 레벨
       close, // 완전히 닫을 수 O
     );
-
 
   const handleScrimClick = (e) => {
     if (e.target === e.currentTarget) {
@@ -222,7 +230,7 @@ const ModalBottomsheet = () => {
         <SModalContent $level={modalBottomsheetLevel}>{children}</SModalContent>
       </SModalBottomsheetLayout>
     </SModalBottomsheetScrim>,
-    document.getElementById('root'),
+    document.getElementById('modal'),
   );
 };
 

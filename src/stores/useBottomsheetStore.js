@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-const useBottomsheetStore = create((set) => ({
+const useModalBottomsheetStore = create((set) => ({
   // 바텀시트 상태
   isOpen: false,
   transition: 'close',
@@ -48,4 +48,4 @@ const useBottomsheetStore = create((set) => ({
   },
 }));
 
-export default useBottomsheetStore;
+export default useModalBottomsheetStore;
