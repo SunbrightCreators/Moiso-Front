@@ -7,8 +7,8 @@ import { Input } from '@chakra-ui/react';
  *
  * Props:
  * - register: react-hook-form의 register 함수
- * - min: 최소 날짜 (YYYY-MM-DD 형식)
- * - max: 최대 날짜 (YYYY-MM-DD 형식)
+ * - min: 최소 시간 (HH:MM 형식)
+ * - max: 최대 시간 (HH:MM 형식)
  * - required: 필수 입력 여부
  * - disabled: 비활성화 여부
  */
