@@ -29,7 +29,7 @@ const Timepicker = ({
     setStartTime(value);
   };
 
-  // 종료일 변경 → 시작일 최대값 설정
+  // 종료시간 변경 → 시작시간 최대값 설정
   const handleEndTimeChange = (e) => {
     const value = e.target.value;
     setEndTime(value);
