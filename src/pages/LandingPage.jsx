@@ -1,6 +1,8 @@
 import { Flex, VStack, Heading, Text, Button, Box } from '@chakra-ui/react';
 import logo from '../assets/icons/logo.svg';
 import styled from 'styled-components'; // styled-components import
+import { Link } from 'react-router-dom';
+import { ROUTE_PATH } from '../constants/route';
 
 const StyledLoginButton = styled(Button)`
   width: 22.375rem;
@@ -10,7 +12,7 @@ const StyledLoginButton = styled(Button)`
   gap: 0.75rem;
   flex-shrink: 0;
   border-radius: 0.375rem;
-  background: bg/default;
+  background: #303742;
   color: white;
   display: flex;
   justify-content: center;
@@ -61,8 +63,15 @@ function LandingPage() {
       </VStack>
 
       <VStack spacing={3} w='100%' maxW='md' mx='auto' mt='1.44rem' pb='5.5rem'>
-        <StyledLoginButton> 로그인</StyledLoginButton>
-        <StyledSignupButton>회원가입</StyledSignupButton>
+        {/* 로그인 버튼 클릭 시 ROUTE_PATH.LOGIN 경로로 이동 */}
+        <StyledLoginButton as={Link} to={ROUTE_PATH.LOGIN}>
+          로그인
+        </StyledLoginButton>
+
+        {/* 회원가입 버튼 클릭 시 ROUTE_PATH.SIGNUP 경로로 이동 */}
+        <StyledSignupButton as={Link} to={ROUTE_PATH.SIGNUP}>
+          회원가입
+        </StyledSignupButton>
       </VStack>
     </Flex>
   );
