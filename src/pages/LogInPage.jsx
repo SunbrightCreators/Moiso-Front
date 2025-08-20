@@ -89,7 +89,7 @@ export default function LoginPage() {
   };
 
   return (
-    <Flex direction='column' minH='100vh'>
+    <Flex direction='column' minH='100%'>
       <TopNavigation left='back' title='로그인 ' />
 
       <VStack spacing={6} flex='1' p={6} alignItems='center' mt='5.44rem'>
