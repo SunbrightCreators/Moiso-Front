@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import TopNavigation from '../components/common/TopNavigation';
 import Dialog from '../components/common/Dialog';
 import useDialogStore from '../stores/useDialogStore';
-import useModeStore from '../stores/useModeStore';
+import { SEX } from '../constants/enum';
 
 // --- 스타일 정의 ---
 
@@ -282,40 +282,30 @@ function SignUpPage2({ onNextStep }) {
               <ErrorMessage>{errors.birthdate.message}</ErrorMessage>
             )}
           </div>
-
           <div className='gender-container'>
             <FormLabel>성별</FormLabel>
             <div className='gender-group'>
-              <GenderOption isSelected={genderUI === 'male'}>
-                <input
-                  type='radio'
-                  value='male'
-                  style={{ display: 'none' }}
-                  checked={genderUI === 'male'}
-                  onChange={(e) => {
-                    setGenderUI(e.target.value);
-                    setValue('gender', e.target.value, {
+              {SEX.map((option) => (
+                <GenderOption
+                  key={option.value}
+                  isSelected={genderUI === option.value}
+                  onClick={() => {
+                    setGenderUI(option.value);
+                    setValue('gender', option.value, {
                       shouldValidate: true,
                     });
                   }}
-                />
-                남성
-              </GenderOption>
-              <GenderOption isSelected={genderUI === 'female'}>
-                <input
-                  type='radio'
-                  value='female'
-                  style={{ display: 'none' }}
-                  checked={genderUI === 'female'}
-                  onChange={(e) => {
-                    setGenderUI(e.target.value);
-                    setValue('gender', e.target.value, {
-                      shouldValidate: true,
-                    });
-                  }}
-                />
-                여성
-              </GenderOption>
+                >
+                  <input
+                    type='radio'
+                    value={option.value}
+                    style={{ display: 'none' }}
+                    checked={genderUI === option.value}
+                    readOnly
+                  />
+                  {option.label}
+                </GenderOption>
+              ))}
             </div>
             {errors.gender && (
               <ErrorMessage>{errors.gender.message}</ErrorMessage>
