@@ -31,60 +31,39 @@ const tokens = defineTokens({
   },
   text: {
     '2xs': {
-      normal:
-        'normal normal var(--font-weights-normal) normal var(--font-sizes-2xs) var(--line-heights-2xs) var(--fonts-body)',
-      medium:
-        'normal normal var(--font-weights-medium) normal var(--font-sizes-2xs) var(--line-heights-2xs) var(--fonts-body)',
-      semibold:
-        'normal normal var(--font-weights-semibold) normal var(--font-sizes-2xs) var(--line-heights-2xs) var(--fonts-body)',
+      normal: 'normal normal var(--font-weights-normal) normal var(--font-sizes-2xs) var(--line-heights-2xs) var(--fonts-body)',
+      medium: 'normal normal var(--font-weights-medium) normal var(--font-sizes-2xs) var(--line-heights-2xs) var(--fonts-body)',
+      semibold: 'normal normal var(--font-weights-semibold) normal var(--font-sizes-2xs) var(--line-heights-2xs) var(--fonts-body)',
     },
     xs: {
-      normal:
-        'normal normal var(--font-weights-normal) normal var(--font-sizes-xs) var(--line-heights-xs) var(--fonts-body)',
-      medium:
-        'normal normal var(--font-weights-medium) normal var(--font-sizes-xs) var(--line-heights-xs) var(--fonts-body)',
-      semibold:
-        'normal normal var(--font-weights-semibold) normal var(--font-sizes-xs) var(--line-heights-xs) var(--fonts-body)',
+      normal: 'normal normal var(--font-weights-normal) normal var(--font-sizes-xs) var(--line-heights-xs) var(--fonts-body)',
+      medium: 'normal normal var(--font-weights-medium) normal var(--font-sizes-xs) var(--line-heights-xs) var(--fonts-body)',
+      semibold: 'normal normal var(--font-weights-semibold) normal var(--font-sizes-xs) var(--line-heights-xs) var(--fonts-body)',
     },
     sm: {
-      normal:
-        'normal normal var(--font-weights-normal) normal var(--font-sizes-sm) var(--line-heights-sm) var(--fonts-body)',
-      medium:
-        'normal normal var(--font-weights-medium) normal var(--font-sizes-sm) var(--line-heights-sm) var(--fonts-body)',
-      semibold:
-        'normal normal var(--font-weights-semibold) normal var(--font-sizes-sm) var(--line-heights-sm) var(--fonts-body)',
+      normal: 'normal normal var(--font-weights-normal) normal var(--font-sizes-sm) var(--line-heights-sm) var(--fonts-body)',
+      medium: 'normal normal var(--font-weights-medium) normal var(--font-sizes-sm) var(--line-heights-sm) var(--fonts-body)',
+      semibold: 'normal normal var(--font-weights-semibold) normal var(--font-sizes-sm) var(--line-heights-sm) var(--fonts-body)',
     },
     md: {
-      normal:
-        'normal normal var(--font-weights-normal) normal var(--font-sizes-md) var(--line-heights-md) var(--fonts-body)',
-      medium:
-        'normal normal var(--font-weights-medium) normal var(--font-sizes-md) var(--line-heights-md) var(--fonts-body)',
-      semibold:
-        'normal normal var(--font-weights-semibold) normal var(--font-sizes-md) var(--line-heights-md) var(--fonts-body)',
+      normal: 'normal normal var(--font-weights-normal) normal var(--font-sizes-md) var(--line-heights-md) var(--fonts-body)',
+      medium: 'normal normal var(--font-weights-medium) normal var(--font-sizes-md) var(--line-heights-md) var(--fonts-body)',
+      semibold: 'normal normal var(--font-weights-semibold) normal var(--font-sizes-md) var(--line-heights-md) var(--fonts-body)',
     },
     lg: {
-      normal:
-        'normal normal var(--font-weights-normal) normal var(--font-sizes-lg) var(--line-heights-lg) var(--fonts-body)',
-      medium:
-        'normal normal var(--font-weights-medium) normal var(--font-sizes-lg) var(--line-heights-lg) var(--fonts-body)',
-      semibold:
-        'normal normal var(--font-weights-semibold) normal var(--font-sizes-lg) var(--line-heights-lg) var(--fonts-body)',
+      normal: 'normal normal var(--font-weights-normal) normal var(--font-sizes-lg) var(--line-heights-lg) var(--fonts-body)',
+      medium: 'normal normal var(--font-weights-medium) normal var(--font-sizes-lg) var(--line-heights-lg) var(--fonts-body)',
+      semibold: 'normal normal var(--font-weights-semibold) normal var(--font-sizes-lg) var(--line-heights-lg) var(--fonts-body)',
     },
     xl: {
-      normal:
-        'normal normal var(--font-weights-normal) normal var(--font-sizes-xl) var(--line-heights-xl) var(--fonts-body)',
-      medium:
-        'normal normal var(--font-weights-medium) normal var(--font-sizes-xl) var(--line-heights-xl) var(--fonts-body)',
-      semibold:
-        'normal normal var(--font-weights-semibold) normal var(--font-sizes-xl) var(--line-heights-xl) var(--fonts-body)',
+      normal: 'normal normal var(--font-weights-normal) normal var(--font-sizes-xl) var(--line-heights-xl) var(--fonts-body)',
+      medium: 'normal normal var(--font-weights-medium) normal var(--font-sizes-xl) var(--line-heights-xl) var(--fonts-body)',
+      semibold: 'normal normal var(--font-weights-semibold) normal var(--font-sizes-xl) var(--line-heights-xl) var(--fonts-body)',
     },
     '2xl': {
-      normal:
-        'normal normal var(--font-weights-normal) normal var(--font-sizes-2xl) var(--line-heights-2xl) var(--fonts-body)',
-      medium:
-        'normal normal var(--font-weights-medium) normal var(--font-sizes-2xl) var(--line-heights-2xl) var(--fonts-body)',
-      semibold:
-        'normal normal var(--font-weights-normal) normal var(--font-sizes-2xl) var(--line-heights-2xl) var(--fonts-body)',
+      normal: 'normal normal var(--font-weights-normal) normal var(--font-sizes-2xl) var(--line-heights-2xl) var(--fonts-body)',
+      medium: 'normal normal var(--font-weights-medium) normal var(--font-sizes-2xl) var(--line-heights-2xl) var(--fonts-body)',
+      semibold: 'normal normal var(--font-weights-normal) normal var(--font-sizes-2xl) var(--line-heights-2xl) var(--fonts-body)',
     },
   },
 });
