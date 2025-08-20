@@ -9,8 +9,7 @@ import {
 } from '@chakra-ui/react';
 import logo from '../assets/icons/logo.svg';
 import styled from 'styled-components';
-import { ReactComponent as FounderIcon } from '../assets/icons/founder.svg';
-import { ReactComponent as ProposerIcon } from '../assets/icons/proposal.svg'; // styled-components import
+import useModeStore from '../stores/useModeStore';
 
 const StyledLoginButton = styled(Button)`
   width: 22.375rem;
@@ -41,17 +40,7 @@ const LogoBox = styled(Box)`
   font: var(--text-sm-semibold);
 `;
 
-const StyledFounderIcon = styled(Icon)`
-  width: 6.25rem;
-  height: 1rem;
-`;
-
-const StyledProposerIcon = styled(Icon)`
-  width: 8.3125rem;
-  height: 1rem;
-`;
-
-function SignUpPage1() {
+function SignUpPage1({}) {
   return (
     <Flex direction='column' minH='100vh' font='font: var(--text-sm-semibold);'>
       <VStack spacing={4} flex='1' justify='center'>
@@ -65,12 +54,8 @@ function SignUpPage1() {
       </VStack>
 
       <VStack spacing={3} w='100%' maxW='md' mx='auto' mt='1.44rem' pb='5.5rem'>
-        <StyledLoginButton>
-          <StyledFounderIcon as={FounderIcon} mr={2} />
-        </StyledLoginButton>
-        <StyledLoginButton>
-          <StyledProposerIcon as={ProposerIcon} mr={2} />
-        </StyledLoginButton>
+        <StyledLoginButton onClick>창업자로 가입</StyledLoginButton>
+        <StyledLoginButton onClick>지역주민으로 가입</StyledLoginButton>
       </VStack>
     </Flex>
   );

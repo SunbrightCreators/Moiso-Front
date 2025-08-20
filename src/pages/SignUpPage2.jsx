@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { useForm } from 'react-hook-form';
 import TopNavigation from '../components/common/TopNavigation';
+import Dialog from '../components/common/Dialog';
+import useDialogStore from '../stores/useDialogStore';
 
 // --- 스타일 정의 ---
 
@@ -15,19 +17,19 @@ const Container = styled.div`
 const ContentArea = styled.main`
   flex-grow: 1;
   overflow-y: auto;
-  padding: 24px 16px;
+  padding: 1.5rem 1rem;
   &::-webkit-scrollbar {
     display: none;
   }
 `;
 
 const ButtonArea = styled.div`
-  padding: 8px 16px 20px;
+  padding: 0.5rem 1rem 1.25rem;
 `;
 
 const FormLabel = styled.label`
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 0.25rem;
   color: #27272a;
   font-size: 0.875rem;
   font-weight: 600;
@@ -39,9 +41,9 @@ const GenderOption = styled.label`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 56px;
+  height: 3.5rem;
   border-radius: 0.5rem;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
@@ -50,22 +52,29 @@ const GenderOption = styled.label`
       ? css`
           background: #303742;
           color: white;
-          border: 1px solid #303742;
+          border: 0.0625rem solid #303742;
         `
       : css`
           background: white;
           color: #303742;
-          border: 1px solid #cad1db;
+          border: 0.0625rem solid #cad1db;
         `}
 `;
 
 const ChevronIcon = styled.span`
   display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-top: 2px solid #a6afbd;
-  border-right: 2px solid #a6afbd;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-top: 0.125rem solid #a6afbd;
+  border-right: 0.125rem solid #a6afbd;
   transform: rotate(45deg);
+`;
+
+const ChevronBtn = styled.button`
+border;);
+background: transparent;
+padding: 0.125rem;
+cursor:pointer;
 `;
 
 const Form = styled.form`
@@ -73,10 +82,10 @@ const Form = styled.form`
   flex-direction: column;
 
   > div {
-    margin-bottom: 24px;
+    margin-bottom: 1.5rem;
   }
   .gender-container {
-    margin-bottom: 32px;
+    margin-bottom: 2rem;
   }
   > div:last-child {
     margin-bottom: 0;
@@ -85,12 +94,12 @@ const Form = styled.form`
   input[type='text'],
   input[type='email'],
   input[type='password'] {
-    width: 100%;
-    height: 56px;
-    padding: 0 16px;
-    border-radius: 8px;
-    border: 1px solid #cad1db;
-    font-size: 16px;
+    width: 22.375rem;
+    height: 3.5rem; /* 56px */
+    padding: 0 1rem; /* 0 16px */
+    border-radius: 0.5rem; /* 8px */
+    border: 0.0625rem solid #cad1db; /* 1px */
+    font-size: 1rem; /* 16px */
     box-sizing: border-box;
     &::placeholder {
       color: #cad1db;
@@ -99,48 +108,47 @@ const Form = styled.form`
 
   .gender-group {
     display: flex;
-    gap: 8px;
+    gap: 0.5rem;
   }
 
   .agreement-group {
     display: flex;
     flex-direction: column;
-    margin-top: 8px;
+    margin-top: 0.5rem;
   }
 
   .agreement-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 16px;
-    padding: 10px 4px;
+    font-size: 1rem;
+    padding: 0.625rem 0.25rem;
   }
 
   .agreement-group .agreement-item:first-child {
-    border-bottom: 1px solid #f4f4f5;
+    border-bottom: 0.0625rem solid #f4f4f5;
   }
 
   .agreement-item-left {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 0.5rem;
   }
 `;
 
 const ErrorMessage = styled.p`
   color: #ff3b30;
-  font-size: 12px;
-  margin-top: 4px;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
 `;
 
 const Button = styled.button`
-  position: fixied;
   width: 100%;
-  height: 56px;
+  height: 3.5rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   color: white;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
   transition: background-color 0.2s;
@@ -151,6 +159,32 @@ const Button = styled.button`
 // --- 리액트 컴포넌트 정의 ---
 
 function SignUpPage2() {
+  const setAlertDialog = useDialogStore((s) => s.setAlertDialog);
+  const TERMS_TXT = `여기에 서비스 이용약관 전문을 넣으세요...`;
+  const PRIVACY_TXT = `여기에 개인정보 수집 및 이용 동의 전문을 넣으세요...`;
+  const MARKETING_TXT = `여기에 마케팅 수신 동의 안내를 넣으세요...`;
+
+  const openTerms = () =>
+    setAlertDialog({
+      title: '서비스 이용약관',
+      content: TERMS_TXT,
+      actionText: '닫기',
+    });
+
+  const openPrivacy = () =>
+    setAlertDialog({
+      title: '개인정보 수집 및 이용동의',
+      content: PRIVACY_TXT,
+      actionText: '닫기',
+    });
+
+  const openMarketing = () =>
+    setAlertDialog({
+      title: '마케팅 및 수신동의',
+      content: MARKETING_TXT,
+      actionText: '닫기',
+    });
+
   const {
     register,
     handleSubmit,
@@ -302,7 +336,17 @@ function SignUpPage2() {
                   />
                   <span>[필수] 서비스 이용 약관</span>
                 </div>
-                <ChevronIcon />
+                <ChevronBtn
+                  type='button'
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openTerms('서비스 이용약관', TERMS_TXT);
+                  }}
+                  aria-label='서비스 이용약관 보기'
+                >
+                  <ChevronIcon />{' '}
+                </ChevronBtn>
               </div>
               <div className='agreement-item'>
                 <div className='agreement-item-left'>
@@ -312,14 +356,34 @@ function SignUpPage2() {
                   />
                   <span>[필수] 개인정보 수집 및 이용 동의</span>
                 </div>
-                <ChevronIcon />
+                <ChevronBtn
+                  type='button'
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openPrivacy('개인정보 수집 및 이용 동의', PRIVACY_TXT);
+                  }}
+                  aria-label='개인정보 수집 및 이용 동의'
+                >
+                  <ChevronIcon />{' '}
+                </ChevronBtn>
               </div>
               <div className='agreement-item'>
                 <div className='agreement-item-left'>
                   <input type='checkbox' {...register('marketing')} />
                   <span>[선택] 마케팅 및 메시지 수신 동의</span>
                 </div>
-                <ChevronIcon />
+                <ChevronBtn
+                  type='button'
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openMarketing('마케팅 및 메시지 수신 동의', MARKETING_TXT);
+                  }}
+                  aria-label='마케팅 및 메시지 수신 동의'
+                >
+                  <ChevronIcon />{' '}
+                </ChevronBtn>
               </div>
             </div>
             {(errors.terms || errors.privacy) && (
@@ -333,6 +397,7 @@ function SignUpPage2() {
           다음
         </Button>
       </ButtonArea>
+      <Dialog />
     </Container>
   );
 }
