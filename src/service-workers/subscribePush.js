@@ -1,3 +1,5 @@
+import { VAPID_PUBLIC_KEY } from '../constants/env';
+
 const base64urlToUint8Array = (base64urlString) => {
   // base64url → base64
   let base64 = base64urlString.replace(/-/g, '+').replace(/_/g, '/');
@@ -19,8 +21,7 @@ const base64urlToUint8Array = (base64urlString) => {
 };
 
 const subscribePush = async (registration) => {
-  const vapidPublicKey = process.env.REACT_APP_VAPID_PUBLIC_KEY;
-  const applicationServerKey = base64urlToUint8Array(vapidPublicKey);
+  const applicationServerKey = base64urlToUint8Array(VAPID_PUBLIC_KEY);
 
   try {
     const subscription = await registration.pushManager.subscribe({
