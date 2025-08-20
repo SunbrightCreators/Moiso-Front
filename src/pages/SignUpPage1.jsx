@@ -41,6 +41,7 @@ const LogoBox = styled(Box)`
 `;
 
 function SignUpPage1({ onNextStep }) {
+  const setIsProposerMode = useModeStore((s) => s.setIsProposerMode);
   // '창업자로 가입' 버튼 클릭 시 실행될 함수
   const handleFounderClick = () => {
     setIsProposerMode(false); // 창업자 모드
