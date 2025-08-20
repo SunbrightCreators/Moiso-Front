@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import TopNavigation from '../components/common/TopNavigation';
 import Dialog from '../components/common/Dialog';
 import useDialogStore from '../stores/useDialogStore';
+import useModeStore from '../stores/useModeStore';
 
 // --- 스타일 정의 ---
 
@@ -71,10 +72,10 @@ const ChevronIcon = styled.span`
 `;
 
 const ChevronBtn = styled.button`
-border;);
-background: transparent;
-padding: 0.125rem;
-cursor:pointer;
+  border: none;
+  background: transparent;
+  padding: 0.125rem;
+  cursor: pointer;
 `;
 
 const Form = styled.form`
@@ -158,7 +159,7 @@ const Button = styled.button`
 
 // --- 리액트 컴포넌트 정의 ---
 
-function SignUpPage2() {
+function SignUpPage2({ onNextStep }) {
   const setAlertDialog = useDialogStore((s) => s.setAlertDialog);
   const TERMS_TXT = `여기에 서비스 이용약관 전문을 넣으세요...`;
   const PRIVACY_TXT = `여기에 개인정보 수집 및 이용 동의 전문을 넣으세요...`;
@@ -210,6 +211,7 @@ function SignUpPage2() {
 
   const onSubmit = (data) => {
     alert('회원가입이 완료되었습니다.');
+    if (onNextStep) onNextStep();
   };
 
   return (

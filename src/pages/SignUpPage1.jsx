@@ -19,7 +19,7 @@ const StyledLoginButton = styled(Button)`
   gap: 0.75rem;
   flex-shrink: 0;
   border-radius: 0.375rem;
-  background: bg/default;
+  background: #303742;
   color: white;
   display: flex;
   justify-content: center;
@@ -40,7 +40,24 @@ const LogoBox = styled(Box)`
   font: var(--text-sm-semibold);
 `;
 
-function SignUpPage1({}) {
+function SignUpPage1({ onNextStep }) {
+  // '창업자로 가입' 버튼 클릭 시 실행될 함수
+  const handleFounderClick = () => {
+    if (onNextStep && typeof onNextStep === 'function') {
+      onNextStep(false);
+    } else {
+      console.error('onNextStep is not a valid function.');
+    }
+  };
+
+  // '지역주민으로 가입' 버튼 클릭 시 실행될 함수
+  const handleResidentClick = () => {
+    if (onNextStep && typeof onNextStep === 'function') {
+      onNextStep(true);
+    } else {
+      console.error('onNextStep is not a valid function.');
+    }
+  };
   return (
     <Flex direction='column' minH='100vh' font='font: var(--text-sm-semibold);'>
       <VStack spacing={4} flex='1' justify='center'>
@@ -54,8 +71,12 @@ function SignUpPage1({}) {
       </VStack>
 
       <VStack spacing={3} w='100%' maxW='md' mx='auto' mt='1.44rem' pb='5.5rem'>
-        <StyledLoginButton onClick>창업자로 가입</StyledLoginButton>
-        <StyledLoginButton onClick>지역주민으로 가입</StyledLoginButton>
+        <StyledLoginButton onClick={handleFounderClick}>
+          창업자로 가입
+        </StyledLoginButton>
+        <StyledLoginButton onClick={handleResidentClick}>
+          지역주민으로 가입
+        </StyledLoginButton>
       </VStack>
     </Flex>
   );
