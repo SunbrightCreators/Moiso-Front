@@ -54,7 +54,11 @@ function SignUpPage1({ onNextStep }) {
   };
 
   return (
-    <Flex direction='column' minH='100%' font='font: var(--text-sm-semibold);'>
+    <Flex
+      direction='column'
+      minH='100dvh'
+      font='font: var(--text-sm-semibold);'
+    >
       <VStack spacing={4} flex='1' justify='center'>
         <LogoBox>
           <img src={logo} alt='서비스 로고' width='150' height='150' />
