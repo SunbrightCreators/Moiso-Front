@@ -7,7 +7,7 @@ import {
   Box,
   Icon,
 } from '@chakra-ui/react';
-import logo from '../assets/icons/logo.svg';
+import logo from '../assets/icons/logo1.svg';
 import styled from 'styled-components';
 import useModeStore from '../stores/useModeStore';
 

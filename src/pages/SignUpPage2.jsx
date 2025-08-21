@@ -210,8 +210,7 @@ function SignUpPage2({ onNextStep }) {
   }, [allAgreed, setValue]);
 
   const onSubmit = (data) => {
-    alert('회원가입이 완료되었습니다.');
-    if (onNextStep) onNextStep();
+    onNextStep?.({ account: data });
   };
 
   return (
@@ -385,7 +384,11 @@ function SignUpPage2({ onNextStep }) {
         </Form>
       </ContentArea>
       <ButtonArea>
-        <Button type='submit' disabled={!isValid}>
+        <Button
+          type='submit'
+          disabled={!isValid}
+          onClick={handleSubmit(onSubmit)}
+        >
           다음
         </Button>
       </ButtonArea>

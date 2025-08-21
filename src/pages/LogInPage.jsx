@@ -6,7 +6,7 @@ import {
 } from '@chakra-ui/form-control';
 import styled from 'styled-components';
 import TopNavigation from '../components/common/TopNavigation';
-import logo from '../assets/icons/logo.svg';
+import logo from '../assets/icons/logo1.svg';
 import { useForm } from 'react-hook-form';
 
 const LogoArea = styled(Box)`
@@ -94,7 +94,7 @@ export default function LoginPage() {
 
       <VStack spacing={6} flex='1' p={6} alignItems='center' mt='5.44rem'>
         <LogoArea mt={8}>
-          <img src={logo} alt='서비스 로고' width='150' height='150' />
+          <img src={logo} alt='서비스 로고' />
         </LogoArea>
 
         <VStack
