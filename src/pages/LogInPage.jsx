@@ -6,22 +6,18 @@ import {
 } from '@chakra-ui/form-control';
 import styled from 'styled-components';
 import TopNavigation from '../components/common/TopNavigation';
-import logo from '../assets/icons/logo1.svg';
+import logo from '../assets/icons/심볼.svg';
 import { useForm } from 'react-hook-form';
 
 const LogoArea = styled(Box)`
   display: flex;
-  width: 10.875rem;
-  height: 10.875rem;
+  width: 17.25rem;
+  height: 4.5rem;
   padding: 3.25rem;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
   border-radius: 0.4375rem;
-  background: var(--Surface, #f0f4fa);
-  font: var(--text-sm-semibold);
-  border-radius: 0.4375rem;
-  background: var(--Surface, #f0f4fa);
 `;
 
 const LoginButton = styled(Button)`

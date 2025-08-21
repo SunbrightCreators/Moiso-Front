@@ -38,8 +38,8 @@ const StyledSignupButton = styled(Button)`
 
 const LogoBox = styled(Box)`
   display: flex;
-  width: 13.4375rem;
-  height: 10.875rem;
+  width: 13.4375rem
+  height: 10.875rem
   flex-shrink: 0;
   padding: 3.25rem;
   justify-content: center;
@@ -47,7 +47,6 @@ const LogoBox = styled(Box)`
   flex-shrink: 0;
   border-radius: 0.4375rem;
   background: var(--Surface, #ffffffff);
-  font: var(--text-sm-semibold);
 `;
 
 function LandingPage() {
@@ -59,7 +58,7 @@ function LandingPage() {
     >
       <VStack spacing={4} flex='1' justify='center'>
         <LogoBox>
-          <img src={logo} alt='서비스 로고' width='150' height='150' />
+          <img src={logo} alt='서비스 로고' />
         </LogoBox>
       </VStack>
 
