@@ -694,7 +694,15 @@ const ProposalRecPage = () => {
 
                   <SmallBody>
                     <TagRow>
-                      <Badge variant='subtle' size='md'>
+                      <Badge
+                        variant='subtle'
+                        size='md'
+                        bg='#F4F4F5'
+                        color='#27272A'
+                        borderRadius='999px'
+                        fontSize='12px'
+                        fontWeight='400'
+                      >
                         {item.industry}
                       </Badge>
                     </TagRow>
@@ -764,7 +772,15 @@ const ProposalRecPage = () => {
 
                   <SmallBody>
                     <TagRow>
-                      <Badge variant='subtle' size='md'>
+                      <Badge
+                        variant='subtle'
+                        size='md'
+                        bg='#F4F4F5'
+                        color='#27272A'
+                        borderRadius='999px'
+                        fontSize='12px'
+                        fontWeight='400'
+                      >
                         {item.industry}
                       </Badge>
                     </TagRow>
