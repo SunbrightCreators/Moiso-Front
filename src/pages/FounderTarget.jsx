@@ -40,7 +40,7 @@ const StyledButton = styled(Button)`
   background-color: ${(props) => (props.isactive ? 'black' : 'gray')};
   color: white;
 
-  /* ✅ Chakra가 disabled를 aria-disabled/data-disabled로 줄 때도 완전 차단 */
+  /* Chakra가 disabled를 aria-disabled/data-disabled로 줄 때도 완전 차단 */
   &:disabled,
   &[aria-disabled='true'],
   &[data-disabled] {
