@@ -85,7 +85,6 @@ const SModalBottomsheetScrim = styled.div`
 const SModalBottomsheetLayout = styled(SLayout)`
   transform: translateX(-50%)
     translateY(${({ $transition }) => ($transition === 'open' ? '0' : '100%')});
-  max-height: 90vh;
   border-radius: 1rem 1rem 0 0;
   transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 `;
