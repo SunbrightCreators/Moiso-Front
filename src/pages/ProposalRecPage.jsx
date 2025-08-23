@@ -14,8 +14,8 @@ import ScrapPressed from '../assets/icons/scrap_pressed.svg';
 
 const LikeButton = styled.input.attrs({ type: 'checkbox' })`
   appearance: none;
-  width: 24px;
-  height: 24px;
+  width: var(--sizes-4, 1rem);
+  height: var(--sizes-4, 1rem);
   background: url(${HeartDefault}) no-repeat center/contain;
   cursor: pointer;
 
@@ -30,8 +30,8 @@ const LikeButton = styled.input.attrs({ type: 'checkbox' })`
 `;
 const ScrapButton = styled.input.attrs({ type: 'checkbox' })`
   appearance: none;
-  width: 18px;
-  height: 18px;
+  width: var(--sizes-4, 1rem);
+  height: var(--sizes-4, 1rem);
   background: url(${ScrapDefault}) no-repeat center/contain;
   cursor: pointer;
 
@@ -164,7 +164,7 @@ const StatsBar = styled.div`
   justify-content: flex-end; /* 오른쪽 끝 */
   margin-left: auto;
   align-items: center;
-  gap: 12px;
+  gap: var(--spacing-0_5, 0.125rem);
   color: #9ca3af;
   margin-top: 8px;
 `;
@@ -337,7 +337,7 @@ const UserRow = styled.div`
 const StatsRow = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--spacing-0_5, 0.125rem);
   color: #9ca3af;
 `;
 
@@ -380,13 +380,6 @@ const BottomBarWrap = styled.div`
   padding-bottom: env(safe-area-inset-bottom);
 `;
 
-const IconImg = styled.img`
-  width: 18px;
-  height: 18px;
-  display: block;
-  user-select: none;
-  pointer-events: none; /* 클릭 아님 */
-`;
 const CardLink = styled(Link)`
   display: block;
   color: inherit;
@@ -395,221 +388,12 @@ const CardLink = styled(Link)`
 
 /* =========================== 컴포넌트 =========================== */
 const ProposalRecPage = () => {
-  const [liked, setLiked] = useState(false);
-  const [scrapped, setScrapped] = useState(false);
+  const [likedMap, setLikedMap] = useState({});
+  const [scrappedMap, setScrappedMap] = useState({});
+  const toggleLike = (id) => setLikedMap((m) => ({ ...m, [id]: !m[id] }));
+  const toggleScrap = (id) => setScrappedMap((m) => ({ ...m, [id]: !m[id] }));
 
   const [bigIndex, setBigIndex] = useState(1);
-  //목데이터
-  const big = [
-    {
-      id: 1,
-      created_at: '30초 전',
-      user: {
-        name: '최**',
-        profile_image: 'https://example.com/...',
-        proposer_level: {
-          address: {
-            sido: '시도',
-            sigungu: '시군구',
-            eupmyundong: '읍면동',
-          },
-          level: 2,
-        },
-      },
-      title: '제안글 제목',
-      content: '제안글 내용',
-      industry: '카페/디저트',
-      business_hours: {
-        start: '09:00',
-        end: '18:00',
-      },
-      address: {
-        sido: '시도',
-        sigungu: '시군구',
-        eupmyundong: '읍면동',
-        jibun_detail: '지번 주소 상세',
-        road_detail: '도로명 주소 상세',
-      },
-      radius: '500m',
-      image: ['https://example.com/...'],
-      likes_count: 300,
-      scraps_count: 178,
-    },
-    {
-      id: 2,
-      created_at: '30초 전',
-      user: {
-        name: '최**',
-        profile_image: 'https://example.com/...',
-        proposer_level: {
-          address: {
-            sido: '시도',
-            sigungu: '시군구',
-            eupmyundong: '읍면동',
-          },
-          level: 2,
-        },
-      },
-      title: '제안글 제목',
-      content: '제안글 내용',
-      industry: '카페/디저트',
-      business_hours: {
-        start: '09:00',
-        end: '18:00',
-      },
-      address: {
-        sido: '시도',
-        sigungu: '시군구',
-        eupmyundong: '읍면동',
-        jibun_detail: '지번 주소 상세',
-        road_detail: '도로명 주소 상세',
-      },
-      radius: '500m',
-      image: ['https://example.com/...'],
-      likes_count: 300,
-      scraps_count: 178,
-    },
-  ];
-  const similar = [
-    {
-      id: 1,
-      created_at: '30초 전',
-      user: {
-        name: '최**',
-        profile_image: 'https://example.com/...',
-        proposer_level: {
-          address: {
-            sido: '시도',
-            sigungu: '시군구',
-            eupmyundong: '읍면동',
-          },
-          level: 2,
-        },
-      },
-      title: '제안글 제목',
-      content: '제안글 내용',
-      industry: '카페/디저트',
-      business_hours: {
-        start: '09:00',
-        end: '18:00',
-      },
-      address: {
-        sido: '시도',
-        sigungu: '시군구',
-        eupmyundong: '읍면동',
-        jibun_detail: '지번 주소 상세',
-        road_detail: '도로명 주소 상세',
-      },
-      radius: '500m',
-      image: ['https://example.com/...'],
-      likes_count: 300,
-      scraps_count: 178,
-    },
-    {
-      id: 2,
-      created_at: '30초 전',
-      user: {
-        name: '최**',
-        profile_image: 'https://example.com/...',
-        proposer_level: {
-          address: {
-            sido: '시도',
-            sigungu: '시군구',
-            eupmyundong: '읍면동',
-          },
-          level: 2,
-        },
-      },
-      title: '제안글 제목',
-      content: '제안글 내용',
-      industry: '카페/디저트',
-      business_hours: {
-        start: '09:00',
-        end: '18:00',
-      },
-      address: {
-        sido: '시도',
-        sigungu: '시군구',
-        eupmyundong: '읍면동',
-        jibun_detail: '지번 주소 상세',
-        road_detail: '도로명 주소 상세',
-      },
-      radius: '500m',
-      image: ['https://example.com/...'],
-      likes_count: 300,
-      scraps_count: 178,
-    },
-  ];
-  const highSuccess = [
-    {
-      id: 1,
-      created_at: '30초 전',
-      user: {
-        name: '최**',
-        profile_image: 'https://example.com/...',
-        proposer_level: {
-          address: {
-            sido: '시도',
-            sigungu: '시군구',
-            eupmyundong: '읍면동',
-          },
-          level: 2,
-        },
-      },
-      title: '제안글 제목',
-      content: '제안글 내용',
-      industry: '카페/디저트',
-      business_hours: {
-        start: '09:00',
-        end: '18:00',
-      },
-      address: {
-        sido: '시도',
-        sigungu: '시군구',
-        eupmyundong: '읍면동',
-        jibun_detail: '지번 주소 상세',
-        road_detail: '도로명 주소 상세',
-      },
-      radius: '500m',
-      image: ['https://example.com/...'],
-      likes_count: 300,
-      scraps_count: 178,
-    },
-    {
-      id: 2,
-      created_at: '30초 전',
-      user: {
-        name: '최**',
-        profile_image: 'https://example.com/...',
-        proposer_level: {
-          address: {
-            sido: '시도',
-            sigungu: '시군구',
-            eupmyundong: '읍면동',
-          },
-          level: 2,
-        },
-      },
-      title: '제안글 제목',
-      content: '제안글 내용',
-      industry: '카페/디저트',
-      business_hours: {
-        start: '09:00',
-        end: '18:00',
-      },
-      address: {
-        sido: '시도',
-        sigungu: '시군구',
-        eupmyundong: '읍면동',
-        jibun_detail: '지번 주소 상세',
-        road_detail: '도로명 주소 상세',
-      },
-      radius: '500m',
-      image: ['https://example.com/...'],
-      likes_count: 300,
-      scraps_count: 178,
-    },
-  ];
 
   return (
     <>
@@ -645,7 +429,7 @@ const ProposalRecPage = () => {
                               <LargeDesc>{item.content}</LargeDesc>
                               <HeaderRow>
                                 <HeaderLeft>
-                                  <Avatar.Root shape='rounded' size='xs'>
+                                  <Avatar.Root shape='full' size='xs'>
                                     <Avatar.Fallback
                                       name={item.user?.name}
                                       src={item.user?.profile_image}
@@ -686,18 +470,21 @@ const ProposalRecPage = () => {
                                   onPointerDown={stop}
                                 >
                                   <LikeButton
-                                    checked={liked}
-                                    onChange={() => setLiked(!liked)}
+                                    checked={!!likedMap[item.id]}
+                                    onChange={() => toggleLike(item.id)}
                                   />
                                   <span>
-                                    {item.likes_count + (liked ? 1 : 0)}
+                                    {item.likes_count +
+                                      (likedMap[item.id] ? 1 : 0)}
                                   </span>
+
                                   <ScrapButton
-                                    checked={scrapped}
-                                    onChange={() => setScrapped(!scrapped)}
+                                    checked={!!scrappedMap[item.id]}
+                                    onChange={() => toggleScrap(item.id)}
                                   />
                                   <span>
-                                    {item.scraps_count + (scrapped ? 1 : 0)}
+                                    {item.scraps_count +
+                                      (scrappedMap[item.id] ? 1 : 0)}
                                   </span>
                                 </StatsBar>
                               </FooterRow>
@@ -776,7 +563,7 @@ const ProposalRecPage = () => {
 
                     <FooterRow>
                       <UserRow>
-                        <Avatar.Root shape='rounded' size='xs'>
+                        <Avatar.Root shape='full' size='xs'>
                           <Avatar.Fallback
                             name={item.user?.name}
                             src={item.user?.profile_image}
@@ -790,15 +577,20 @@ const ProposalRecPage = () => {
                         onPointerDown={stop}
                       >
                         <LikeButton
-                          checked={liked}
-                          onChange={() => setLiked(!liked)}
+                          checked={!!likedMap[item.id]}
+                          onChange={() => toggleLike(item.id)}
                         />
-                        <span>{item.likes_count + (liked ? 1 : 0)}</span>
+                        <span>
+                          {item.likes_count + (likedMap[item.id] ? 1 : 0)}
+                        </span>
+
                         <ScrapButton
-                          checked={scrapped}
-                          onChange={() => setScrapped(!scrapped)}
+                          checked={!!scrappedMap[item.id]}
+                          onChange={() => toggleScrap(item.id)}
                         />
-                        <span>{item.scraps_count + (scrapped ? 1 : 0)}</span>
+                        <span>
+                          {item.scraps_count + (scrappedMap[item.id] ? 1 : 0)}
+                        </span>
                       </StatsRow>
                     </FooterRow>
                   </SmallBody>
@@ -862,7 +654,7 @@ const ProposalRecPage = () => {
 
                     <FooterRow>
                       <UserRow>
-                        <Avatar.Root shape='rounded' size='xs'>
+                        <Avatar.Root shape='full' size='xs'>
                           <Avatar.Fallback
                             name={item.user?.name}
                             src={item.user?.profile_image}
@@ -876,15 +668,20 @@ const ProposalRecPage = () => {
                         onPointerDown={stop}
                       >
                         <LikeButton
-                          checked={liked}
-                          onChange={() => setLiked(!liked)}
+                          checked={!!likedMap[item.id]}
+                          onChange={() => toggleLike(item.id)}
                         />
-                        <span>{item.likes_count + (liked ? 1 : 0)}</span>
+                        <span>
+                          {item.likes_count + (likedMap[item.id] ? 1 : 0)}
+                        </span>
+
                         <ScrapButton
-                          checked={scrapped}
-                          onChange={() => setScrapped(!scrapped)}
+                          checked={!!scrappedMap[item.id]}
+                          onChange={() => toggleScrap(item.id)}
                         />
-                        <span>{item.scraps_count + (scrapped ? 1 : 0)}</span>
+                        <span>
+                          {item.scraps_count + (scrappedMap[item.id] ? 1 : 0)}
+                        </span>
                       </StatsRow>
                     </FooterRow>
                   </SmallBody>
@@ -903,3 +700,216 @@ const ProposalRecPage = () => {
 };
 
 export default ProposalRecPage;
+
+/*목데이터 */
+
+const big = [
+  {
+    id: 3,
+    created_at: '30초 전',
+    user: {
+      name: '최**',
+      profile_image: 'https://example.com/...',
+      proposer_level: {
+        address: {
+          sido: '시도',
+          sigungu: '시군구',
+          eupmyundong: '읍면동',
+        },
+        level: 2,
+      },
+    },
+    title: '제안글 제목',
+    content: '제안글 내용',
+    industry: '카페/디저트',
+    business_hours: {
+      start: '09:00',
+      end: '18:00',
+    },
+    address: {
+      sido: '시도',
+      sigungu: '시군구',
+      eupmyundong: '읍면동',
+      jibun_detail: '지번 주소 상세',
+      road_detail: '도로명 주소 상세',
+    },
+    radius: '500m',
+    image: ['https://example.com/...'],
+    likes_count: 300,
+    scraps_count: 178,
+  },
+  {
+    id: 2,
+    created_at: '30초 전',
+    user: {
+      name: '최**',
+      profile_image: 'https://example.com/...',
+      proposer_level: {
+        address: {
+          sido: '시도',
+          sigungu: '시군구',
+          eupmyundong: '읍면동',
+        },
+        level: 2,
+      },
+    },
+    title: '제안글 제목',
+    content: '제안글 내용',
+    industry: '카페/디저트',
+    business_hours: {
+      start: '09:00',
+      end: '18:00',
+    },
+    address: {
+      sido: '시도',
+      sigungu: '시군구',
+      eupmyundong: '읍면동',
+      jibun_detail: '지번 주소 상세',
+      road_detail: '도로명 주소 상세',
+    },
+    radius: '500m',
+    image: ['https://example.com/...'],
+    likes_count: 300,
+    scraps_count: 178,
+  },
+];
+const similar = [
+  {
+    id: 1,
+    created_at: '30초 전',
+    user: {
+      name: '최**',
+      profile_image: 'https://example.com/...',
+      proposer_level: {
+        address: {
+          sido: '시도',
+          sigungu: '시군구',
+          eupmyundong: '읍면동',
+        },
+        level: 2,
+      },
+    },
+    title: '제안글 제목',
+    content: '제안글 내용',
+    industry: '카페/디저트',
+    business_hours: {
+      start: '09:00',
+      end: '18:00',
+    },
+    address: {
+      sido: '시도',
+      sigungu: '시군구',
+      eupmyundong: '읍면동',
+      jibun_detail: '지번 주소 상세',
+      road_detail: '도로명 주소 상세',
+    },
+    radius: '500m',
+    image: ['https://example.com/...'],
+    likes_count: 300,
+    scraps_count: 178,
+  },
+  {
+    id: 2,
+    created_at: '30초 전',
+    user: {
+      name: '최**',
+      profile_image: 'https://example.com/...',
+      proposer_level: {
+        address: {
+          sido: '시도',
+          sigungu: '시군구',
+          eupmyundong: '읍면동',
+        },
+        level: 2,
+      },
+    },
+    title: '제안글 제목',
+    content: '제안글 내용',
+    industry: '카페/디저트',
+    business_hours: {
+      start: '09:00',
+      end: '18:00',
+    },
+    address: {
+      sido: '시도',
+      sigungu: '시군구',
+      eupmyundong: '읍면동',
+      jibun_detail: '지번 주소 상세',
+      road_detail: '도로명 주소 상세',
+    },
+    radius: '500m',
+    image: ['https://example.com/...'],
+    likes_count: 300,
+    scraps_count: 178,
+  },
+];
+const highSuccess = [
+  {
+    id: 1,
+    created_at: '30초 전',
+    user: {
+      name: '최**',
+      profile_image: 'https://example.com/...',
+      proposer_level: {
+        address: {
+          sido: '시도',
+          sigungu: '시군구',
+          eupmyundong: '읍면동',
+        },
+        level: 2,
+      },
+    },
+    title: '제안글 제목',
+    content: '제안글 내용',
+    industry: '카페/디저트',
+    business_hours: {
+      start: '09:00',
+      end: '18:00',
+    },
+    address: {
+      sido: '시도',
+      sigungu: '시군구',
+      eupmyundong: '읍면동',
+      jibun_detail: '지번 주소 상세',
+      road_detail: '도로명 주소 상세',
+    },
+    radius: '500m',
+    image: ['https://example.com/...'],
+    likes_count: 300,
+    scraps_count: 178,
+  },
+  {
+    id: 2,
+    created_at: '30초 전',
+    user: {
+      name: '최**',
+      profile_image: 'https://example.com/...',
+      proposer_level: {
+        address: {
+          sido: '시도',
+          sigungu: '시군구',
+          eupmyundong: '읍면동',
+        },
+        level: 2,
+      },
+    },
+    title: '제안글 제목',
+    content: '제안글 내용',
+    industry: '카페/디저트',
+    business_hours: {
+      start: '09:00',
+      end: '18:00',
+    },
+    address: {
+      sido: '시도',
+      sigungu: '시군구',
+      eupmyundong: '읍면동',
+      jibun_detail: '지번 주소 상세',
+      road_detail: '도로명 주소 상세',
+    },
+    radius: '500m',
+    image: ['https://example.com/...'],
+    likes_count: 300,
+    scraps_count: 178,
+  },
+];
