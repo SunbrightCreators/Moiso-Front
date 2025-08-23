@@ -65,7 +65,7 @@ const FounderTarget = ({ onNextStep }) => {
     );
   };
 
-  const canNext = selectedTargets.length > 0; // ✅ 추가: 버튼 활성 조건
+  const canNext = selectedTargets.length > 0; //  추가: 버튼 활성 조건
 
   return (
     <PageContainer>
