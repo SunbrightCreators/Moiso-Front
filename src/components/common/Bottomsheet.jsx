@@ -33,7 +33,6 @@ const SMapContent = styled(SContent)`
     if ($level === 2) return '40vh';
     if ($level === 3) return '70vh';
   }};
-  transition: height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 `;
 
 const SModalContent = styled(SContent)`
