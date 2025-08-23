@@ -42,7 +42,6 @@ const SModalContent = styled(SContent)`
     if ($level === 3) return '80vh';
     return '50vh'; // 기본값
   }};
-  max-height: calc(90vh - 1.5rem); // 핸들바 높이는 제외!!
 `;
 
 // 공통 레이아웃 —————————————————————————————————————————————————
