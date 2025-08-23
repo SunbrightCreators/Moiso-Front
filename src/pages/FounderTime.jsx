@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100%;
 `;
 const MainContent = styled.main`
   display: flex;

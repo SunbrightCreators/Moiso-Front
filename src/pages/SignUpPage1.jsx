@@ -10,13 +10,36 @@ const StyledLoginButton = styled(Button)`
   padding: 0.125rem 1.75rem;
   gap: 0.75rem;
   flex-shrink: 0;
-  border-radius: 0.375rem;
-  background: #303742;
+  border-radius: var(--radii-md, 0.375rem);
+  background: var(--colors-yellow-focusRing, #facc15);
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  font: var(--text-sm-semibold);
+  font-family: var(--fonts-body, Inter);
+  font-size: var(--font-sizes-md, 1rem);
+  font-style: normal;
+  font-weight: var(--font-weights-semibold, 600);
+  line-height: var(--line-heights-md, 1.5rem);
+`;
+const StyledLoginButton2 = styled(Button)`
+  width: 22.375rem;
+  height: 3rem;
+  min-width: 4rem;
+  padding: 0.125rem 1.75rem;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  border-radius: var(--radii-md, 0.375rem);
+  background: var(--colors-blue-solid, #2563eb);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--fonts-body, Inter);
+  font-size: var(--font-sizes-md, 1rem);
+  font-style: normal;
+  font-weight: var(--font-weights-semibold, 600);
+  line-height: var(--line-heights-md, 1.5rem);
 `;
 
 const LogoBox = styled(Box)`
@@ -46,11 +69,7 @@ function SignUpPage1({ onNextStep }) {
   };
 
   return (
-    <Flex
-      direction='column'
-      minH='100dvh'
-      font='font: var(--text-sm-semibold);'
-    >
+    <Flex direction='column' minH='100%' font='font: var(--text-sm-semibold);'>
       <VStack spacing={4} flex='1' justify='center'>
         <LogoBox>
           <img src={logo} alt='서비스 로고' />
@@ -61,9 +80,9 @@ function SignUpPage1({ onNextStep }) {
         <StyledLoginButton onClick={handleResidentClick}>
           지역주민으로 가입
         </StyledLoginButton>
-        <StyledLoginButton onClick={handleFounderClick}>
+        <StyledLoginButton2 onClick={handleFounderClick}>
           창업자로 가입
-        </StyledLoginButton>
+        </StyledLoginButton2>
       </VStack>
     </Flex>
   );

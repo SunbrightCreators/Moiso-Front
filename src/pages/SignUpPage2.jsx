@@ -164,6 +164,7 @@ function SignUpPage2({ onNextStep }) {
   const TERMS_TXT = `여기에 서비스 이용약관 전문을 넣으세요...`;
   const PRIVACY_TXT = `여기에 개인정보 수집 및 이용 동의 전문을 넣으세요...`;
   const MARKETING_TXT = `여기에 마케팅 수신 동의 안내를 넣으세요...`;
+  const IDEA_TXT = `여기에 아이디어 도난 및 신뢰동의 안내를 넣으세요...`;
 
   const openTerms = () =>
     setAlertDialog({
@@ -186,6 +187,13 @@ function SignUpPage2({ onNextStep }) {
       actionText: '닫기',
     });
 
+  const openidea = () =>
+    setAlertDialog({
+      title: '아이디어 도난 및 신뢰',
+      content: IDEA_TXT,
+      actionText: '닫기',
+    });
+
   const {
     register,
     handleSubmit,
@@ -205,6 +213,7 @@ function SignUpPage2({ onNextStep }) {
   const allAgreed = watch('allAgreed');
   useEffect(() => {
     setValue('terms', allAgreed, { shouldValidate: true });
+    setValue('idea', allAgreed, { shouldValidate: true });
     setValue('privacy', allAgreed, { shouldValidate: true });
     setValue('marketing', allAgreed);
   }, [allAgreed, setValue]);
@@ -323,6 +332,26 @@ function SignUpPage2({ onNextStep }) {
                 <div className='agreement-item-left'>
                   <input
                     type='checkbox'
+                    {...register('idea', { required: true })}
+                  />
+                  <span>[필수] 아이디어 도난 및 신뢰</span>
+                </div>
+                <ChevronBtn
+                  type='button'
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openidea('아이디어 도난 및 신뢰', IDEA_TXT);
+                  }}
+                  aria-label='아이디어 도난 및 신뢰'
+                >
+                  <ChevronIcon />{' '}
+                </ChevronBtn>
+              </div>
+              <div className='agreement-item'>
+                <div className='agreement-item-left'>
+                  <input
+                    type='checkbox'
                     {...register('terms', { required: true })}
                   />
                   <span>[필수] 서비스 이용 약관</span>
@@ -347,6 +376,7 @@ function SignUpPage2({ onNextStep }) {
                   />
                   <span>[필수] 개인정보 수집 및 이용 동의</span>
                 </div>
+
                 <ChevronBtn
                   type='button'
                   onClick={(e) => {

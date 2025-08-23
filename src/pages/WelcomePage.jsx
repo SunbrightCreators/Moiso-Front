@@ -11,7 +11,7 @@ import proposerWelcomeGif from '../assets/icons/Proposergif.gif';
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100%;
   justify-content: space-between;
 `;
 const MainContent = styled.main`
