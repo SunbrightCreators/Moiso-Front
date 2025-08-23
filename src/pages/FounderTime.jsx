@@ -46,7 +46,7 @@ const StyledButton = styled(Button)`
   &[data-disabled] {
     background-color: #a1a1aa;
     cursor: not-allowed;
-    pointer-events: none; /* ✅ 클릭 차단 */
+    pointer-events: none; /* 클릭 차단 */
   }
 `;
 
