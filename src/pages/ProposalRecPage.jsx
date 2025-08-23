@@ -6,9 +6,42 @@ import { ROUTE_PATH } from '../constants/route';
 import useModeStore from '../stores/useModeStore';
 import Carousel from '../components/common/Carousel';
 import BottomNavigation from '../components/common/BottomNavigation';
-import Heart from '../assets/icons/Favorite.svg';
-import Bookmark from '../assets/icons/Shape.svg';
+import HeartDefault from '../assets/icons/heart_default.svg';
+import HeartPressed from '../assets/icons/heart_pressed.svg';
+import HeartDisabled from '../assets/icons/heart_disabled.svg';
+import ScrapDefault from '../assets/icons/scrap_default.svg';
+import ScrapPressed from '../assets/icons/scrap_pressed.svg';
 
+const LikeButton = styled.input.attrs({ type: 'checkbox' })`
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  background: url(${HeartDefault}) no-repeat center/contain;
+  cursor: pointer;
+
+  &:checked {
+    background: url(${HeartPressed}) no-repeat center/contain;
+  }
+
+  &:disabled {
+    background: url(${HeartDisabled}) no-repeat center/contain;
+    cursor: not-allowed;
+  }
+`;
+const ScrapButton = styled.input.attrs({ type: 'checkbox' })`
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: url(${ScrapDefault}) no-repeat center/contain;
+  cursor: pointer;
+
+  &:checked {
+    background: url(${ScrapPressed}) no-repeat center/contain;
+  }
+`;
+const stop = (e) => {
+  e.stopPropagation();
+};
 /* ----------------------------- 큰 카드 공통 ----------------------------- */
 const LargeCard = styled.article`
   flex: 0 0 100%;
@@ -362,11 +395,8 @@ const CardLink = styled(Link)`
 
 /* =========================== 컴포넌트 =========================== */
 const ProposalRecPage = () => {
-  const { setIsProposerMode } = useModeStore();
-
-  useEffect(() => {
-    setIsProposerMode(false); // 창업자 모드
-  }, [setIsProposerMode]);
+  const [liked, setLiked] = useState(false);
+  const [scrapped, setScrapped] = useState(false);
 
   const [bigIndex, setBigIndex] = useState(1);
   //목데이터
@@ -650,11 +680,25 @@ const ProposalRecPage = () => {
                               </InfoSection>
 
                               <FooterRow>
-                                <StatsBar>
-                                  <IconImg src={Heart} alt='' />
-                                  <span>{item.likes_count}</span>
-                                  <IconImg src={Bookmark} alt='' />
-                                  <span>{item.scraps_count}</span>
+                                <StatsBar
+                                  onClick={stop}
+                                  onMouseDown={stop}
+                                  onPointerDown={stop}
+                                >
+                                  <LikeButton
+                                    checked={liked}
+                                    onChange={() => setLiked(!liked)}
+                                  />
+                                  <span>
+                                    {item.likes_count + (liked ? 1 : 0)}
+                                  </span>
+                                  <ScrapButton
+                                    checked={scrapped}
+                                    onChange={() => setScrapped(!scrapped)}
+                                  />
+                                  <span>
+                                    {item.scraps_count + (scrapped ? 1 : 0)}
+                                  </span>
                                 </StatsBar>
                               </FooterRow>
                               <LargeBtn>수락하기</LargeBtn>
@@ -740,12 +784,21 @@ const ProposalRecPage = () => {
                         </Avatar.Root>
                         <UserName>{item.user?.name}</UserName>
                       </UserRow>
-                      <StatsRow>
-                        <IconImg src={Heart} alt='' />
-                        <span>{item.likes_count}</span>
-                        <IconImg src={Bookmark} alt='' />
-
-                        <span>{item.scraps_count}</span>
+                      <StatsRow
+                        onClick={stop}
+                        onMouseDown={stop}
+                        onPointerDown={stop}
+                      >
+                        <LikeButton
+                          checked={liked}
+                          onChange={() => setLiked(!liked)}
+                        />
+                        <span>{item.likes_count + (liked ? 1 : 0)}</span>
+                        <ScrapButton
+                          checked={scrapped}
+                          onChange={() => setScrapped(!scrapped)}
+                        />
+                        <span>{item.scraps_count + (scrapped ? 1 : 0)}</span>
                       </StatsRow>
                     </FooterRow>
                   </SmallBody>
@@ -817,12 +870,21 @@ const ProposalRecPage = () => {
                         </Avatar.Root>
                         <UserName>{item.user?.name}</UserName>
                       </UserRow>
-                      <StatsRow>
-                        <IconImg src={Heart} alt='' />
-                        <span>{item.likes_count}</span>
-                        <IconImg src={Bookmark} alt='' />
-
-                        <span>{item.scraps_count}</span>
+                      <StatsRow
+                        onClick={stop}
+                        onMouseDown={stop}
+                        onPointerDown={stop}
+                      >
+                        <LikeButton
+                          checked={liked}
+                          onChange={() => setLiked(!liked)}
+                        />
+                        <span>{item.likes_count + (liked ? 1 : 0)}</span>
+                        <ScrapButton
+                          checked={scrapped}
+                          onChange={() => setScrapped(!scrapped)}
+                        />
+                        <span>{item.scraps_count + (scrapped ? 1 : 0)}</span>
                       </StatsRow>
                     </FooterRow>
                   </SmallBody>
