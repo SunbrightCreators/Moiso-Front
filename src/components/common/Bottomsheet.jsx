@@ -25,6 +25,7 @@ const SHandleBar = styled.div`
 const SContent = styled.div`
   width: 100%;
   overflow-y: auto;
+  transition: height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 `;
 
 const SMapContent = styled(SContent)`
