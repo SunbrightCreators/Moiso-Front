@@ -55,8 +55,7 @@ const SLayout = styled.div`
   bottom: 0;
   transform: translateX(-50%);
   max-width: 480px;
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
+  border-radius: 1rem 1rem 0 0;
   padding-top: 1.5rem;
 `;
 
