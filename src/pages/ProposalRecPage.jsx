@@ -11,6 +11,8 @@ import HeartPressed from '../assets/icons/heart_pressed.svg';
 import HeartDisabled from '../assets/icons/heart_disabled.svg';
 import ScrapDefault from '../assets/icons/scrap_default.svg';
 import ScrapPressed from '../assets/icons/scrap_pressed.svg';
+import BEmpty from '../assets/icons/EmptyState.svg';
+import SEmpty from '../assets/icons/EmptyState_s.svg';
 
 const LikeButton = styled.input.attrs({ type: 'checkbox' })`
   appearance: none;
@@ -404,104 +406,125 @@ const ProposalRecPage = () => {
             <Section1>
               <HeroInner>
                 <Carousel gap='0' setIndex={setBigIndex}>
-                  {big.map((item) => (
-                    <Slide key={item.id}>
-                      <HeroBg src={item.image} />
+                  {(big?.length ?? 0) > 0 ? (
+                    big.map((item) => (
+                      <Slide key={item.id}>
+                        <HeroBg src={item.image} />
 
-                      <OverlayWrap>
-                        <CardLink to={ROUTE_PATH.PROPOSAL_DETAIL(item.id)}>
-                          <OverlayCard>
-                            <LargeBody>
-                              <Tag>
-                                <Badge
-                                  variant='subtle'
-                                  size='md'
-                                  bg='#111827'
-                                  color='white'
-                                  borderRadius='999px'
-                                  fontSize='12px'
-                                  fontWeight='400'
-                                >
-                                  {item.industry}
-                                </Badge>
-                              </Tag>
-                              <LargeTitle>{item.title}</LargeTitle>
-                              <LargeDesc>{item.content}</LargeDesc>
-                              <HeaderRow>
-                                <HeaderLeft>
-                                  <Avatar.Root shape='full' size='xs'>
-                                    <Avatar.Fallback
-                                      name={item.user?.name}
-                                      src={item.user?.profile_image}
+                        <OverlayWrap>
+                          <CardLink to={ROUTE_PATH.PROPOSAL_DETAIL(item.id)}>
+                            <OverlayCard>
+                              <LargeBody>
+                                <Tag>
+                                  <Badge
+                                    variant='subtle'
+                                    size='md'
+                                    bg='#111827'
+                                    color='white'
+                                    borderRadius='999px'
+                                    fontSize='12px'
+                                    fontWeight='400'
+                                  >
+                                    {item.industry}
+                                  </Badge>
+                                </Tag>
+                                <LargeTitle>{item.title}</LargeTitle>
+                                <LargeDesc>{item.content}</LargeDesc>
+                                <HeaderRow>
+                                  <HeaderLeft>
+                                    <Avatar.Root shape='full' size='xs'>
+                                      <Avatar.Fallback
+                                        name={item.user?.name}
+                                        src={item.user?.profile_image}
+                                      />
+                                    </Avatar.Root>
+                                    <UserName>{item.user?.name}</UserName>
+                                  </HeaderLeft>
+                                  <HeaderRight>
+                                    {
+                                      item.user?.proposer_level?.address
+                                        ?.eupmyundong
+                                    }{' '}
+                                    · LV.{item.user?.proposer_level?.level}
+                                  </HeaderRight>
+                                </HeaderRow>
+                                <InfoSection>
+                                  <InfoBlock>
+                                    <InfoTitle>희망 운영 시간</InfoTitle>
+                                    <InfoValue>
+                                      {item.business_hours?.start} -{' '}
+                                      {item.business_hours?.end}
+                                    </InfoValue>
+                                  </InfoBlock>
+
+                                  <InfoBlock>
+                                    <InfoTitle>희망 장소</InfoTitle>
+                                    <InfoValue>
+                                      {item.address?.eupmyundong},{' '}
+                                      {item.address?.road_detail} +{' '}
+                                      {item.radius}
+                                    </InfoValue>
+                                  </InfoBlock>
+                                </InfoSection>
+
+                                <FooterRow>
+                                  <StatsBar
+                                    onClick={stop}
+                                    onMouseDown={stop}
+                                    onPointerDown={stop}
+                                  >
+                                    <LikeButton
+                                      checked={!!likedMap[item.id]}
+                                      onChange={() => toggleLike(item.id)}
                                     />
-                                  </Avatar.Root>
-                                  <UserName>{item.user?.name}</UserName>
-                                </HeaderLeft>
-                                <HeaderRight>
-                                  {
-                                    item.user?.proposer_level?.address
-                                      ?.eupmyundong
-                                  }{' '}
-                                  · LV.{item.user?.proposer_level?.level}
-                                </HeaderRight>
-                              </HeaderRow>
-                              <InfoSection>
-                                <InfoBlock>
-                                  <InfoTitle>희망 운영 시간</InfoTitle>
-                                  <InfoValue>
-                                    {item.business_hours?.start} -{' '}
-                                    {item.business_hours?.end}
-                                  </InfoValue>
-                                </InfoBlock>
+                                    <span>
+                                      {item.likes_count +
+                                        (likedMap[item.id] ? 1 : 0)}
+                                    </span>
 
-                                <InfoBlock>
-                                  <InfoTitle>희망 장소</InfoTitle>
-                                  <InfoValue>
-                                    {item.address?.eupmyundong},{' '}
-                                    {item.address?.road_detail} + {item.radius}
-                                  </InfoValue>
-                                </InfoBlock>
-                              </InfoSection>
+                                    <ScrapButton
+                                      checked={!!scrappedMap[item.id]}
+                                      onChange={() => toggleScrap(item.id)}
+                                    />
+                                    <span>
+                                      {item.scraps_count +
+                                        (scrappedMap[item.id] ? 1 : 0)}
+                                    </span>
+                                  </StatsBar>
+                                </FooterRow>
+                                <LargeBtn>수락하기</LargeBtn>
+                              </LargeBody>
+                            </OverlayCard>
+                          </CardLink>
 
-                              <FooterRow>
-                                <StatsBar
-                                  onClick={stop}
-                                  onMouseDown={stop}
-                                  onPointerDown={stop}
-                                >
-                                  <LikeButton
-                                    checked={!!likedMap[item.id]}
-                                    onChange={() => toggleLike(item.id)}
-                                  />
-                                  <span>
-                                    {item.likes_count +
-                                      (likedMap[item.id] ? 1 : 0)}
-                                  </span>
-
-                                  <ScrapButton
-                                    checked={!!scrappedMap[item.id]}
-                                    onChange={() => toggleScrap(item.id)}
-                                  />
-                                  <span>
-                                    {item.scraps_count +
-                                      (scrappedMap[item.id] ? 1 : 0)}
-                                  </span>
-                                </StatsBar>
-                              </FooterRow>
-                              <LargeBtn>수락하기</LargeBtn>
-                            </LargeBody>
-                          </OverlayCard>
-                        </CardLink>
-
-                        {/* 카드 바로 아래 중앙 도트 */}
-                        <Dots>
-                          {big.map((_, i) => (
-                            <Dot key={i} $active={bigIndex === i + 1} />
-                          ))}
-                        </Dots>
+                          {/* 카드 바로 아래 중앙 도트 */}
+                          <Dots>
+                            {big.map((_, i) => (
+                              <Dot key={i} $active={bigIndex === i + 1} />
+                            ))}
+                          </Dots>
+                        </OverlayWrap>
+                      </Slide>
+                    ))
+                  ) : (
+                    // ★ big이 비었을 때: 빈 상태 이미지 1장만 슬라이드로
+                    <Slide>
+                      <HeroBg src='' />
+                      <OverlayWrap>
+                        <OverlayCard as='div' style={{ padding: 0 }}>
+                          <img
+                            src={BEmpty}
+                            alt='추천 결과 없음'
+                            style={{
+                              display: 'block',
+                              width: '100%',
+                              height: '100%',
+                            }}
+                          />
+                        </OverlayCard>
                       </OverlayWrap>
                     </Slide>
-                  ))}
+                  )}
                 </Carousel>
               </HeroInner>
             </Section1>
@@ -516,87 +539,104 @@ const ProposalRecPage = () => {
           </SectionSub>
 
           <Carousel gap='1.5rem'>
-            {similar.map((item) => (
-              <CardLink key={item.id} to={ROUTE_PATH.PROPOSAL_DETAIL(item.id)}>
-                <SmallCard key={item.id}>
-                  <ImgWrap>
-                    <SmallThumb src={item.image} />
-                  </ImgWrap>
+            {(similar?.length ?? 0) > 0 ? (
+              similar.map((item) => (
+                <CardLink
+                  key={item.id}
+                  to={ROUTE_PATH.PROPOSAL_DETAIL(item.id)}
+                >
+                  <SmallCard key={item.id}>
+                    <ImgWrap>
+                      <SmallThumb src={item.image} />
+                    </ImgWrap>
 
-                  <SmallBody>
-                    <TagRow>
-                      <Badge
-                        variant='subtle'
-                        size='md'
-                        bg='#F4F4F5'
-                        color='#27272A'
-                        borderRadius='999px'
-                        fontSize='12px'
-                        fontWeight='400'
-                      >
-                        {item.industry}
-                      </Badge>
-                    </TagRow>
+                    <SmallBody>
+                      <TagRow>
+                        <Badge
+                          variant='subtle'
+                          size='md'
+                          bg='#F4F4F5'
+                          color='#27272A'
+                          borderRadius='999px'
+                          fontSize='12px'
+                          fontWeight='400'
+                        >
+                          {item.industry}
+                        </Badge>
+                      </TagRow>
 
-                    <HeadBox>
-                      <HeadTitle>{item.title}</HeadTitle>
-                      <HeadDesc>{item.subtitle}</HeadDesc>
-                    </HeadBox>
+                      <HeadBox>
+                        <HeadTitle>{item.title}</HeadTitle>
+                        <HeadDesc>{item.subtitle}</HeadDesc>
+                      </HeadBox>
 
-                    <MetaList>
-                      <MetaLine>
-                        <MetaLabel>희망시간</MetaLabel>
-                        <MetaValue>
-                          {item.business_hours?.start} -{' '}
-                          {item.business_hours?.end}
-                        </MetaValue>
-                      </MetaLine>
-                      <MetaLine>
-                        <MetaLabel>희망장소</MetaLabel>
-                        <MetaValue>
-                          {' '}
-                          {item.address?.eupmyundong},{' '}
-                          {item.address?.road_detail} + {item.radius}
-                        </MetaValue>
-                      </MetaLine>
-                    </MetaList>
+                      <MetaList>
+                        <MetaLine>
+                          <MetaLabel>희망시간</MetaLabel>
+                          <MetaValue>
+                            {item.business_hours?.start} -{' '}
+                            {item.business_hours?.end}
+                          </MetaValue>
+                        </MetaLine>
+                        <MetaLine>
+                          <MetaLabel>희망장소</MetaLabel>
+                          <MetaValue>
+                            {' '}
+                            {item.address?.eupmyundong},{' '}
+                            {item.address?.road_detail} + {item.radius}
+                          </MetaValue>
+                        </MetaLine>
+                      </MetaList>
 
-                    <FooterRow>
-                      <UserRow>
-                        <Avatar.Root shape='full' size='xs'>
-                          <Avatar.Fallback
-                            name={item.user?.name}
-                            src={item.user?.profile_image}
+                      <FooterRow>
+                        <UserRow>
+                          <Avatar.Root shape='full' size='xs'>
+                            <Avatar.Fallback
+                              name={item.user?.name}
+                              src={item.user?.profile_image}
+                            />
+                          </Avatar.Root>
+                          <UserName>{item.user?.name}</UserName>
+                        </UserRow>
+                        <StatsRow
+                          onClick={stop}
+                          onMouseDown={stop}
+                          onPointerDown={stop}
+                        >
+                          <LikeButton
+                            checked={!!likedMap[item.id]}
+                            onChange={() => toggleLike(item.id)}
                           />
-                        </Avatar.Root>
-                        <UserName>{item.user?.name}</UserName>
-                      </UserRow>
-                      <StatsRow
-                        onClick={stop}
-                        onMouseDown={stop}
-                        onPointerDown={stop}
-                      >
-                        <LikeButton
-                          checked={!!likedMap[item.id]}
-                          onChange={() => toggleLike(item.id)}
-                        />
-                        <span>
-                          {item.likes_count + (likedMap[item.id] ? 1 : 0)}
-                        </span>
+                          <span>
+                            {item.likes_count + (likedMap[item.id] ? 1 : 0)}
+                          </span>
 
-                        <ScrapButton
-                          checked={!!scrappedMap[item.id]}
-                          onChange={() => toggleScrap(item.id)}
-                        />
-                        <span>
-                          {item.scraps_count + (scrappedMap[item.id] ? 1 : 0)}
-                        </span>
-                      </StatsRow>
-                    </FooterRow>
-                  </SmallBody>
-                </SmallCard>
-              </CardLink>
-            ))}
+                          <ScrapButton
+                            checked={!!scrappedMap[item.id]}
+                            onChange={() => toggleScrap(item.id)}
+                          />
+                          <span>
+                            {item.scraps_count + (scrappedMap[item.id] ? 1 : 0)}
+                          </span>
+                        </StatsRow>
+                      </FooterRow>
+                    </SmallBody>
+                  </SmallCard>
+                </CardLink>
+              ))
+            ) : (
+              <div style={{ width: '100%' }}>
+                <img
+                  src={SEmpty}
+                  alt='성공률 높은 제안 없음'
+                  style={{
+                    width: '80%',
+                    display: 'block',
+                    margin: '0 auto',
+                  }}
+                />
+              </div>
+            )}
           </Carousel>
         </Section>
 
@@ -608,86 +648,103 @@ const ProposalRecPage = () => {
           </SectionSub>
 
           <Carousel gap='1.5rem'>
-            {highSuccess.map((item) => (
-              <CardLink key={item.id} to={ROUTE_PATH.PROPOSAL_DETAIL(item.id)}>
-                <SmallCard key={item.id}>
-                  <ImgWrap>
-                    <SmallThumb src={item.image} />
-                  </ImgWrap>
+            {(highSuccess?.length ?? 0) > 0 ? (
+              highSuccess.map((item) => (
+                <CardLink
+                  key={item.id}
+                  to={ROUTE_PATH.PROPOSAL_DETAIL(item.id)}
+                >
+                  <SmallCard key={item.id}>
+                    <ImgWrap>
+                      <SmallThumb src={item.image} />
+                    </ImgWrap>
 
-                  <SmallBody>
-                    <TagRow>
-                      <Badge
-                        variant='subtle'
-                        size='md'
-                        bg='#F4F4F5'
-                        color='#27272A'
-                        borderRadius='999px'
-                        fontSize='12px'
-                        fontWeight='400'
-                      >
-                        {item.industry}
-                      </Badge>
-                    </TagRow>
+                    <SmallBody>
+                      <TagRow>
+                        <Badge
+                          variant='subtle'
+                          size='md'
+                          bg='#F4F4F5'
+                          color='#27272A'
+                          borderRadius='999px'
+                          fontSize='12px'
+                          fontWeight='400'
+                        >
+                          {item.industry}
+                        </Badge>
+                      </TagRow>
 
-                    <HeadBox>
-                      <HeadTitle>{item.title}</HeadTitle>
-                      <HeadDesc>{item.subtitle}</HeadDesc>
-                    </HeadBox>
-                    <MetaList>
-                      <MetaLine>
-                        <MetaLabel>희망시간</MetaLabel>
-                        <MetaValue>
-                          {item.business_hours?.start} -{' '}
-                          {item.business_hours?.end}
-                        </MetaValue>
-                      </MetaLine>
-                      <MetaLine>
-                        <MetaLabel>희망장소</MetaLabel>
-                        <MetaValue>
-                          {' '}
-                          {item.address?.eupmyundong},{' '}
-                          {item.address?.road_detail} + {item.radius}
-                        </MetaValue>
-                      </MetaLine>
-                    </MetaList>
+                      <HeadBox>
+                        <HeadTitle>{item.title}</HeadTitle>
+                        <HeadDesc>{item.subtitle}</HeadDesc>
+                      </HeadBox>
+                      <MetaList>
+                        <MetaLine>
+                          <MetaLabel>희망시간</MetaLabel>
+                          <MetaValue>
+                            {item.business_hours?.start} -{' '}
+                            {item.business_hours?.end}
+                          </MetaValue>
+                        </MetaLine>
+                        <MetaLine>
+                          <MetaLabel>희망장소</MetaLabel>
+                          <MetaValue>
+                            {' '}
+                            {item.address?.eupmyundong},{' '}
+                            {item.address?.road_detail} + {item.radius}
+                          </MetaValue>
+                        </MetaLine>
+                      </MetaList>
 
-                    <FooterRow>
-                      <UserRow>
-                        <Avatar.Root shape='full' size='xs'>
-                          <Avatar.Fallback
-                            name={item.user?.name}
-                            src={item.user?.profile_image}
+                      <FooterRow>
+                        <UserRow>
+                          <Avatar.Root shape='full' size='xs'>
+                            <Avatar.Fallback
+                              name={item.user?.name}
+                              src={item.user?.profile_image}
+                            />
+                          </Avatar.Root>
+                          <UserName>{item.user?.name}</UserName>
+                        </UserRow>
+                        <StatsRow
+                          onClick={stop}
+                          onMouseDown={stop}
+                          onPointerDown={stop}
+                        >
+                          <LikeButton
+                            checked={!!likedMap[item.id]}
+                            onChange={() => toggleLike(item.id)}
                           />
-                        </Avatar.Root>
-                        <UserName>{item.user?.name}</UserName>
-                      </UserRow>
-                      <StatsRow
-                        onClick={stop}
-                        onMouseDown={stop}
-                        onPointerDown={stop}
-                      >
-                        <LikeButton
-                          checked={!!likedMap[item.id]}
-                          onChange={() => toggleLike(item.id)}
-                        />
-                        <span>
-                          {item.likes_count + (likedMap[item.id] ? 1 : 0)}
-                        </span>
+                          <span>
+                            {item.likes_count + (likedMap[item.id] ? 1 : 0)}
+                          </span>
 
-                        <ScrapButton
-                          checked={!!scrappedMap[item.id]}
-                          onChange={() => toggleScrap(item.id)}
-                        />
-                        <span>
-                          {item.scraps_count + (scrappedMap[item.id] ? 1 : 0)}
-                        </span>
-                      </StatsRow>
-                    </FooterRow>
-                  </SmallBody>
-                </SmallCard>
-              </CardLink>
-            ))}
+                          <ScrapButton
+                            checked={!!scrappedMap[item.id]}
+                            onChange={() => toggleScrap(item.id)}
+                          />
+                          <span>
+                            {item.scraps_count + (scrappedMap[item.id] ? 1 : 0)}
+                          </span>
+                        </StatsRow>
+                      </FooterRow>
+                    </SmallBody>
+                  </SmallCard>
+                </CardLink>
+              ))
+            ) : (
+              <div style={{ width: '100%' }}>
+                <img
+                  src={SEmpty}
+                  alt='성공률 높은 제안 없음'
+                  style={{
+                    width: '80%',
+                    display: 'block',
+                    margin: '0 auto',
+                  }}
+                />
+              </div>
+            )}
           </Carousel>
         </Section>
       </Page>
