@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Provider from './styles/provider';
 import Router from './Router';
+import { ModalBottomsheet } from './components/common/Bottomsheet';
 import Dialog from './components/common/Dialog';
 import registerServiceWorker from './service-workers/registerServiceWorker';
 import requestNotificationPermission from './service-workers/requestNotificationPermission';
@@ -15,6 +16,7 @@ root.render(
   <React.StrictMode>
     <Provider>
       <Router />
+      <ModalBottomsheet />
       <Dialog />
     </Provider>
   </React.StrictMode>,
