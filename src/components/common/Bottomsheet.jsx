@@ -148,31 +148,17 @@ const useDragHandler = (
 
 // 지도 탐색용 바텀시트 (non-Modal)
 const MapBottomsheet = ({ children, level = 1, onLevelChange }) => {
-  const [mapBottomsheetLevel, setMapBottomsheetLevel] = useState(level);
-
-  // level prop이 변경되면 내부 상태도 업데이트
-  useEffect(() => {
-    setMapBottomsheetLevel(level);
-  }, [level]);
-
-  const handleLevelChange = (newLevel) => {
-    setMapBottomsheetLevel(newLevel);
-    if (onLevelChange) {
-      onLevelChange(newLevel);
-    }
-  };
-
   const { handlePointerDown, handlePointerMove, handlePointerUp } =
     useDragHandler(
-      mapBottomsheetLevel,
-      handleLevelChange,
+      level,
+      onLevelChange,
       1, // 최소 레벨
       3, // 최대 레벨
       null, // 지도 바텀시트는 완전히 닫지 X
     );
 
   return (
-    <SMapBottomsheetLayout $level={mapBottomsheetLevel}>
+    <SMapBottomsheetLayout $level={level}>
       <SHandleBar
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -181,7 +167,7 @@ const MapBottomsheet = ({ children, level = 1, onLevelChange }) => {
         onTouchMove={handlePointerMove}
         onTouchEnd={handlePointerUp}
       />
-      <SMapContent $level={mapBottomsheetLevel}>{children}</SMapContent>
+      <SMapContent $level={level}>{children}</SMapContent>
     </SMapBottomsheetLayout>
   );
 };
