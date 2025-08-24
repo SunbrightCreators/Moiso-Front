@@ -84,6 +84,14 @@ const globalCss = {
       margin: '0 auto',
     },
   },
+  '#root': {
+	width: '100%',
+	height: '100%',
+  },
+  '#modal': {
+	width: '100%',
+	height: '100%',
+  },
 };
 
 // 3) Chakra 설정(config) 정의
