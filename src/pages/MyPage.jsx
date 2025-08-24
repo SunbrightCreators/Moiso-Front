@@ -12,7 +12,7 @@ import ToFounder from '../assets/icons/ChangetoFo.svg';
 import Lv1 from '../assets/icons/lv1.svg';
 import Lv2 from '../assets/icons/lv2.svg';
 import Lv3 from '../assets/icons/lv3.svg';
-import ScrapIcon from '../assets/icons/search.svg';
+import ScrapIcon from '../assets/icons/scrap_default.svg';
 
 import MyProposalIcon from '../assets/icons/BNB_proposal.svg';
 import MyFundingIcon from '../assets/icons/BNB_funding.svg';
