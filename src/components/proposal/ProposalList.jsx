@@ -11,80 +11,35 @@ import DefaultScrapIcon from '../../assets/icons/List_Bookmark_dafault.svg';
 
 // ———————————————————————————————————————————
 
-// 하트 아이콘 (활성)
-const ActiveHeart = () => (
-  <div
-    style={{
-      width: '1rem',
-      height: '1rem',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}
-  >
-    <img src={ActiveHeartIcon} alt='좋아요 활성' />
-  </div>
-);
+// Styled checkbox components for Like and Scrap buttons
+const LikeButton = styled.input.attrs({ type: 'checkbox' })`
+  appearance: none;
+  width: var(--sizes-4, 1rem);
+  height: var(--sizes-4, 1rem);
+  background: url(${DefaultHeartIcon}) no-repeat center/contain;
+  cursor: pointer;
 
-// 하트  (Default)
-const DefaultHeart = () => (
-  <div
-    style={{
-      width: '1rem',
-      height: '1rem',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}
-  >
-    <img src={DefaultHeartIcon} alt='좋아요' />
-  </div>
-);
+  &:checked {
+    background: url(${ActiveHeartIcon}) no-repeat center/contain;
+  }
 
-// 하트 (Disabled)
-const DisabledHeart = () => (
-  <div
-    style={{
-      width: '1rem',
-      height: '1rem',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}
-  >
-    <img src={DisabledHeartIcon} alt='좋아요 비활성' />
-  </div>
-);
+  &:disabled {
+    background: url(${DisabledHeartIcon}) no-repeat center/contain;
+    cursor: not-allowed;
+  }
+`;
 
-// 스크랩 (Default)
-const DefaultScrap = () => (
-  <div
-    style={{
-      width: '1rem',
-      height: '1rem',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}
-  >
-    <img src={DefaultScrapIcon} alt='스크랩' />
-  </div>
-);
+const ScrapButton = styled.input.attrs({ type: 'checkbox' })`
+  appearance: none;
+  width: var(--sizes-4, 1rem);
+  height: var(--sizes-4, 1rem);
+  background: url(${DefaultScrapIcon}) no-repeat center/contain;
+  cursor: pointer;
 
-// 스크랩  (활성)
-const ActiveScrap = () => (
-  <div
-    style={{
-      width: '1rem',
-      height: '1rem',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}
-  >
-    <img src={ActiveScrapIcon} alt='스크랩 활성' />
-  </div>
-);
+  &:checked {
+    background: url(${ActiveScrapIcon}) no-repeat center/contain;
+  }
+`;
 
 // ———————————————————————————————————————————
 
@@ -171,35 +126,31 @@ const ProposalItem = ({ proposal, onLike, onScrap, profile = 'proposer' }) => {
 
         <SActionContainer>
           <SLikeButtonWrapper>
-            <SActionBtn
-              onClick={() =>
+            <LikeButton
+              checked={proposal.isLiked && profile === 'proposer'}
+              disabled={profile === 'founder'}
+              onChange={() =>
                 profile === 'proposer' && handleLikeClick(proposal.id)
               }
-              disabled={profile === 'founder'}
+              onClick={(e) => e.stopPropagation()}
+            />
+            <SActionCount
+              $isActive={profile === 'proposer' && proposal.isLiked}
               $isDisabled={profile === 'founder'}
             >
-              {profile === 'founder' ? (
-                <DisabledHeart />
-              ) : proposal.isLiked ? (
-                <ActiveHeart />
-              ) : (
-                <DefaultHeart />
-              )}
-              <SActionCount
-                $isActive={profile === 'proposer' && proposal.isLiked}
-              >
-                {proposal.likeCount}
-              </SActionCount>
-            </SActionBtn>
+              {proposal.likeCount}
+            </SActionCount>
           </SLikeButtonWrapper>
 
           <SScrapButtonWrapper>
-            <SActionBtn onClick={() => handleScrapClick(proposal.id)}>
-              {proposal.isScraped ? <ActiveScrap /> : <DefaultScrap />}
-              <SScrapActionCount $isActive={proposal.isScraped}>
-                {proposal.scrapCount}
-              </SScrapActionCount>
-            </SActionBtn>
+            <ScrapButton
+              checked={proposal.isScraped}
+              onChange={() => handleScrapClick(proposal.id)}
+              onClick={(e) => e.stopPropagation()}
+            />
+            <SScrapActionCount $isActive={proposal.isScraped}>
+              {proposal.scrapCount}
+            </SScrapActionCount>
           </SScrapButtonWrapper>
         </SActionContainer>
       </SFooterWrapper>
@@ -356,19 +307,21 @@ const SActionContainer = styled.div`
 // 좋아요 버튼 래퍼 - 고정 위치 안하면 숫자 따라 크기가 변해서..ㅠㅠ
 const SLikeButtonWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 2.5rem;
   height: 1.25rem;
+  gap: 0.2rem;
 `;
 
 // 스크랩 버튼 래퍼 - 고정 위치
 const SScrapButtonWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 2.5rem;
   height: 1.25rem;
+  gap: 0.2rem;
 `;
 
 const SActionBtn = styled.button`
@@ -413,6 +366,10 @@ const SActionCount = styled.span`
   line-height: var(--line-heights-xs, 1rem); /* 133.333% */
 
   color: ${(props) => {
+    if (props.$isDisabled) {
+      // 비활성 상태일 때 (founder 모드)
+      return 'var(--colors-text-subtle, #a1a1aa)';
+    }
     if (props.$isActive) {
       // 활성 상태일 때 색깔
       return 'var(--colors-red-solid, #DC2626)';
