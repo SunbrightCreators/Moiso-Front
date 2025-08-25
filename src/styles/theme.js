@@ -84,13 +84,13 @@ const globalCss = {
       margin: '0 auto',
     },
   },
-  '#root': {
-	width: '100%',
-	height: '100%',
+  '#root, #modal': {
+    width: 'inherit',
+    height: 'inherit',
   },
   '#modal': {
-	width: '100%',
-	height: '100%',
+    position: 'fixed',
+    'z-index': '900',
   },
 };
 
