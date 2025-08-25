@@ -131,8 +131,7 @@ const createMarkerFromBoolean = (
 };
 
 /**
- * 마커의 선택 상태를 업데이트
- * 피드백해주신 대로 , 마커 클릭하면 스타일 변경으로 재렌더링 자동 수행하게 했습니다!
+ *  마커 클릭하면 스타일 변경으로 재렌더링 자동 수행하게 함
  * @param {Object} marker - 네이버 지도 Marker 인스턴스
  * @param {number} type - 마커 타입
  * @param {boolean} isSelected - 새로운 선택 상태
