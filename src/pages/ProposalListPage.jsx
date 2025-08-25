@@ -18,15 +18,6 @@ import {
   ZOOM_DISTANCE_MAPPING,
 } from '../../components/common/MarkerClustering';
 
-// import {
-//   Button,
-//   Text,
-//   Select,
-//   Badge,
-//   Slider,
-//   RadioGroup,
-//   HStack,
-// } from '@chakra-ui/react';
 
 import useModeStore from '../../stores/useModeStore';
 import {
@@ -42,16 +33,10 @@ import {
 } from '../../apis/maps';
 import PencilIcon from '../assets/icons/pencil.svg';
 /**
- * 제안글(Proposal) 지도 탐색 페이지
- * 1. 우리동네/다른동네 설정 기능 없음 (다른 페이지에서 처리)
- * 2. 기본 화면: 네이버 지도 + non-modal 바텀시트(1단) + 우측 하단 세로 슬라이더
- * 3. 제안자/창업자 차이: '제안하기' 버튼 유무만
- * 4. 줌 레벨 조정 시 슬라이더에 반영
- * 5. 바텀시트 드래그? 시 제안글 목록 표시
- */
+ * 제안글(Proposal) 지도 탐색 */
+
 const ProposalMapPage = () => {
-  // 전역 상태
-  const { isProposerMode } = useModeStore();
+  const { isProposerMode } = useModeStore();  // 전역 상태
 
   // 지도
   const mapRef = useRef(null);
@@ -59,9 +44,7 @@ const ProposalMapPage = () => {
   const [markers, setMarkers] = useState([]);
   const [markerCluster, setMarkerCluster] = useState(null);
   const [zoomLevel, setZoomLevel] = useState(13); // 클러스터링이 보이도록 낮은 줌 레벨로 설정
-
-  // 바텀시트 상태
-  const [bottomsheetLevel, setBottomsheetLevel] = useState(1);
+  const [bottomsheetLevel, setBottomsheetLevel] = useState(1);  // 바텀시트 상태
 
   // 제안글 데이터 (바텀시트용 - 항상 개별 제안글만)
   const [proposals, setProposals] = useState([]);
@@ -1085,7 +1068,7 @@ const SRadioButton = styled.div.withConfig({
         : 'var(--colors-border-default, #e2e8f0)'};
   background-color: ${(props) =>
     props.isSelected ? 'var(--colors-bg-default, #27272a)' : 'white'};
-  color: ${(props) =>
+  color: ${(props) => 
     props.isSelected
       ? 'var(--colors-text-inverted, #ffffff)'
       : 'var(--colors-text-subtle, #64748b)'};
