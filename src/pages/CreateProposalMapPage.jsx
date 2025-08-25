@@ -5,9 +5,9 @@ import TopNavigation from '../components/common/TopNavigation';
 import { createTypedCircle } from '../components/common/Circle';
 import { createTypedMarker } from '../components/common/Marker';
 import {
-  getGeocoding,
-  getLegalAddressSearch,
-  getReverseGeocodingLegal,
+  getAddressToPosition,
+  getAddressToLegal,
+  getPositionToLegal,
 } from '../apis/maps';
 
 import CurrentLocation from '../assets/icons/CreateProposalMapPage_target.svg';
@@ -551,3 +551,4 @@ const SErrorCloseButton = styled.button`
   padding: 0;
   margin-left: 0.5rem;
 `;
+  
