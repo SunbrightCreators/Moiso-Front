@@ -1,35 +1,24 @@
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import TopNavigation from '../../components/common/TopNavigation';
-import BottomNavigation from '../../components/common/BottomNavigation';
-import { MapBottomsheet } from '../../components/common/Bottomsheet';
-import ProposalItem from '../../components/proposal/ProposalList';
+import TopNavigation from '../components/common/TopNavigation';
+import BottomNavigation from '../components/common/BottomNavigation';
+import { MapBottomsheet } from '../components/common/Bottomsheet';
+import ProposalItem from '../components/proposal/ProposalList';
 import {
   createTypedCircle,
   createCircleFromBoolean,
-} from '../../components/common/Circle';
+} from '../components/common/Circle';
 import {
   createTypedMarker,
   updateMarkerSelection,
-} from '../../components/common/Marker';
+} from '../components/common/Marker';
 import {
   createMarkerClusterer,
   getMapDisplayType,
   ZOOM_DISTANCE_MAPPING,
-} from '../../components/common/MarkerClustering';
+} from '../components/common/MarkerClustering';
 
-import useModeStore from '../../stores/useModeStore';
-import {
-  getProposalsMap,
-  getProposalDetail,
-  postProposalLike,
-  postProposalScrap,
-} from '../../apis/proposals';
-import {
-  getLegalAddressSearch,
-  getReverseGeocodingLegal,
-  getGeocoding,
-} from '../../apis/maps';
+import useModeStore from '../stores/useModeStore';
 import PencilIcon from '../assets/icons/pencil.svg';
 /**
  * 제안글(Proposal) 지도 탐색 */
