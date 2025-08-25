@@ -4,6 +4,7 @@ import Provider from './styles/provider';
 import Router from './Router';
 import { ModalBottomsheet } from './components/common/Bottomsheet';
 import Dialog from './components/common/Dialog';
+import { Toaster } from './components/common/toaster';
 import registerServiceWorker from './service-workers/registerServiceWorker';
 import requestNotificationPermission from './service-workers/requestNotificationPermission';
 import subscribePush from './service-workers/subscribePush';
@@ -18,6 +19,7 @@ root.render(
       <Router />
       <ModalBottomsheet />
       <Dialog />
+      <Toaster />
     </Provider>
   </React.StrictMode>,
 );
