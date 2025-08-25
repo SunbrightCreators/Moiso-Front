@@ -266,15 +266,12 @@ const Dot = styled.i`
 /* ----------------------------- 작은 카드 ----------------------------- */
 const SmallCard = styled.article`
   background: transparent;
+  width: 20.375rem;
 `;
-const ImgWrap = styled.div`
-  width: 100%;
-  border-radius: 16px;
-  overflow: hidden;
-`;
-const SmallThumb = styled.div`
+const SImg = styled.img`
   width: 20.375rem;
   height: 11.375rem;
+  border-radius: 16px;
   background: #e5e7eb url(${(p) => p.src}) center/cover no-repeat;
 `;
 const SmallBody = styled.div`
@@ -346,8 +343,10 @@ const StatsRow = styled.div`
 
 /* --------------------------- 섹션/페이지 --------------------------- */
 const Section = styled.section`
-  display: grid;
+  display: flex;
+  flex-flow: column nowrap;
   gap: 10px;
+  width: fit-content;
 `;
 const SectionSub = styled.p`
   margin-top: -4px;
@@ -369,10 +368,12 @@ const SectionTitle = styled.h2`
   line-height: 1.75rem;
 `;
 const Page = styled.main`
-  flex-grow: 1;
-  padding: 16px;
-  display: grid;
+  display: flex;
+  justify-content: center;
   gap: 28px;
+
+  padding: 16px;
+
   background: #fff;
 `;
 const BottomBarWrap = styled.div`
@@ -384,9 +385,7 @@ const BottomBarWrap = styled.div`
 `;
 
 const CardLink = styled(Link)`
-  display: block;
-  color: inherit;
-  text-decoration: none;
+  width: fit-content;
 `;
 
 /* =========================== 컴포넌트 =========================== */
@@ -407,109 +406,98 @@ const ProposalRecPage = () => {
           <SectionSub>
             스크랩한 글을 바탕으로 비슷한 제안을 추천해드려요
           </SectionSub>
+          {(similar?.length ?? 0) > 0 ? (
+            similar.map((item) => (
+              <CardLink key={item.id} to={ROUTE_PATH.PROPOSAL_DETAIL(item.id)}>
+                <SmallCard key={item.id}>
+                  <SImg src={item.image} />
+                  <SmallBody>
+                    <TagRow>
+                      <Badge
+                        variant='subtle'
+                        size='md'
+                        bg='#F4F4F5'
+                        color='#27272A'
+                        borderRadius='999px'
+                        fontSize='12px'
+                        fontWeight='400'
+                      >
+                        {item.industry}
+                      </Badge>
+                    </TagRow>
+                    <HeadBox>
+                      <HeadTitle>{item.title}</HeadTitle>
+                      <HeadDesc>{item.subtitle}</HeadDesc>
+                    </HeadBox>
+                    <MetaList>
+                      <MetaLine>
+                        <MetaLabel>희망시간</MetaLabel>
+                        <MetaValue>
+                          {item.business_hours?.start} -{' '}
+                          {item.business_hours?.end}
+                        </MetaValue>
+                      </MetaLine>
+                      <MetaLine>
+                        <MetaLabel>희망장소</MetaLabel>
+                        <MetaValue>
+                          {' '}
+                          {item.address?.eupmyundong},{' '}
+                          {item.address?.road_detail} + {item.radius}
+                        </MetaValue>
+                      </MetaLine>
+                    </MetaList>
 
-          <Carousel gap='1.5rem'>
-            {(similar?.length ?? 0) > 0 ? (
-              similar.map((item) => (
-                <CardLink
-                  key={item.id}
-                  to={ROUTE_PATH.PROPOSAL_DETAIL(item.id)}
-                >
-                  <SmallCard key={item.id}>
-                    <ImgWrap>
-                      <SmallThumb src={item.image} />
-                    </ImgWrap>
-
-                    <SmallBody>
-                      <TagRow>
-                        <Badge
-                          variant='subtle'
-                          size='md'
-                          bg='#F4F4F5'
-                          color='#27272A'
-                          borderRadius='999px'
-                          fontSize='12px'
-                          fontWeight='400'
-                        >
-                          {item.industry}
-                        </Badge>
-                      </TagRow>
-
-                      <HeadBox>
-                        <HeadTitle>{item.title}</HeadTitle>
-                        <HeadDesc>{item.subtitle}</HeadDesc>
-                      </HeadBox>
-
-                      <MetaList>
-                        <MetaLine>
-                          <MetaLabel>희망시간</MetaLabel>
-                          <MetaValue>
-                            {item.business_hours?.start} -{' '}
-                            {item.business_hours?.end}
-                          </MetaValue>
-                        </MetaLine>
-                        <MetaLine>
-                          <MetaLabel>희망장소</MetaLabel>
-                          <MetaValue>
-                            {' '}
-                            {item.address?.eupmyundong},{' '}
-                            {item.address?.road_detail} + {item.radius}
-                          </MetaValue>
-                        </MetaLine>
-                      </MetaList>
-
-                      <FooterRow>
-                        <UserRow>
-                          <Avatar.Root shape='full' size='xs'>
-                            <Avatar.Fallback
-                              name={item.user?.name}
-                              src={item.user?.profile_image}
-                            />
-                          </Avatar.Root>
-                          <UserName>{item.user?.name}</UserName>
-                        </UserRow>
-                        <StatsRow
-                          onClick={stop}
-                          onMouseDown={stop}
-                          onPointerDown={stop}
-                        >
-                          <LikeButton
-                            checked={!!likedMap[item.id]}
-                            onChange={() => toggleLike(item.id)}
+                    <FooterRow>
+                      <UserRow>
+                        <Avatar.Root shape='full' size='xs'>
+                          <Avatar.Fallback
+                            name={item.user?.name}
+                            src={item.user?.profile_image}
                           />
-                          <span>
-                            {item.likes_count + (likedMap[item.id] ? 1 : 0)}
-                          </span>
+                        </Avatar.Root>
+                        <UserName>{item.user?.name}</UserName>
+                      </UserRow>
+                      <StatsRow
+                        onClick={stop}
+                        onMouseDown={stop}
+                        onPointerDown={stop}
+                      >
+                        <LikeButton
+                          checked={!!likedMap[item.id]}
+                          onChange={() => toggleLike(item.id)}
+                        />
+                        <span>
+                          {item.likes_count + (likedMap[item.id] ? 1 : 0)}
+                        </span>
 
-                          <ScrapButton
-                            checked={!!scrappedMap[item.id]}
-                            onChange={() => toggleScrap(item.id)}
-                          />
-                          <span>
-                            {item.scraps_count + (scrappedMap[item.id] ? 1 : 0)}
-                          </span>
-                        </StatsRow>
-                      </FooterRow>
-                    </SmallBody>
-                  </SmallCard>
-                </CardLink>
-              ))
-            ) : (
-              <EmptyState.Root
-                height='100%'
-                display='flex'
-                alignItems='center'
-                justifyContent='center'
-              >
-                <EmptyState.Content>
-                  <EmptyState.Indicator>
-                    <Sparkle />
-                  </EmptyState.Indicator>
-                  <EmptyState.Title>추천 결과가 없어요</EmptyState.Title>
-                </EmptyState.Content>
-              </EmptyState.Root>
-            )}
-          </Carousel>
+                        <ScrapButton
+                          checked={!!scrappedMap[item.id]}
+                          onChange={() => toggleScrap(item.id)}
+                        />
+                        <span>
+                          {item.scraps_count + (scrappedMap[item.id] ? 1 : 0)}
+                        </span>
+                      </StatsRow>
+                    </FooterRow>
+                  </SmallBody>
+                </SmallCard>
+              </CardLink>
+            ))
+          ) : (
+            <EmptyState.Root
+              height='100%'
+              display='flex'
+              alignItems='center'
+              justifyContent='center'
+            >
+              <EmptyState.Content>
+                <EmptyState.Indicator>
+                  <Sparkle />
+                </EmptyState.Indicator>
+                <EmptyState.Title>추천 결과가 없어요</EmptyState.Title>
+              </EmptyState.Content>
+            </EmptyState.Root>
+          )}
         </Section>
       </Page>
 
