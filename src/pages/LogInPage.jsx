@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import TopNavigation from '../components/common/TopNavigation';
 import logo from '../assets/icons/심볼.svg';
 import { useForm } from 'react-hook-form';
+import { postLogin } from '../apis/accounts';
 
 const LoginPage = () => {
   const {
@@ -13,15 +14,10 @@ const LoginPage = () => {
     mode: 'onBlur',
   });
 
-  const onSubmit = (data) => {
-    if (data.email !== 'test@example.com' || data.password !== 'password') {
-      setError('root', {
-        type: 'manual',
-        message: '이메일 또는 비밀번호가 일치하지 않습니다.',
-      });
-    } else {
-      console.log('로그인 성공:', data);
-    }
+  const onSubmit = async (data) => {
+    try {
+      const response = await postLogin(data.email, data.password);
+    } catch (error) {}
   };
 
   return (
