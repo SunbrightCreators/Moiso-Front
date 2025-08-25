@@ -37,7 +37,7 @@ const authClientInterceptor = {
       let token = localStorage.getItem('token');
       if (token) {
         token = JSON.parse(token);
-        config.headers.Authorization = `${token.grantType} ${token.accessToken}`;
+        config.headers.Authorization = `${token.grant_type} ${token.access.token}`;
       }
       return Promise.resolve(config);
     },

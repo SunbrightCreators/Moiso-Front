@@ -4,8 +4,10 @@ import TopNavigation from '../components/common/TopNavigation';
 import logo from '../assets/icons/심볼.svg';
 import { useForm } from 'react-hook-form';
 import { postLogin } from '../apis/accounts';
+import useModeStore from '../stores/useModeStore';
 
 const LoginPage = () => {
+  const { setIsProposerMode } = useModeStore();
   const {
     register,
     handleSubmit,
@@ -17,6 +19,9 @@ const LoginPage = () => {
   const onSubmit = async (data) => {
     try {
       const response = await postLogin(data.email, data.password);
+      const { profile, ...token } = response.data;
+      localStorage.setItem('token', JSON.stringify(token));
+      setIsProposerMode(profile.includes('proposer'));
     } catch (error) {}
   };
 
