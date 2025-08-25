@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
-import { Badge, Avatar } from '@chakra-ui/react';
+import { EmptyState, Badge, Avatar } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { ROUTE_PATH } from '../constants/route';
 import useModeStore from '../stores/useModeStore';
@@ -11,8 +11,7 @@ import HeartPressed from '../assets/icons/heart_pressed.svg';
 import HeartDisabled from '../assets/icons/heart_disabled.svg';
 import ScrapDefault from '../assets/icons/scrap_default.svg';
 import ScrapPressed from '../assets/icons/scrap_pressed.svg';
-import BEmpty from '../assets/icons/EmptyState.svg';
-import SEmpty from '../assets/icons/EmptyState_s.svg';
+import { ReactComponent as Sparkle } from '../assets/icons/sparkle.svg';
 
 const LikeButton = styled.input.attrs({ type: 'checkbox' })`
   appearance: none;
@@ -512,15 +511,21 @@ const ProposalRecPage = () => {
                       <HeroBg src='' />
                       <OverlayWrap>
                         <OverlayCard as='div' style={{ padding: 0 }}>
-                          <img
-                            src={BEmpty}
-                            alt='추천 결과 없음'
-                            style={{
-                              display: 'block',
-                              width: '100%',
-                              height: '100%',
-                            }}
-                          />
+                          <EmptyState.Root
+                            height='100%'
+                            display='flex'
+                            alignItems='center'
+                            justifyContent='center'
+                          >
+                            <EmptyState.Content>
+                              <EmptyState.Indicator>
+                                <Sparkle />
+                              </EmptyState.Indicator>
+                              <EmptyState.Title>
+                                추천 결과가 없어요
+                              </EmptyState.Title>
+                            </EmptyState.Content>
+                          </EmptyState.Root>
                         </OverlayCard>
                       </OverlayWrap>
                     </Slide>
@@ -625,17 +630,19 @@ const ProposalRecPage = () => {
                 </CardLink>
               ))
             ) : (
-              <div style={{ width: '100%' }}>
-                <img
-                  src={SEmpty}
-                  alt='성공률 높은 제안 없음'
-                  style={{
-                    width: '80%',
-                    display: 'block',
-                    margin: '0 auto',
-                  }}
-                />
-              </div>
+              <EmptyState.Root
+                height='100%'
+                display='flex'
+                alignItems='center'
+                justifyContent='center'
+              >
+                <EmptyState.Content>
+                  <EmptyState.Indicator>
+                    <Sparkle />
+                  </EmptyState.Indicator>
+                  <EmptyState.Title>추천 결과가 없어요</EmptyState.Title>
+                </EmptyState.Content>
+              </EmptyState.Root>
             )}
           </Carousel>
         </Section>
