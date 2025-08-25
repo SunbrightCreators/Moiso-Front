@@ -44,8 +44,8 @@ const StyledLoginButton2 = styled(Button)`
 
 const LogoBox = styled(Box)`
   display: flex;
-  width: 13.4375rem
-  height: 10.875rem
+  width: 13.4375rem;
+  height: 10.875rem;
   flex-shrink: 0;
   padding: 3.25rem;
   justify-content: center;
