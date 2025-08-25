@@ -417,7 +417,7 @@ const MOCK_USER = {
   avatarUrl: 'https://bit.ly/sage-adebayo',
   membership: {
     proposer: true, // 지역주민 프로필 보유 여부
-    founder: false, // 창업자 프로필 보유 여부
+    founder: true, // 창업자 프로필 보유 여부
   },
   level: {
     district: '대현동',
