@@ -18,7 +18,6 @@ import {
   ZOOM_DISTANCE_MAPPING,
 } from '../../components/common/MarkerClustering';
 
-
 import useModeStore from '../../stores/useModeStore';
 import {
   getProposalsMap,
@@ -36,7 +35,7 @@ import PencilIcon from '../assets/icons/pencil.svg';
  * 제안글(Proposal) 지도 탐색 */
 
 const ProposalMapPage = () => {
-  const { isProposerMode } = useModeStore();  // 전역 상태
+  const { isProposerMode } = useModeStore(); // 전역 상태
 
   // 지도
   const mapRef = useRef(null);
@@ -44,7 +43,7 @@ const ProposalMapPage = () => {
   const [markers, setMarkers] = useState([]);
   const [markerCluster, setMarkerCluster] = useState(null);
   const [zoomLevel, setZoomLevel] = useState(13); // 클러스터링이 보이도록 낮은 줌 레벨로 설정
-  const [bottomsheetLevel, setBottomsheetLevel] = useState(1);  // 바텀시트 상태
+  const [bottomsheetLevel, setBottomsheetLevel] = useState(1); // 바텀시트 상태
 
   // 제안글 데이터 (바텀시트용 - 항상 개별 제안글만)
   const [proposals, setProposals] = useState([]);
@@ -527,306 +526,306 @@ const ProposalMapPage = () => {
       updateMarkerSelection(marker, marker.type || 1, false);
     }
   });
-};
 
-// 지도에 마커와 서클 생성
-const createMarkersAndCircles = (proposalData) => {
-  // 기존 마커 제거
-  markers.forEach((marker) => {
-    if (marker.setMap) {
-      marker.setMap(null);
-    }
-  });
-  setMarkers([]);
-
-  // 클러스터 제거
-  if (markerCluster) {
-    markerCluster.clearMarkers();
-  }
-
-  if (!map || !proposalData || proposalData.length === 0) return;
-
-  // 줌 레벨에 따라 클러스터링 또는 개별 마커 표시
-  const displayType = getMapDisplayType(zoomLevel);
-
-  console.log('현재 줌 레벨:', zoomLevel, '표시 타입:', displayType);
-
-  if (displayType === 'DETAILED') {
-    // 500m 미만: 개별 마커 표시
-    console.log('개별 마커 모드');
-    const newMarkers = [];
-    proposalData.forEach((proposal, index) => {
-      if (
-        proposal.position &&
-        proposal.position.latitude &&
-        proposal.position.longitude
-      ) {
-        // 우리 동네인지 판별
-        const isOur = isOurNeighborhood(proposal.address);
-        const markerType = isOur ? 1 : 2;
-
-        // 개별 마커 생성
-        const isSelected = selectedMarkerId === proposal.id;
-        const marker = createTypedMarker(
-          map,
-          proposal.position.latitude,
-          proposal.position.longitude,
-          markerType,
-          isSelected,
-        );
-
-        if (marker) {
-          // 마커 객체에 ID와 제안글 정보 추가
-          const markerWithData = {
-            id: proposal.id,
-            marker: marker,
-            proposal: proposal,
-          };
-          newMarkers.push(markerWithData);
-
-          // 마커 클릭 이벤트
-          naver.maps.Event.addListener(marker, 'click', () => {
-            handleMarkerClick(proposal, proposal.id);
-          });
-        }
-      }
-    });
-
-    setMarkers(newMarkers);
-  } else {
-    // 클러스터링 사용 (10km 이상, 2km~10km, 500m~2km)
-    console.log('클러스터링 모드, 제안글 수:', proposalData.length);
-    const clusterer = createMarkerClusterer(map);
-    const markersForCluster = [];
-
-    proposalData.forEach((proposal, index) => {
-      console.log(`제안글 ${index + 1} 처리:`, proposal.title);
-      if (
-        proposal.position &&
-        proposal.position.latitude &&
-        proposal.position.longitude
-      ) {
-        // 마커 생성 (클러스터링용)
-        const marker = new naver.maps.Marker({
-          position: new naver.maps.LatLng(
-            proposal.position.latitude,
-            proposal.position.longitude,
-          ),
-        });
-
-        // 우리 동네인지 판별
-        const isOur = isOurNeighborhood(proposal.address);
-        marker.type = isOur ? 1 : 2;
-
-        // 줌 레벨에 따른 지역명 설정
-        let areaName = '지역';
-        if (proposal.address) {
-          switch (displayType) {
-            case 'PROVINCE':
-              areaName = proposal.address.sido || '시/도';
-              break;
-            case 'DISTRICT':
-              areaName = proposal.address.sigungu || '구';
-              break;
-            case 'NEIGHBORHOOD':
-              areaName = proposal.address.eupmyundong || '동';
-              break;
-          }
-        }
-        marker.areaName = areaName;
-
-        markersForCluster.push(marker);
-      }
-    });
-
-    console.log('클러스터링용 마커 수:', markersForCluster.length);
-    clusterer.addMarkers(markersForCluster);
-    console.log('클러스터러에 마커 추가 완료');
-    setMarkerCluster(clusterer);
-  }
-};
-
-// mapData가 변경될 때마다 마커와 서클 생성
-useEffect(() => {
-  if (mapData.length > 0) {
-    createMarkersAndCircles(mapData);
-  }
-}, [mapData, map, zoomLevel, selectedProposal]);
-
-// 컴포넌트 언마운트 시 마커 정리
-useEffect(() => {
-  return () => {
+  // 지도에 마커와 서클 생성
+  const createMarkersAndCircles = (proposalData) => {
+    // 기존 마커 제거
     markers.forEach((marker) => {
       if (marker.setMap) {
         marker.setMap(null);
       }
     });
+    setMarkers([]);
 
-    // 클러스터 정리
+    // 클러스터 제거
     if (markerCluster) {
       markerCluster.clearMarkers();
     }
-  };
-}, []);
 
-// 현재 지역 기반으로 제안글 필터링
-const getFilteredProposalsByRegion = (proposalData) => {
-  if (
-    !currentRegion.sido &&
-    !currentRegion.sigungu &&
-    !currentRegion.eupmyundong
-  ) {
-    return proposalData; // 지역 정보가 없으면 전체 반환
-  }
+    if (!map || !proposalData || proposalData.length === 0) return;
 
-  return proposalData.filter((proposal) => {
-    if (!proposal.address) return false;
+    // 줌 레벨에 따라 클러스터링 또는 개별 마커 표시
+    const displayType = getMapDisplayType(zoomLevel);
 
-    // 시/도, 시/군/구, 읍/면/동 중 하나라도 일치하면 포함
-    return (
-      (currentRegion.sido && proposal.address.sido === currentRegion.sido) ||
-      (currentRegion.sigungu &&
-        proposal.address.sigungu === currentRegion.sigungu) ||
-      (currentRegion.eupmyundong &&
-        proposal.address.eupmyundong === currentRegion.eupmyundong)
-    );
-  });
-};
+    console.log('현재 줌 레벨:', zoomLevel, '표시 타입:', displayType);
 
-// 필터 스크롤 터치 이벤트 핸들러
-const handleFilterTouchStart = (e) => {
-  const container = filterScrollRef.current;
-  if (container) {
-    container.startX = e.touches[0].clientX;
-    container.scrollStart = container.scrollLeft;
-  }
-};
+    if (displayType === 'DETAILED') {
+      // 500m 미만: 개별 마커 표시
+      console.log('개별 마커 모드');
+      const newMarkers = [];
+      proposalData.forEach((proposal, index) => {
+        if (
+          proposal.position &&
+          proposal.position.latitude &&
+          proposal.position.longitude
+        ) {
+          // 우리 동네인지 판별
+          const isOur = isOurNeighborhood(proposal.address);
+          const markerType = isOur ? 1 : 2;
 
-const handleFilterTouchMove = (e) => {
-  const container = filterScrollRef.current;
-  if (container && container.startX !== undefined) {
-    const touchX = e.touches[0].clientX;
-    const diffX = Math.abs(touchX - container.startX);
+          // 개별 마커 생성
+          const isSelected = selectedMarkerId === proposal.id;
+          const marker = createTypedMarker(
+            map,
+            proposal.position.latitude,
+            proposal.position.longitude,
+            markerType,
+            isSelected,
+          );
 
-    // 가로 스크롤이 감지되면 세로 스크롤 방지
-    if (diffX > 10) {
-      e.stopPropagation();
+          if (marker) {
+            // 마커 객체에 ID와 제안글 정보 추가
+            const markerWithData = {
+              id: proposal.id,
+              marker: marker,
+              proposal: proposal,
+            };
+            newMarkers.push(markerWithData);
+
+            // 마커 클릭 이벤트
+            naver.maps.Event.addListener(marker, 'click', () => {
+              handleMarkerClick(proposal, proposal.id);
+            });
+          }
+        }
+      });
+
+      setMarkers(newMarkers);
+    } else {
+      // 클러스터링 사용 (10km 이상, 2km~10km, 500m~2km)
+      console.log('클러스터링 모드, 제안글 수:', proposalData.length);
+      const clusterer = createMarkerClusterer(map);
+      const markersForCluster = [];
+
+      proposalData.forEach((proposal, index) => {
+        console.log(`제안글 ${index + 1} 처리:`, proposal.title);
+        if (
+          proposal.position &&
+          proposal.position.latitude &&
+          proposal.position.longitude
+        ) {
+          // 마커 생성 (클러스터링용)
+          const marker = new naver.maps.Marker({
+            position: new naver.maps.LatLng(
+              proposal.position.latitude,
+              proposal.position.longitude,
+            ),
+          });
+
+          // 우리 동네인지 판별
+          const isOur = isOurNeighborhood(proposal.address);
+          marker.type = isOur ? 1 : 2;
+
+          // 줌 레벨에 따른 지역명 설정
+          let areaName = '지역';
+          if (proposal.address) {
+            switch (displayType) {
+              case 'PROVINCE':
+                areaName = proposal.address.sido || '시/도';
+                break;
+              case 'DISTRICT':
+                areaName = proposal.address.sigungu || '구';
+                break;
+              case 'NEIGHBORHOOD':
+                areaName = proposal.address.eupmyundong || '동';
+                break;
+            }
+          }
+          marker.areaName = areaName;
+
+          markersForCluster.push(marker);
+        }
+      });
+
+      console.log('클러스터링용 마커 수:', markersForCluster.length);
+      clusterer.addMarkers(markersForCluster);
+      console.log('클러스터러에 마커 추가 완료');
+      setMarkerCluster(clusterer);
     }
-  }
-};
+  };
 
-return (
-  <SLayout>
-    <TopNavigation />
+  // mapData가 변경될 때마다 마커와 서클 생성
+  useEffect(() => {
+    if (mapData.length > 0) {
+      createMarkersAndCircles(mapData);
+    }
+  }, [mapData, map, zoomLevel, selectedProposal]);
 
-    {/* ————————————————————— 여기서부터 지도 —————————————————— */}
-    <SMapContainer>
-      <SMapWrapper ref={mapRef} />
+  // 컴포넌트 언마운트 시 마커 정리
+  useEffect(() => {
+    return () => {
+      markers.forEach((marker) => {
+        if (marker.setMap) {
+          marker.setMap(null);
+        }
+      });
 
-      {/*  슬라이더 - 바텀시트 레벨에 따라 위치 조정 */}
-      <SSliderContainer
-        $bottomsheetLevel={bottomsheetLevel}
-        $isOverBottomsheet={bottomsheetLevel >= 2}
-      >
-        <SSliderWrapper>
-          <SVerticalSlider
-            type='range'
-            min={10}
-            max={18}
-            step={1}
-            value={zoomLevel}
-            onChange={(e) => handleZoomChange(parseInt(e.target.value))}
-            style={{
-              background: `linear-gradient(to top, var(--colors-bg-default, #27272a) 0%, var(--colors-bg-default, #27272a) ${((zoomLevel - 10) / (18 - 10)) * 100}%, #e2e8f0 ${((zoomLevel - 10) / (18 - 10)) * 100}%, #e2e8f0 100%)`,
-            }}
-          />
-        </SSliderWrapper>
-        <SZoomLevelText>{zoomLevel}레벨</SZoomLevelText>
-      </SSliderContainer>
+      // 클러스터 정리
+      if (markerCluster) {
+        markerCluster.clearMarkers();
+      }
+    };
+  }, []);
 
-      {/* 제안자 모드일 때만 : 플로팅 버튼으로, '제안하기' - 화면상 고정 위치 */}
-      {isProposerMode && (
-        <SProposeButton
+  // 현재 지역 기반으로 제안글 필터링
+  const getFilteredProposalsByRegion = (proposalData) => {
+    if (
+      !currentRegion.sido &&
+      !currentRegion.sigungu &&
+      !currentRegion.eupmyundong
+    ) {
+      return proposalData; // 지역 정보가 없으면 전체 반환
+    }
+
+    return proposalData.filter((proposal) => {
+      if (!proposal.address) return false;
+
+      // 시/도, 시/군/구, 읍/면/동 중 하나라도 일치하면 포함
+      return (
+        (currentRegion.sido && proposal.address.sido === currentRegion.sido) ||
+        (currentRegion.sigungu &&
+          proposal.address.sigungu === currentRegion.sigungu) ||
+        (currentRegion.eupmyundong &&
+          proposal.address.eupmyundong === currentRegion.eupmyundong)
+      );
+    });
+  };
+
+  // 필터 스크롤 터치 이벤트 핸들러
+  const handleFilterTouchStart = (e) => {
+    const container = filterScrollRef.current;
+    if (container) {
+      container.startX = e.touches[0].clientX;
+      container.scrollStart = container.scrollLeft;
+    }
+  };
+
+  const handleFilterTouchMove = (e) => {
+    const container = filterScrollRef.current;
+    if (container && container.startX !== undefined) {
+      const touchX = e.touches[0].clientX;
+      const diffX = Math.abs(touchX - container.startX);
+
+      // 가로 스크롤이 감지되면 세로 스크롤 방지
+      if (diffX > 10) {
+        e.stopPropagation();
+      }
+    }
+  };
+
+  return (
+    <SLayout>
+      <TopNavigation />
+
+      {/* ————————————————————— 여기서부터 지도 —————————————————— */}
+      <SMapContainer>
+        <SMapWrapper ref={mapRef} />
+
+        {/*  슬라이더 - 바텀시트 레벨에 따라 위치 조정 */}
+        <SSliderContainer
           $bottomsheetLevel={bottomsheetLevel}
-          onClick={() => {
-            /* 페이지 이동 : 구현해야 됨! */
-          }}
+          $isOverBottomsheet={bottomsheetLevel >= 2}
         >
-          <img
-            src={PencilIcon}
-            alt='제안하기'
-            style={{ width: 20, height: 20, marginRight: 8 }}
-          />
-          제안하기
-        </SProposeButton>
-      )}
-    </SMapContainer>
+          <SSliderWrapper>
+            <SVerticalSlider
+              type='range'
+              min={10}
+              max={18}
+              step={1}
+              value={zoomLevel}
+              onChange={(e) => handleZoomChange(parseInt(e.target.value))}
+              style={{
+                background: `linear-gradient(to top, var(--colors-bg-default, #27272a) 0%, var(--colors-bg-default, #27272a) ${((zoomLevel - 10) / (18 - 10)) * 100}%, #e2e8f0 ${((zoomLevel - 10) / (18 - 10)) * 100}%, #e2e8f0 100%)`,
+              }}
+            />
+          </SSliderWrapper>
+          <SZoomLevelText>{zoomLevel}레벨</SZoomLevelText>
+        </SSliderContainer>
 
-    {/* ————————————————————————————————————————————————————————— */}
-
-    {/* non-modal 바텀시트 (1단짜리) */}
-    <SBottomsheetWrapper>
-      <MapBottomsheet
-        level={bottomsheetLevel}
-        onLevelChange={setBottomsheetLevel}
-      >
-        {/* 업종 필터 (라디오 버튼 형식으로 스크롤되게) */}
-        <SFilterRow>
-          <SFilterScrollContainer
-            ref={filterScrollRef}
-            data-filter-scroll
-            onTouchStart={handleFilterTouchStart}
-            onTouchMove={handleFilterTouchMove}
+        {/* 제안자 모드일 때만 : 플로팅 버튼으로, '제안하기' - 화면상 고정 위치 */}
+        {isProposerMode && (
+          <SProposeButton
+            $bottomsheetLevel={bottomsheetLevel}
+            onClick={() => {
+              /* 페이지 이동 : 구현해야 됨! */
+            }}
           >
-            {industryOptions.map((option) => (
-              <SRadioButton
-                key={option.value}
-                isSelected={selectedIndustry === option.value}
-                onClick={() => setSelectedIndustry(option.value)}
-              >
-                {option.label}
-              </SRadioButton>
-            ))}
-          </SFilterScrollContainer>
-        </SFilterRow>
+            <img
+              src={PencilIcon}
+              alt='제안하기'
+              style={{ width: 20, height: 20, marginRight: 8 }}
+            />
+            제안하기
+          </SProposeButton>
+        )}
+      </SMapContainer>
 
-        {/* 정렬 컨테이너 */}
-        <SSortContainer>
-          <SProposalCount>
-            {currentRegion.eupmyundong ||
-              currentRegion.sigungu ||
-              currentRegion.sido ||
-              '현재 지역'}{' '}
-            총 {getFilteredProposalsByRegion(proposals).length}개
-          </SProposalCount>
+      {/* ————————————————————————————————————————————————————————— */}
 
-          <SSortSelect
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value)}
-          >
-            <option value='최신순'>최신순</option>
-            <option value='인기순'>인기순</option>
-            <option value='레벨순'>레벨순</option>
-          </SSortSelect>
-        </SSortContainer>
-
-        {/* 제안글 목록 - 현재 지역 기반 필터링 */}
-        <div>
-          {getFilteredProposalsByRegion(proposals).map((proposal) => (
-            <div
-              key={proposal.id}
-              onClick={() => handleProposalItemClick(proposal)}
-              style={{ cursor: 'pointer' }}
+      {/* non-modal 바텀시트 (1단짜리) */}
+      <SBottomsheetWrapper>
+        <MapBottomsheet
+          level={bottomsheetLevel}
+          onLevelChange={setBottomsheetLevel}
+        >
+          {/* 업종 필터 (라디오 버튼 형식으로 스크롤되게) */}
+          <SFilterRow>
+            <SFilterScrollContainer
+              ref={filterScrollRef}
+              data-filter-scroll
+              onTouchStart={handleFilterTouchStart}
+              onTouchMove={handleFilterTouchMove}
             >
-              <ProposalItem proposal={proposal} />
-            </div>
-          ))}
-        </div>
-      </MapBottomsheet>
-    </SBottomsheetWrapper>
-    <BottomNavigation />
-  </SLayout>
-);
+              {industryOptions.map((option) => (
+                <SRadioButton
+                  key={option.value}
+                  isSelected={selectedIndustry === option.value}
+                  onClick={() => setSelectedIndustry(option.value)}
+                >
+                  {option.label}
+                </SRadioButton>
+              ))}
+            </SFilterScrollContainer>
+          </SFilterRow>
+
+          {/* 정렬 컨테이너 */}
+          <SSortContainer>
+            <SProposalCount>
+              {currentRegion.eupmyundong ||
+                currentRegion.sigungu ||
+                currentRegion.sido ||
+                '현재 지역'}{' '}
+              총 {getFilteredProposalsByRegion(proposals).length}개
+            </SProposalCount>
+
+            <SSortSelect
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}
+            >
+              <option value='최신순'>최신순</option>
+              <option value='인기순'>인기순</option>
+              <option value='레벨순'>레벨순</option>
+            </SSortSelect>
+          </SSortContainer>
+
+          {/* 제안글 목록 - 현재 지역 기반 필터링 */}
+          <div>
+            {getFilteredProposalsByRegion(proposals).map((proposal) => (
+              <div
+                key={proposal.id}
+                onClick={() => handleProposalItemClick(proposal)}
+                style={{ cursor: 'pointer' }}
+              >
+                <ProposalItem proposal={proposal} />
+              </div>
+            ))}
+          </div>
+        </MapBottomsheet>
+      </SBottomsheetWrapper>
+      <BottomNavigation />
+    </SLayout>
+  );
+};
 
 // Styled Components
 const SLayout = styled.div`
@@ -1068,7 +1067,7 @@ const SRadioButton = styled.div.withConfig({
         : 'var(--colors-border-default, #e2e8f0)'};
   background-color: ${(props) =>
     props.isSelected ? 'var(--colors-bg-default, #27272a)' : 'white'};
-  color: ${(props) => 
+  color: ${(props) =>
     props.isSelected
       ? 'var(--colors-text-inverted, #ffffff)'
       : 'var(--colors-text-subtle, #64748b)'};
