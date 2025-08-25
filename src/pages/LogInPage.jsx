@@ -1,70 +1,10 @@
-import { Box, Flex, VStack, Input, Button } from '@chakra-ui/react';
-import {
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-} from '@chakra-ui/form-control';
+import { Field, Input, Button } from '@chakra-ui/react';
 import styled from 'styled-components';
 import TopNavigation from '../components/common/TopNavigation';
 import logo from '../assets/icons/심볼.svg';
 import { useForm } from 'react-hook-form';
 
-const LogoArea = styled(Box)`
-  display: flex;
-  width: 17.25rem;
-  height: 4.5rem;
-  padding: 3.25rem;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-  border-radius: 0.4375rem;
-`;
-
-const LoginButton = styled(Button)`
-  display: flex;
-  width: 22.375rem;
-  height: 3.5rem;
-  padding: 0 1rem;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-  border-radius: 0.5rem;
-  background: var(--Fill-primary, #303742);
-`;
-const StyledInput = styled(Input)`
-  display: flex;
-  width: 22.375rem;
-  height: 3.5rem;
-  padding: 0 1rem;
-  align-items: center;
-  gap: 0.75rem;
-  align-self: stretch;
-  border-radius: 0.5rem;
-  border: 1px solid var(--Stroke, #cad1db);
-  background: var(--White, #fff);
-`;
-const StyledFormLabel = styled(FormLabel)`
-  width: 22.375rem;
-  color: var(--Text-primary, #1c2129);
-  font-family: Manrope;
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 1.375rem; /* 137.5% */
-  margin-bottom: 0.3rem;
-`;
-const SFormErrorMessage = styled(FormErrorMessage)`
-  color: var(--Error, #e55050);
-
-  /* Interface/Description/Main */
-  font-family: Manrope;
-  font-size: 0.75rem;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 1.125rem; /* 150% */
-`;
-
-export default function LoginPage() {
+const LoginPage = () => {
   const {
     register,
     handleSubmit,
@@ -85,24 +25,13 @@ export default function LoginPage() {
   };
 
   return (
-    <Flex direction='column' minH='100%'>
+    <SLayout>
       <TopNavigation left='back' title='로그인 ' />
-
-      <VStack spacing={6} flex='1' p={6} alignItems='center' mt='5.44rem'>
-        <LogoArea mt={8}>
-          <img src={logo} alt='서비스 로고' />
-        </LogoArea>
-
-        <VStack
-          as='form'
-          onSubmit={handleSubmit(onSubmit)}
-          spacing={4}
-          w='100%'
-          maxW='md'
-          mt='2.25rem'
-        >
-          <FormControl isInvalid={errors.email}>
-            <StyledFormLabel>이메일</StyledFormLabel>
+      <SMain>
+        <SImg src={logo} alt='서비스 로고' />
+        <SForm onSubmit={handleSubmit(onSubmit)}>
+          <Field.Root>
+            <Field.Label>이메일</Field.Label>
             <StyledInput
               type='email'
               placeholder='이메일 입력'
@@ -114,13 +43,12 @@ export default function LoginPage() {
                 },
               })}
             />
-            <SFormErrorMessage>
+            <Field.ErrorText>
               {errors.email && errors.email.message}
-            </SFormErrorMessage>
-          </FormControl>
-
-          <FormControl isInvalid={errors.password}>
-            <StyledFormLabel>비밀번호</StyledFormLabel>
+            </Field.ErrorText>
+          </Field.Root>
+          <Field.Root>
+            <Field.Label>비밀번호</Field.Label>
             <StyledInput
               type='password'
               placeholder='비밀번호 입력'
@@ -132,16 +60,63 @@ export default function LoginPage() {
                 },
               })}
             />
-            <SFormErrorMessage>
+            <Field.ErrorText>
               {errors.password && errors.password.message}
-            </SFormErrorMessage>
-          </FormControl>
-
+            </Field.ErrorText>
+          </Field.Root>
           <LoginButton type='submit' mt='1.5rem'>
             이메일 로그인
           </LoginButton>
-        </VStack>
-      </VStack>
-    </Flex>
+        </SForm>
+      </SMain>
+    </SLayout>
   );
-}
+};
+
+const SLayout = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  width: inherit;
+  height: inherit;
+`;
+const SMain = styled.main`
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-around;
+
+  height: inherit;
+`;
+const SForm = styled.form`
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1rem;
+`;
+const SImg = styled.img`
+  height: 4.5rem;
+`;
+const StyledInput = styled(Input)`
+  display: flex;
+  width: 22.375rem;
+  height: 3.5rem;
+  padding: 0 1rem;
+  align-items: center;
+  gap: 0.75rem;
+  align-self: stretch;
+  border-radius: 0.5rem;
+  border: 1px solid var(--Stroke, #cad1db);
+  background: var(--White, #fff);
+`;
+const LoginButton = styled(Button)`
+  display: flex;
+  width: 22.375rem;
+  height: 3.5rem;
+  padding: 0 1rem;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 0.5rem;
+  background: var(--Fill-primary, #303742);
+`;
+
+export default LoginPage;
