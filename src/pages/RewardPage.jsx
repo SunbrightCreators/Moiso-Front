@@ -102,7 +102,6 @@ const EmptyCard = styled.div`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  }
 `;
 
 const Divider = styled.hr`

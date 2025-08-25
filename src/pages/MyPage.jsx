@@ -369,7 +369,7 @@ const MenuSection = styled.section`
 const SRow = styled.div`
   display: flex;
   align-items: center;
-  padding: 1rem; 1rem;
+  padding: 1rem;
 `;
 
 const SIconWrap = styled.span`
