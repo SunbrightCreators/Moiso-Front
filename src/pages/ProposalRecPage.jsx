@@ -120,11 +120,11 @@ const UserName = styled.span`
 
 const HeaderRight = styled.span`
   color: 'var(--colors-text-default, #27272A)';
-  fontsize: 14;
-  fontfamily: 'Inter';
-  fontweight: '500';
-  lineheight: 20;
-  wordwrap: 'break-word';
+  font-size: 14;
+  font-family: 'Inter';
+  font-weight: '500';
+  line-height: 20;
+  word-wrap: 'break-word';
 `;
 
 // === 정보 블록(운영 시간/장소) ===
@@ -149,10 +149,10 @@ const InfoBlock = styled.div`
 const InfoTitle = styled.div`
   font-weight: 600;
   font-size: 14px;
-  lineheight: 20;
+  line-height: 20;
   color: 'var(--colors-text-default, #27272A)';
-  fontfamily: 'Inter';
-  wordwrap: 'break-word';
+  font-family: 'Inter';
+  word-wrap: 'break-word';
 `;
 
 const InfoValue = styled.span`
