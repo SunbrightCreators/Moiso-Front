@@ -209,5 +209,5 @@ export {
   getCircleStyles,
   getCircleWidth,
   isValidRadius,
-  createStyledCircle, 
+  createStyledCircle,
 };
