@@ -1,8 +1,8 @@
 {
   "lang": "ko",
-  "name": "Create React App Sample",
-  "short_name": "React App",
-  "description": "이 웹앱은 Create React App으로 생성된 샘플 애플리케이션입니다.",
+  "name": "모이소",
+  "short_name": "모이소",
+  "description": "모이면 열린다, 우리가 바라는 가게",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
