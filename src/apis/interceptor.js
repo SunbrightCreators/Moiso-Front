@@ -1,3 +1,5 @@
+import { toaster } from '../components/common/toaster';
+
 const clientInterceptor = {
   request: {
     onFulfilled: (config) => {
@@ -9,10 +11,20 @@ const clientInterceptor = {
     options: null,
   },
   response: {
-    onFulfilled: (config) => {
-      return Promise.resolve(config);
+    onFulfilled: (response) => {
+      response.data.detail &&
+        toaster.create({
+          description: response.data.detail,
+          type: 'success',
+        });
+      return Promise.resolve(response);
     },
     onRejected: (error) => {
+      error.response.data.detail &&
+        toaster.create({
+          description: error.response.data.detail,
+          type: 'error',
+        });
       return Promise.reject(error);
     },
     options: null,
@@ -35,10 +47,20 @@ const authClientInterceptor = {
     options: null,
   },
   response: {
-    onFulfilled: (config) => {
-      return Promise.resolve(config);
+    onFulfilled: (response) => {
+      response.data.detail &&
+        toaster.create({
+          description: response.data.detail,
+          type: 'success',
+        });
+      return Promise.resolve(response);
     },
     onRejected: (error) => {
+      error.response.data.detail &&
+        toaster.create({
+          description: error.response.data.detail,
+          type: 'error',
+        });
       return Promise.reject(error);
     },
     options: null,
