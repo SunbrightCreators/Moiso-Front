@@ -5,8 +5,11 @@ import logo from '../assets/icons/심볼.svg';
 import { useForm } from 'react-hook-form';
 import { postLogin } from '../apis/accounts';
 import useModeStore from '../stores/useModeStore';
+import { ROUTE_PATH } from '../constants/route';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const { setIsProposerMode } = useModeStore();
   const {
     register,
@@ -22,6 +25,7 @@ const LoginPage = () => {
       const { profile, ...token } = response.data;
       localStorage.setItem('token', JSON.stringify(token));
       setIsProposerMode(profile.includes('proposer'));
+      navigate(ROUTE_PATH.PROPOSAL);
     } catch (error) {}
   };
 
