@@ -51,7 +51,6 @@ const Page = styled.div`
   display: flex;
   flex-direction: column;
   flex-flow: column nowrap;
-  background: #fff;
 `;
 
 const Main = styled.main`
