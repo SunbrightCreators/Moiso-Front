@@ -135,9 +135,9 @@ export default MyFundingPage;
 const Page = styled.div`
   margin: 0 auto;
   max-width: 30rem; /* 480px */
-  height: 100dvh;
+  height: 100%;
   background: #fff;
-  overflow: hidden; /* 윈도우 스크롤 차단 */
+  overflow: hidden;
 `;
 
 const ScrollArea = styled.div`
