@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { EmptyState, Badge, Avatar } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { ROUTE_PATH } from '../constants/route';
-import useModeStore from '../stores/useModeStore';
 import Carousel from '../components/common/Carousel';
 import BottomNavigation from '../components/common/BottomNavigation';
 import HeartDefault from '../assets/icons/heart_default.svg';
@@ -373,8 +372,6 @@ const Page = styled.main`
   gap: 28px;
 
   padding: 16px;
-
-  background: #fff;
 `;
 const BottomBarWrap = styled.div`
   position: sticky;
@@ -745,7 +742,6 @@ const ProposalRecPage = () => {
 export default ProposalRecPage;
 
 /*목데이터 */
-
 const big = [
   {
     id: 3,
