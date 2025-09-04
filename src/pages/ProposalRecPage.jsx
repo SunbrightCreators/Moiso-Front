@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { EmptyState, Badge, Avatar } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { ROUTE_PATH } from '../constants/route';
-import useModeStore from '../stores/useModeStore';
 import Carousel from '../components/common/Carousel';
 import BottomNavigation from '../components/common/BottomNavigation';
 import HeartDefault from '../assets/icons/heart_default.svg';
@@ -346,7 +345,6 @@ const Section = styled.section`
   display: flex;
   flex-flow: column nowrap;
   gap: 10px;
-  width: fit-content;
 `;
 const SectionSub = styled.p`
   margin-top: -4px;
@@ -369,12 +367,11 @@ const SectionTitle = styled.h2`
 `;
 const Page = styled.main`
   display: flex;
+  flex-flow: column nowrap;
   justify-content: center;
   gap: 28px;
 
   padding: 16px;
-
-  background: #fff;
 `;
 const BottomBarWrap = styled.div`
   position: sticky;
@@ -382,10 +379,6 @@ const BottomBarWrap = styled.div`
   background: #fff;
   z-index: 100;
   padding-bottom: env(safe-area-inset-bottom);
-`;
-
-const CardLink = styled(Link)`
-  width: fit-content;
 `;
 
 /* =========================== 컴포넌트 =========================== */
@@ -400,89 +393,327 @@ const ProposalRecPage = () => {
   return (
     <>
       <Page>
+        {/* 1) 상단 추천 - 큰 카드 (풀블리드 배경 + 오버레이 + 도트) */}
+        <Section>
+          <FullBleed>
+            <Section1>
+              <HeroInner>
+                {big.length > 0 ? (
+                  <Carousel gap='0' setIndex={setBigIndex}>
+                    {big.map((item) => (
+                      <Slide key={item.id}>
+                        <HeroBg src={item.image} />
+                        <OverlayWrap>
+                          <Link to={ROUTE_PATH.PROPOSAL_DETAIL(item.id)}>
+                            <OverlayCard>
+                              <LargeBody>
+                                <Tag>
+                                  <Badge
+                                    variant='subtle'
+                                    size='md'
+                                    bg='#111827'
+                                    color='white'
+                                    borderRadius='999px'
+                                    fontSize='12px'
+                                    fontWeight='400'
+                                  >
+                                    {item.industry}
+                                  </Badge>
+                                </Tag>
+                                <LargeTitle>{item.title}</LargeTitle>
+                                <LargeDesc>{item.content}</LargeDesc>
+                                <HeaderRow>
+                                  <HeaderLeft>
+                                    <Avatar.Root shape='full' size='xs'>
+                                      <Avatar.Fallback
+                                        name={item.user?.name}
+                                        src={item.user?.profile_image}
+                                      />
+                                    </Avatar.Root>
+                                    <UserName>{item.user?.name}</UserName>
+                                  </HeaderLeft>
+                                  <HeaderRight>
+                                    {
+                                      item.user?.proposer_level?.address
+                                        ?.eupmyundong
+                                    }{' '}
+                                    · LV.{item.user?.proposer_level?.level}
+                                  </HeaderRight>
+                                </HeaderRow>
+                                <InfoSection>
+                                  <InfoBlock>
+                                    <InfoTitle>희망 운영 시간</InfoTitle>
+                                    <InfoValue>
+                                      {item.business_hours?.start} -{' '}
+                                      {item.business_hours?.end}
+                                    </InfoValue>
+                                  </InfoBlock>
+
+                                  <InfoBlock>
+                                    <InfoTitle>희망 장소</InfoTitle>
+                                    <InfoValue>
+                                      {item.address?.eupmyundong},{' '}
+                                      {item.address?.road_detail} +{' '}
+                                      {item.radius}
+                                    </InfoValue>
+                                  </InfoBlock>
+                                </InfoSection>
+
+                                <FooterRow>
+                                  <StatsBar
+                                    onClick={stop}
+                                    onMouseDown={stop}
+                                    onPointerDown={stop}
+                                  >
+                                    <LikeButton
+                                      checked={!!likedMap[item.id]}
+                                      onChange={() => toggleLike(item.id)}
+                                    />
+                                    <span>
+                                      {item.likes_count +
+                                        (likedMap[item.id] ? 1 : 0)}
+                                    </span>
+
+                                    <ScrapButton
+                                      checked={!!scrappedMap[item.id]}
+                                      onChange={() => toggleScrap(item.id)}
+                                    />
+                                    <span>
+                                      {item.scraps_count +
+                                        (scrappedMap[item.id] ? 1 : 0)}
+                                    </span>
+                                  </StatsBar>
+                                </FooterRow>
+                                <LargeBtn>수락하기</LargeBtn>
+                              </LargeBody>
+                            </OverlayCard>
+                          </Link>
+
+                          {/* 카드 바로 아래 중앙 도트 */}
+                          <Dots>
+                            {big.map((_, i) => (
+                              <Dot key={i} $active={bigIndex === i + 1} />
+                            ))}
+                          </Dots>
+                        </OverlayWrap>
+                      </Slide>
+                    ))}
+                  </Carousel>
+                ) : (
+                  <>
+                    <HeroBg />
+                    <OverlayWrap>
+                      <OverlayCard>
+                        <EmptyState.Root
+                          height='100%'
+                          display='flex'
+                          alignItems='center'
+                          justifyContent='center'
+                        >
+                          <EmptyState.Content>
+                            <EmptyState.Indicator>
+                              <Sparkle />
+                            </EmptyState.Indicator>
+                            <EmptyState.Title>
+                              추천 결과가 없어요
+                            </EmptyState.Title>
+                          </EmptyState.Content>
+                        </EmptyState.Root>
+                      </OverlayCard>
+                    </OverlayWrap>
+                  </>
+                )}
+              </HeroInner>
+            </Section1>
+          </FullBleed>
+        </Section>
+
         {/* 2) 비슷한 제안 - 작은 카드 */}
         <Section>
           <SectionTitle>비슷한 제안, 골라봤어요</SectionTitle>
           <SectionSub>
             스크랩한 글을 바탕으로 비슷한 제안을 추천해드려요
           </SectionSub>
-          {(similar?.length ?? 0) > 0 ? (
-            similar.map((item) => (
-              <CardLink key={item.id} to={ROUTE_PATH.PROPOSAL_DETAIL(item.id)}>
-                <SmallCard key={item.id}>
-                  <SImg src={item.image} />
-                  <SmallBody>
-                    <TagRow>
-                      <Badge
-                        variant='subtle'
-                        size='md'
-                        bg='#F4F4F5'
-                        color='#27272A'
-                        borderRadius='999px'
-                        fontSize='12px'
-                        fontWeight='400'
-                      >
-                        {item.industry}
-                      </Badge>
-                    </TagRow>
-                    <HeadBox>
-                      <HeadTitle>{item.title}</HeadTitle>
-                      <HeadDesc>{item.subtitle}</HeadDesc>
-                    </HeadBox>
-                    <MetaList>
-                      <MetaLine>
-                        <MetaLabel>희망시간</MetaLabel>
-                        <MetaValue>
-                          {item.business_hours?.start} -{' '}
-                          {item.business_hours?.end}
-                        </MetaValue>
-                      </MetaLine>
-                      <MetaLine>
-                        <MetaLabel>희망장소</MetaLabel>
-                        <MetaValue>
-                          {' '}
-                          {item.address?.eupmyundong},{' '}
-                          {item.address?.road_detail} + {item.radius}
-                        </MetaValue>
-                      </MetaLine>
-                    </MetaList>
+          {similar.length > 0 ? (
+            <Carousel gap='1.5rem'>
+              {similar.map((item) => (
+                <Link key={item.id} to={ROUTE_PATH.PROPOSAL_DETAIL(item.id)}>
+                  <SmallCard key={item.id}>
+                    <SImg src={item.image} />
+                    <SmallBody>
+                      <TagRow>
+                        <Badge
+                          variant='subtle'
+                          size='md'
+                          bg='#F4F4F5'
+                          color='#27272A'
+                          borderRadius='999px'
+                          fontSize='12px'
+                          fontWeight='400'
+                        >
+                          {item.industry}
+                        </Badge>
+                      </TagRow>
+                      <HeadBox>
+                        <HeadTitle>{item.title}</HeadTitle>
+                        <HeadDesc>{item.subtitle}</HeadDesc>
+                      </HeadBox>
+                      <MetaList>
+                        <MetaLine>
+                          <MetaLabel>희망시간</MetaLabel>
+                          <MetaValue>
+                            {item.business_hours?.start} -{' '}
+                            {item.business_hours?.end}
+                          </MetaValue>
+                        </MetaLine>
+                        <MetaLine>
+                          <MetaLabel>희망장소</MetaLabel>
+                          <MetaValue>
+                            {' '}
+                            {item.address?.eupmyundong},{' '}
+                            {item.address?.road_detail} + {item.radius}
+                          </MetaValue>
+                        </MetaLine>
+                      </MetaList>
 
-                    <FooterRow>
-                      <UserRow>
-                        <Avatar.Root shape='full' size='xs'>
-                          <Avatar.Fallback
-                            name={item.user?.name}
-                            src={item.user?.profile_image}
+                      <FooterRow>
+                        <UserRow>
+                          <Avatar.Root shape='full' size='xs'>
+                            <Avatar.Fallback
+                              name={item.user?.name}
+                              src={item.user?.profile_image}
+                            />
+                          </Avatar.Root>
+                          <UserName>{item.user?.name}</UserName>
+                        </UserRow>
+                        <StatsRow
+                          onClick={stop}
+                          onMouseDown={stop}
+                          onPointerDown={stop}
+                        >
+                          <LikeButton
+                            checked={!!likedMap[item.id]}
+                            onChange={() => toggleLike(item.id)}
                           />
-                        </Avatar.Root>
-                        <UserName>{item.user?.name}</UserName>
-                      </UserRow>
-                      <StatsRow
-                        onClick={stop}
-                        onMouseDown={stop}
-                        onPointerDown={stop}
-                      >
-                        <LikeButton
-                          checked={!!likedMap[item.id]}
-                          onChange={() => toggleLike(item.id)}
-                        />
-                        <span>
-                          {item.likes_count + (likedMap[item.id] ? 1 : 0)}
-                        </span>
+                          <span>
+                            {item.likes_count + (likedMap[item.id] ? 1 : 0)}
+                          </span>
 
-                        <ScrapButton
-                          checked={!!scrappedMap[item.id]}
-                          onChange={() => toggleScrap(item.id)}
-                        />
-                        <span>
-                          {item.scraps_count + (scrappedMap[item.id] ? 1 : 0)}
-                        </span>
-                      </StatsRow>
-                    </FooterRow>
-                  </SmallBody>
-                </SmallCard>
-              </CardLink>
-            ))
+                          <ScrapButton
+                            checked={!!scrappedMap[item.id]}
+                            onChange={() => toggleScrap(item.id)}
+                          />
+                          <span>
+                            {item.scraps_count + (scrappedMap[item.id] ? 1 : 0)}
+                          </span>
+                        </StatsRow>
+                      </FooterRow>
+                    </SmallBody>
+                  </SmallCard>
+                </Link>
+              ))}
+            </Carousel>
+          ) : (
+            <EmptyState.Root
+              height='100%'
+              display='flex'
+              alignItems='center'
+              justifyContent='center'
+            >
+              <EmptyState.Content>
+                <EmptyState.Indicator>
+                  <Sparkle />
+                </EmptyState.Indicator>
+                <EmptyState.Title>추천 결과가 없어요</EmptyState.Title>
+              </EmptyState.Content>
+            </EmptyState.Root>
+          )}
+        </Section>
+
+        {/* 3) 성공률 높은 제안 - 작은 카드 */}
+        <Section>
+          <SectionTitle>성공률 높은 제안, 모아왔어요</SectionTitle>
+          <SectionSub>
+            관심 동네에서 펀딩 성공률이 높은 제안을 추천해드려요
+          </SectionSub>
+          {highSuccess.length > 0 ? (
+            <Carousel gap='1.5rem'>
+              {highSuccess.map((item) => (
+                <Link key={item.id} to={ROUTE_PATH.PROPOSAL_DETAIL(item.id)}>
+                  <SmallCard key={item.id}>
+                    <SImg src={item.image} />
+                    <SmallBody>
+                      <TagRow>
+                        <Badge
+                          variant='subtle'
+                          size='md'
+                          bg='#F4F4F5'
+                          color='#27272A'
+                          borderRadius='999px'
+                          fontSize='12px'
+                          fontWeight='400'
+                        >
+                          {item.industry}
+                        </Badge>
+                      </TagRow>
+                      <HeadBox>
+                        <HeadTitle>{item.title}</HeadTitle>
+                        <HeadDesc>{item.subtitle}</HeadDesc>
+                      </HeadBox>
+                      <MetaList>
+                        <MetaLine>
+                          <MetaLabel>희망시간</MetaLabel>
+                          <MetaValue>
+                            {item.business_hours?.start} -{' '}
+                            {item.business_hours?.end}
+                          </MetaValue>
+                        </MetaLine>
+                        <MetaLine>
+                          <MetaLabel>희망장소</MetaLabel>
+                          <MetaValue>
+                            {' '}
+                            {item.address?.eupmyundong},{' '}
+                            {item.address?.road_detail} + {item.radius}
+                          </MetaValue>
+                        </MetaLine>
+                      </MetaList>
+                      <FooterRow>
+                        <UserRow>
+                          <Avatar.Root shape='full' size='xs'>
+                            <Avatar.Fallback
+                              name={item.user?.name}
+                              src={item.user?.profile_image}
+                            />
+                          </Avatar.Root>
+                          <UserName>{item.user?.name}</UserName>
+                        </UserRow>
+                        <StatsRow
+                          onClick={stop}
+                          onMouseDown={stop}
+                          onPointerDown={stop}
+                        >
+                          <LikeButton
+                            checked={!!likedMap[item.id]}
+                            onChange={() => toggleLike(item.id)}
+                          />
+                          <span>
+                            {item.likes_count + (likedMap[item.id] ? 1 : 0)}
+                          </span>
+
+                          <ScrapButton
+                            checked={!!scrappedMap[item.id]}
+                            onChange={() => toggleScrap(item.id)}
+                          />
+                          <span>
+                            {item.scraps_count + (scrappedMap[item.id] ? 1 : 0)}
+                          </span>
+                        </StatsRow>
+                      </FooterRow>
+                    </SmallBody>
+                  </SmallCard>
+                </Link>
+              ))}
+            </Carousel>
           ) : (
             <EmptyState.Root
               height='100%'
@@ -511,7 +742,6 @@ const ProposalRecPage = () => {
 export default ProposalRecPage;
 
 /*목데이터 */
-
 const big = [
   {
     id: 3,
