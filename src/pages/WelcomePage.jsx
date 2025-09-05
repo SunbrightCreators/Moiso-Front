@@ -1,8 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Button } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 import TopNavigation from '../components/common/TopNavigation';
 import useModeStore from '../stores/useModeStore';
+import { ROUTE_PATH } from '../constants/route';
 // GIF 파일을 임포트합니다. 파일 경로는 실제 위치에 맞게 수정하세요.
 import founderWelcomeGif from '../assets/icons/Foundergif.gif';
 import proposerWelcomeGif from '../assets/icons/Proposergif.gif';
@@ -31,10 +33,12 @@ const BottomButtonContainer = styled.div`
   padding-top: 0;
   background-color: white;
 `;
-const StyledButton = styled(Button)`
+
+const NavBtn = styled(Button)`
   background-color: black;
   color: white;
 `;
+
 const CenterTextWrapper = styled.div`
   text-align: center;
   margin-bottom: 2rem;
@@ -62,6 +66,18 @@ const WelcomePage = ({ data }) => {
 
   const mainImageSrc = isProposerMode ? proposerWelcomeGif : founderWelcomeGif;
 
+  const navigate = useNavigate();
+
+  const handleNavBtnClick = () => {
+    console.log('ROUTE_PATH.PROPOSAL:', ROUTE_PATH.PROPOSAL); // 디버깅+ 경로 확인
+    try {
+      navigate(ROUTE_PATH.PROPOSAL);
+      console.log('네비게이트 실행됨'); // 네비게이트 실행됐는지 확인용-왜 안되지
+    } catch (error) {
+      console.error('네비게이트 에러:', error);
+    }
+  };
+
   return (
     <PageContainer>
       <TopNavigation left='back' title={topNavTitle} subTitle='' />
@@ -78,9 +94,9 @@ const WelcomePage = ({ data }) => {
       </MainContent>
 
       <BottomButtonContainer>
-        <StyledButton width='100%' size='lg'>
+        <NavBtn onClick={handleNavBtnClick} width='100%' size='lg'>
           확인
-        </StyledButton>
+        </NavBtn>
       </BottomButtonContainer>
     </PageContainer>
   );
