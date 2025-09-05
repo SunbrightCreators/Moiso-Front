@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import TopNavigation from '../components/common/TopNavigation';
-import { createTypedCircle } from '../components/common/Circle';
+import { createTypedCircle } from '../components/map/Circle';
 import { createTypedMarker } from '../components/common/Marker';
 import {
   getAddressToPosition,
@@ -551,4 +551,3 @@ const SErrorCloseButton = styled.button`
   padding: 0;
   margin-left: 0.5rem;
 `;
-  
