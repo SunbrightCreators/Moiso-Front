@@ -70,7 +70,7 @@ const ProposalItem = ({ proposal, onLike, onScrap, profile = 'proposer' }) => {
   return (
     <SProposalCard>
       <SBadgeWrapper>
-        <Badge>{proposal.label}</Badge>
+        <Badge>{proposal.industry}</Badge>
       </SBadgeWrapper>
 
       <STitleWrapper>
@@ -78,7 +78,7 @@ const ProposalItem = ({ proposal, onLike, onScrap, profile = 'proposer' }) => {
       </STitleWrapper>
 
       <SDescriptionWrapper>
-        <SDescription>{proposal.description}</SDescription>
+        <SDescription>{proposal.content}</SDescription>
       </SDescriptionWrapper>
 
       <SDataListWrapper>
@@ -86,13 +86,14 @@ const ProposalItem = ({ proposal, onLike, onScrap, profile = 'proposer' }) => {
           <SCustomItem>
             <SCustomLabel>희망시간</SCustomLabel>
             <SCustomValue>
-              {proposal.timeInput} - {proposal.timeInputEnd}
+              {proposal.business_hours.start} - {proposal.business_hours.end}
             </SCustomValue>
           </SCustomItem>
           <SCustomItem>
             <SCustomLabel>희망장소</SCustomLabel>
             <SCustomValue>
-              {proposal.locationInput} + {proposal.additionalText}
+              {proposal.address.sigungu} {proposal.address.eupmyundong} +{' '}
+              {proposal.radius}
             </SCustomValue>
           </SCustomItem>
         </DataList.Root>
@@ -101,11 +102,11 @@ const ProposalItem = ({ proposal, onLike, onScrap, profile = 'proposer' }) => {
       <SImageCarouselWrapper>
         <Carousel gap='0.5rem'>
           {Array.from({ length: 3 }, (_, index) => {
-            const hasImage = proposal.imageList && proposal.imageList[index];
+            const hasImage = proposal.image && proposal.image[index];
             return (
               <SImageItem key={index}>
                 <SImage
-                  src={hasImage ? proposal.imageList[index] : DefaultImageSrc}
+                  src={hasImage ? proposal.image[index] : DefaultImageSrc}
                   alt={hasImage ? `제안글 이미지 ${index + 1}` : '기본 이미지'}
                 />
               </SImageItem>
@@ -117,17 +118,17 @@ const ProposalItem = ({ proposal, onLike, onScrap, profile = 'proposer' }) => {
       <SFooterWrapper>
         <SUserInfoContainer>
           <Avatar.Root size='xs'>
-            <Avatar.Fallback name={proposal.authorName} />
+            <Avatar.Fallback name={proposal.user.name} />
           </Avatar.Root>
-          {proposal.authorName}
+          {proposal.user.name}
           <SSeparator>|</SSeparator>
-          <STimeAgo>{proposal.timeAgo}</STimeAgo>
+          <STimeAgo>{proposal.created_at}</STimeAgo>
         </SUserInfoContainer>
 
         <SActionContainer>
           <SLikeButtonWrapper>
             <LikeButton
-              checked={proposal.isLiked && profile === 'proposer'}
+              checked={proposal.is_liked && profile === 'proposer'}
               disabled={profile === 'founder'}
               onChange={() =>
                 profile === 'proposer' && handleLikeClick(proposal.id)
@@ -135,21 +136,21 @@ const ProposalItem = ({ proposal, onLike, onScrap, profile = 'proposer' }) => {
               onClick={(e) => e.stopPropagation()}
             />
             <SActionCount
-              $isActive={profile === 'proposer' && proposal.isLiked}
+              $isActive={profile === 'proposer' && proposal.is_liked}
               $isDisabled={profile === 'founder'}
             >
-              {proposal.likeCount}
+              {proposal.likes_count}
             </SActionCount>
           </SLikeButtonWrapper>
 
           <SScrapButtonWrapper>
             <ScrapButton
-              checked={proposal.isScraped}
+              checked={proposal.is_scrapped}
               onChange={() => handleScrapClick(proposal.id)}
               onClick={(e) => e.stopPropagation()}
             />
-            <SScrapActionCount $isActive={proposal.isScraped}>
-              {proposal.scrapCount}
+            <SScrapActionCount $isActive={proposal.is_scrapped}>
+              {proposal.scraps_count}
             </SScrapActionCount>
           </SScrapButtonWrapper>
         </SActionContainer>

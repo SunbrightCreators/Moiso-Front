@@ -5,10 +5,6 @@ import BottomNavigation from '../components/common/BottomNavigation';
 import { MapBottomsheet } from '../components/common/Bottomsheet';
 import ProposalItem from '../components/proposal/ProposalList';
 import {
-  createTypedCircle,
-  createCircleFromBoolean,
-} from '../components/common/Circle';
-import {
   createTypedMarker,
   updateMarkerSelection,
 } from '../components/common/Marker';
@@ -20,6 +16,10 @@ import {
 
 import useModeStore from '../stores/useModeStore';
 import PencilIcon from '../assets/icons/pencil.svg';
+import { getProposalMap } from '../apis/proposals';
+import { getPositionToLegal } from '../apis/maps';
+import { INDUSTRY } from '../constants/enum';
+
 /**
  * 제안글(Proposal) 지도 탐색 */
 
@@ -31,7 +31,7 @@ const ProposalMapPage = () => {
   const [map, setMap] = useState(null);
   const [markers, setMarkers] = useState([]);
   const [markerCluster, setMarkerCluster] = useState(null);
-  const [zoomLevel, setZoomLevel] = useState(13); // 클러스터링이 보이도록 낮은 줌 레벨로 설정
+  const [zoomLevel, setZoomLevel] = useState(13); // 클러스터링 보이게 -> 줌 레벨 낮게 설정
   const [bottomsheetLevel, setBottomsheetLevel] = useState(1); // 바텀시트 상태
 
   // 제안글 데이터 (바텀시트용 - 항상 개별 제안글만)
@@ -59,7 +59,7 @@ const ProposalMapPage = () => {
   // 필터 스크롤 컨테이너 ref
   const filterScrollRef = useRef(null);
 
-  // 현재 위치 (기본: 서울 중심)
+  // 현재 위치 (기본
   const [currentLocation] = useState({
     lat: 37.5665,
     lng: 126.978,
@@ -68,8 +68,8 @@ const ProposalMapPage = () => {
   // 우리 동네 정보 (실제로는 사용자 설정에서 가져와야 함)
   const [ourNeighborhood] = useState({
     sido: '서울특별시',
-    sigungu: '강남구',
-    eupmyundong: '역삼동',
+    sigungu: '서대문구',
+    eupmyundong: '대현동',
   });
 
   // 지역이 우리 동네인지 판별하는 함수
@@ -84,32 +84,10 @@ const ProposalMapPage = () => {
     );
   };
 
-  // 업종 필터 옵션 (API 명세서 기준)
+  // 업종 필터 옵션 (enum.js에서 가져옴)
   const industryOptions = [
     { value: '', label: '전체' },
-    { value: 'FOOD_DINING', label: '외식/음식점' },
-    { value: 'CAFE_DESSERT', label: '카페/디저트' },
-    { value: 'PUB_BAR', label: '주점' },
-    { value: 'CONVENIENCE_RETAIL', label: '편의점/소매' },
-    { value: 'GROCERY_MART', label: '마트/식료품' },
-    { value: 'BEAUTY_CARE', label: '뷰티/미용' },
-    { value: 'HEALTH_FITNESS', label: '건강' },
-    { value: 'FASHION_GOODS', label: '패션/잡화' },
-    { value: 'HOME_LIVING_INTERIOR', label: '생활용품/가구' },
-    { value: 'HOBBY_LEISURE', label: '취미/오락/여가' },
-    { value: 'CULTURE_BOOKS', label: '문화/서적' },
-    { value: 'PET', label: '반려동물' },
-    { value: 'LODGING', label: '숙박' },
-    { value: 'EDUCATION_ACADEMY', label: '교육/학원' },
-    { value: 'AUTO_TRANSPORT', label: '자동차/운송' },
-    { value: 'IT_OFFICE', label: 'IT/사무' },
-    { value: 'FINANCE_LEGAL_TAX', label: '금융/법률/회계' },
-    { value: 'MEDICAL_PHARMA', label: '의료/의약' },
-    { value: 'PERSONAL_SERVICES', label: '생활 서비스' },
-    { value: 'FUNERAL_WEDDING', label: '장례/예식' },
-    { value: 'PHOTO_STUDIO', label: '사진/스튜디오' },
-    { value: 'OTHER_RETAIL', label: '기타 판매업' },
-    { value: 'OTHER_SERVICE', label: '기타 서비스업' },
+    ...INDUSTRY.map((item) => ({ value: item.value, label: item.label })),
   ];
 
   // 네이버 지도 초기화
@@ -173,7 +151,7 @@ const ProposalMapPage = () => {
           checkNaverMaps.retryCount = retryCount + 1;
           setTimeout(checkNaverMaps, 100);
         } else {
-          console.error('네이버 지도 API 로드 타임아웃');
+          console.error('네이버 지도 API 로드 오류');
         }
       }
     };
@@ -192,10 +170,7 @@ const ProposalMapPage = () => {
   const updateCurrentRegion = async (mapInstance) => {
     try {
       const center = mapInstance.getCenter();
-      const response = await getReverseGeocodingLegal(
-        center.lat(),
-        center.lng(),
-      );
+      const response = await getPositionToLegal(center.lat(), center.lng());
 
       if (response.data) {
         setCurrentRegion({
@@ -237,192 +212,79 @@ const ProposalMapPage = () => {
     setBottomsheetLevel(2);
   };
 
-  // 주소를 좌표로 변환하는 함수 (실제 API 연동 시 사용)
-  const convertAddressToCoordinates = async (address) => {
-    try {
-      const response = await getGeocoding(address);
-      return {
-        latitude: response.data.latitude,
-        longitude: response.data.longitude,
-      };
-    } catch (error) {
-      console.error('주소 → 좌표 변환 실패:', error);
-      return null;
-    }
-  };
-
-  // 제안글 데이터 로드 (테스트용 목 데이터)
+  // 제안글 데이터 로드 (API 명세서 기준)
   const loadProposals = async () => {
     setLoading(true);
     try {
-      // API 명세서에 맞춘 Mock 데이터 - 동 단위 개별 제안글만
-      const mockDetailProposals = [
-        {
-          id: 1,
-          position: {
-            latitude: 37.553,
-            longitude: 126.909,
-          },
-          created_at: '30초 전',
-          title: '제안글 제목 (1)',
-          content: '.',
-          user: {
-            name: '김**',
-            profile_image: null,
-          },
-          industry: 'CAFE_DESSERT',
-          business_hours: {
-            start: '09:00',
-            end: '18:00',
-          },
-          address: {
-            sido: '서울특별시',
-            sigungu: '마포구',
-            eupmyundong: '망원동',
-            jibun_detail: '385-44',
-            road_detail: '동교로 69 ',
-          },
-          radius: '500m',
-          image: [],
-          likes_count: 300,
-          scraps_count: 178,
-        },
-        {
-          id: 2,
-          position: {
-            latitude: 37.553,
-            longitude: 126.921,
-          },
-          created_at: '1시간 전',
-          title: '제안글 제목 (2)',
-          content: '.',
-          user: {
-            name: '이**',
-            profile_image: null,
-          },
-          industry: 'PUB_BAR',
-          business_hours: {
-            start: '18:00',
-            end: '02:00',
-          },
-          address: {
-            sido: '서울특별시',
-            sigungu: '마포구',
-            eupmyundong: '서교동',
-            jibun_detail: '369-7',
-            road_detail: '홍익로5길 43',
-          },
-          radius: '500m',
-          image: [],
-          likes_count: 245,
-          scraps_count: 89,
-        },
-        {
-          id: 3,
-          position: {
-            latitude: 37.532,
-            longitude: 126.995,
-          },
-          created_at: '2시간 전',
-          title: '제안글 제목 (3)',
-          content: '.',
-          user: {
-            name: '박**',
-            profile_image: null,
-          },
-          industry: 'FOOD_DINING',
-          business_hours: {
-            start: '11:00',
-            end: '22:00',
-          },
-          address: {
-            sido: '서울특별시',
-            sigungu: '용산구',
-            eupmyundong: '이태원동',
-            jibun_detail: '127-2',
-            road_detail: '이태원로 55길 12',
-          },
-          radius: '500m',
-          image: [],
-          likes_count: 189,
-          scraps_count: 156,
-        },
-      ];
+      // 줌 레벨에 따른 zoom 파라미터 매핑 (API 명세서 기준)
+      let zoomParam;
+      if (zoomLevel >= 15) {
+        zoomParam = 0; // 동이하지도 (개별 제안글)
+      } else if (zoomLevel >= 12) {
+        zoomParam = 500; // 500m~2km
+      } else if (zoomLevel >= 10) {
+        zoomParam = 2000; // 2km~10km
+      } else {
+        zoomParam = 10000; // 10km 이상
+      }
 
-      // 동 단위 제안글 데이터 처리
-      const processedProposals = mockDetailProposals.map((proposal) => ({
-        id: proposal.id,
-        title: proposal.title,
-        industry: proposal.industry,
-        location: `${proposal.address.sigungu} ${proposal.address.eupmyundong}`,
-        likes: proposal.likes_count,
-        scraps: proposal.scraps_count,
-        // API 명세서 기준 필드명 사용
-        likes_count: proposal.likes_count,
-        scraps_count: proposal.scraps_count,
-        isLiked: false, // 기본값
-        isScraped: false, // 기본값
-        authorName: proposal.user.name,
-        timeAgo: proposal.created_at,
-        imageList: proposal.image,
-        // ProposalList에서 사용하는 추가 필드들
-        label:
-          proposal.industry === 'CAFE_DESSERT'
-            ? '카페/디저트'
-            : proposal.industry === 'PUB_BAR'
-              ? '주점'
-              : proposal.industry === 'FOOD_DINING'
-                ? '외식/음식점'
-                : '기타',
-        description: proposal.content,
-        timeInput: proposal.business_hours.start,
-        timeInputEnd: proposal.business_hours.end,
-        locationInput: `${proposal.address.sigungu} ${proposal.address.eupmyundong}`,
-        additionalText: proposal.radius,
-        position: proposal.position,
-        created_at: proposal.created_at,
-        content: proposal.content,
-        user: proposal.user,
-        business_hours: proposal.business_hours,
-        address: proposal.address,
-        radius: proposal.radius,
-        image: proposal.image,
-        markerType: isOurNeighborhood(proposal.address) ? 1 : 2, // 동적으로 마커 타입 설정
-      }));
+      // 사용자 모드에 따른 profile 설정
+      const profile = isProposerMode ? 'proposer' : 'founder';
 
-      // 필터링 적용
-      let filteredProposals = processedProposals;
-      if (selectedIndustry) {
-        filteredProposals = processedProposals.filter(
-          (proposal) => proposal.industry === selectedIndustry,
+      // API 호출
+      const response = await getProposalMap(
+        profile,
+        zoomParam,
+        currentRegion.sido || '',
+        currentRegion.sigungu || '',
+        currentRegion.eupmyundong || '',
+        sortOrder,
+        selectedIndustry,
+      );
+
+      let processedData = [];
+
+      if (zoomParam === 0) {
+        // 동이하지도 - 개별 제안글 데이터 (API 명세서 구조 그대로 사용)
+        processedData = response.data.flatMap((item) =>
+          item.proposals.map((proposal) => ({
+            // API 응답 데이터 그대로 사용 (ProposalRecPage.jsx와 동일한 구조)
+            ...proposal,
+            // 지도 표시를 위한 최소한의 추가 필드만
+            position: item.position,
+            markerType: isOurNeighborhood(proposal.address) ? 1 : 2,
+          })),
         );
+      } else {
+        // 집계된 지역 데이터 (도지도, 구지도, 동지도)
+        processedData = response.data.map((item) => ({
+          id: item.id,
+          title: item.address,
+          count: item.number,
+          position: item.position,
+          isAddressData: item.is_address,
+          // 마커 표시를 위한 기본 정보
+          address: {
+            sido:
+              item.address.includes('특별시') || item.address.includes('광역시')
+                ? item.address
+                : '',
+            sigungu: item.address.includes('구') ? item.address : '',
+            eupmyundong: item.address.includes('동') ? item.address : '',
+          },
+        }));
       }
 
-      // 정렬 적용
-      if (sortOrder === '인기순') {
-        filteredProposals.sort((a, b) => b.likes - a.likes);
-      } else if (sortOrder === '레벨순') {
-        // 레벨순은 임시로 likes 기준으로 정렬
-        filteredProposals.sort((a, b) => b.likes - a.likes);
-      }
-      // 최신순은 기본 순서 유지
-
-      // 상태 업데이트 (마커용과 바텀시트용 동일한 데이터)
-      setMapData(filteredProposals);
-      setProposals(filteredProposals);
-
-      // 실제 API 호출 : 일단 주석처리
-      // const response = await getProposalsMap({
-      //   lat: currentLocation.lat,
-      //   lng: currentLocation.lng,
-      //   radius: 1000,
-      //   industry: selectedIndustry,
-      //   sortBy: sortOrder,
-      // });
-      // setProposals(response.data || []);
+      // 상태 업데이트
+      setMapData(processedData);
+      setProposals(processedData);
     } catch (err) {
       setError('제안글을 불러오는데 실패했습니다.');
-      console.error(err);
+      console.error('API 호출 실패:', err);
+
+      // 오류 시 빈 배열로 설정
+      setMapData([]);
+      setProposals([]);
     } finally {
       setLoading(false);
     }
@@ -430,66 +292,17 @@ const ProposalMapPage = () => {
 
   // 필터 변경시 데이터 재로드
   useEffect(() => {
-    if (map) {
+    if (map && currentRegion.sido) {
       loadProposals();
     }
-  }, [selectedIndustry, sortOrder, map]);
+  }, [selectedIndustry, sortOrder, map, currentRegion, zoomLevel]);
 
-  // 현재 화면 중심 위치의 지역 정보 가져오기
-  const getCurrentLocationInfo = async () => {
-    if (!map) return;
-
-    try {
-      const center = map.getCenter();
-      const lat = center.lat();
-      const lng = center.lng();
-
-      setCurrentCenter({ lat, lng });
-
-      // 역지오코딩으로 현재 위치의 지역 정보 가져오기
-      const response = await getReverseGeocodingLegal(lat, lng);
-      const locationInfo = response.data;
-
-      setCurrentRegion({
-        sido: locationInfo.sido || '',
-        sigungu: locationInfo.sigungu || '',
-        eupmyundong: locationInfo.eupmyundong || '',
-      });
-
-      console.log('현재 화면 중심 지역:', locationInfo);
-      return locationInfo;
-    } catch (error) {
-      console.error('현재 위치 정보 가져오기 실패:', error);
-      return null;
+  // 지도 초기화 시 현재 위치의 지역 정보 가져오기
+  useEffect(() => {
+    if (map) {
+      updateCurrentRegion(map);
     }
-  };
-
-  // 현재 화면 영역의 제안글만 필터링
-  const filterProposalsByCurrentView = (proposals) => {
-    if (
-      !currentRegion.sido &&
-      !currentRegion.sigungu &&
-      !currentRegion.eupmyundong
-    ) {
-      return proposals; // 지역 정보가 없으면 전체 반환
-    }
-
-    return proposals.filter((proposal) => {
-      if (!proposal.address) return false;
-
-      // 줌 레벨에 따라 다른 필터링 적용
-      if (zoomLevel >= 15) {
-        // 상세 레벨: 동 단위 필터링
-        return proposal.address.eupmyundong === currentRegion.eupmyundong;
-      } else if (zoomLevel >= 12) {
-        // 중간 레벨: 구 단위 필터링
-        return proposal.address.sigungu === currentRegion.sigungu;
-      } else {
-        // 넓은 레벨: 시 단위 필터링
-        return proposal.address.sido === currentRegion.sido;
-      }
-    });
-  };
+  }, [map]);
 
   // 바텀시트 아이템 클릭 핸들러 (상세페이지 이동)
   const handleProposalItemClick = (proposal) => {
@@ -504,17 +317,18 @@ const ProposalMapPage = () => {
 
     // 마커도 선택 상태로 업데이트
     handleMarkerClick(proposal, proposal.id);
-  };
-  setSelectedMarkerId(proposal.id);
 
-  // 해당 마커 강조
-  markers.forEach((marker) => {
-    if (marker.proposalId === proposal.id) {
-      updateMarkerSelection(marker, marker.type || 1, true);
-    } else {
-      updateMarkerSelection(marker, marker.type || 1, false);
-    }
-  });
+    setSelectedMarkerId(proposal.id);
+
+    // 해당 마커 강조
+    markers.forEach((marker) => {
+      if (marker.proposalId === proposal.id) {
+        updateMarkerSelection(marker, marker.type || 1, true);
+      } else {
+        updateMarkerSelection(marker, marker.type || 1, false);
+      }
+    });
+  };
 
   // 지도에 마커와 서클 생성
   const createMarkersAndCircles = (proposalData) => {
@@ -539,14 +353,15 @@ const ProposalMapPage = () => {
     console.log('현재 줌 레벨:', zoomLevel, '표시 타입:', displayType);
 
     if (displayType === 'DETAILED') {
-      // 500m 미만: 개별 마커 표시
+      // 동이하지도: 개별 마커 표시
       console.log('개별 마커 모드');
       const newMarkers = [];
       proposalData.forEach((proposal, index) => {
         if (
           proposal.position &&
           proposal.position.latitude &&
-          proposal.position.longitude
+          proposal.position.longitude &&
+          !proposal.isAddressData // 개별 제안글만 표시
         ) {
           // 우리 동네인지 판별
           const isOur = isOurNeighborhood(proposal.address);
@@ -581,46 +396,30 @@ const ProposalMapPage = () => {
 
       setMarkers(newMarkers);
     } else {
-      // 클러스터링 사용 (10km 이상, 2km~10km, 500m~2km)
-      console.log('클러스터링 모드, 제안글 수:', proposalData.length);
+      // 집계된 지역 데이터: 클러스터링 사용
+      console.log('클러스터링 모드, 데이터 수:', proposalData.length);
       const clusterer = createMarkerClusterer(map);
       const markersForCluster = [];
 
-      proposalData.forEach((proposal, index) => {
-        console.log(`제안글 ${index + 1} 처리:`, proposal.title);
+      proposalData.forEach((item, index) => {
+        console.log(`지역 데이터 ${index + 1} 처리:`, item.title);
         if (
-          proposal.position &&
-          proposal.position.latitude &&
-          proposal.position.longitude
+          item.position &&
+          item.position.latitude &&
+          item.position.longitude
         ) {
           // 마커 생성 (클러스터링용)
           const marker = new naver.maps.Marker({
             position: new naver.maps.LatLng(
-              proposal.position.latitude,
-              proposal.position.longitude,
+              item.position.latitude,
+              item.position.longitude,
             ),
           });
 
-          // 우리 동네인지 판별
-          const isOur = isOurNeighborhood(proposal.address);
-          marker.type = isOur ? 1 : 2;
-
-          // 줌 레벨에 따른 지역명 설정
-          let areaName = '지역';
-          if (proposal.address) {
-            switch (displayType) {
-              case 'PROVINCE':
-                areaName = proposal.address.sido || '시/도';
-                break;
-              case 'DISTRICT':
-                areaName = proposal.address.sigungu || '구';
-                break;
-              case 'NEIGHBORHOOD':
-                areaName = proposal.address.eupmyundong || '동';
-                break;
-            }
-          }
-          marker.areaName = areaName;
+          // 지역 타입에 따른 마커 스타일 설정
+          marker.type = item.isAddressData ? 1 : 2;
+          marker.areaName = item.title;
+          marker.count = item.count;
 
           markersForCluster.push(marker);
         }
@@ -656,17 +455,22 @@ const ProposalMapPage = () => {
     };
   }, []);
 
-  // 현재 지역 기반으로 제안글 필터링
+  // 현재 지역 기반으로 제안글 필터링 (개별 제안글만)
   const getFilteredProposalsByRegion = (proposalData) => {
+    // 개별 제안글만 필터링 (집계 데이터 제외)
+    const individualProposals = proposalData.filter(
+      (item) => !item.isAddressData,
+    );
+
     if (
       !currentRegion.sido &&
       !currentRegion.sigungu &&
       !currentRegion.eupmyundong
     ) {
-      return proposalData; // 지역 정보가 없으면 전체 반환
+      return individualProposals; // 지역 정보가 없으면 전체 반환
     }
 
-    return proposalData.filter((proposal) => {
+    return individualProposals.filter((proposal) => {
       if (!proposal.address) return false;
 
       // 시/도, 시/군/구, 읍/면/동 중 하나라도 일치하면 포함
@@ -768,7 +572,7 @@ const ProposalMapPage = () => {
               {industryOptions.map((option) => (
                 <SRadioButton
                   key={option.value}
-                  isSelected={selectedIndustry === option.value}
+                  $isSelected={selectedIndustry === option.value}
                   onClick={() => setSelectedIndustry(option.value)}
                 >
                   {option.label}
@@ -799,15 +603,42 @@ const ProposalMapPage = () => {
 
           {/* 제안글 목록 - 현재 지역 기반 필터링 */}
           <div>
-            {getFilteredProposalsByRegion(proposals).map((proposal) => (
-              <div
-                key={proposal.id}
-                onClick={() => handleProposalItemClick(proposal)}
-                style={{ cursor: 'pointer' }}
-              >
-                <ProposalItem proposal={proposal} />
+            {loading && (
+              <div style={{ padding: '20px', textAlign: 'center' }}>
+                로딩 중...
               </div>
-            ))}
+            )}
+            {error && (
+              <div
+                style={{ padding: '20px', textAlign: 'center', color: 'red' }}
+              >
+                {error}
+              </div>
+            )}
+            {!loading &&
+              !error &&
+              getFilteredProposalsByRegion(proposals).length === 0 && (
+                <div
+                  style={{
+                    padding: '20px',
+                    textAlign: 'center',
+                    color: '#666',
+                  }}
+                >
+                  해당 지역에 제안글이 없습니다.
+                </div>
+              )}
+            {!loading &&
+              !error &&
+              getFilteredProposalsByRegion(proposals).map((proposal) => (
+                <div
+                  key={proposal.id}
+                  onClick={() => handleProposalItemClick(proposal)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <ProposalItem proposal={proposal} />
+                </div>
+              ))}
           </div>
         </MapBottomsheet>
       </SBottomsheetWrapper>
@@ -1041,9 +872,7 @@ const SSortSelect = styled.select`
   }
 `;
 
-const SRadioButton = styled.div.withConfig({
-  shouldForwardProp: (prop) => prop !== 'isSelected',
-})`
+const SRadioButton = styled.div`
   display: inline-block;
   padding: 8px 16px;
   font-size: 14px;
@@ -1051,13 +880,13 @@ const SRadioButton = styled.div.withConfig({
   border-radius: 20px;
   border: 1px solid
     ${(props) =>
-      props.isSelected
+      props.$isSelected
         ? 'var(--colors-bg-default, #27272a)'
         : 'var(--colors-border-default, #e2e8f0)'};
   background-color: ${(props) =>
-    props.isSelected ? 'var(--colors-bg-default, #27272a)' : 'white'};
+    props.$isSelected ? 'var(--colors-bg-default, #27272a)' : 'white'};
   color: ${(props) =>
-    props.isSelected
+    props.$isSelected
       ? 'var(--colors-text-inverted, #ffffff)'
       : 'var(--colors-text-subtle, #64748b)'};
   cursor: pointer;
@@ -1067,9 +896,9 @@ const SRadioButton = styled.div.withConfig({
 
   &:hover {
     background-color: ${(props) =>
-      props.isSelected ? 'var(--colors-bg-default, #27272a)' : '#f7fafc'};
+      props.$isSelected ? 'var(--colors-bg-default, #27272a)' : '#f7fafc'};
     border-color: ${(props) =>
-      props.isSelected ? 'var(--colors-bg-default, #27272a)' : '#cbd5e0'};
+      props.$isSelected ? 'var(--colors-bg-default, #27272a)' : '#cbd5e0'};
   }
 `;
 
