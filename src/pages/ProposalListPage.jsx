@@ -7,7 +7,7 @@ import ProposalItem from '../components/proposal/ProposalList';
 import {
   createTypedMarker,
   updateMarkerSelection,
-} from '../components/common/Marker';
+} from '../components/map/Marker';
 import {
   createMarkerClusterer,
   getMapDisplayType,
