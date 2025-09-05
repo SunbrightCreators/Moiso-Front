@@ -12,7 +12,7 @@ import {
   createMarkerClusterer,
   getMapDisplayType,
   ZOOM_DISTANCE_MAPPING,
-} from '../components/common/MarkerClustering';
+} from '../components/map/MarkerClustering';
 
 import useModeStore from '../stores/useModeStore';
 import PencilIcon from '../assets/icons/pencil.svg';
