@@ -1,6 +1,6 @@
 import { Field, Input, Button } from '@chakra-ui/react';
 import styled from 'styled-components';
-import TopNavigation from '../components/common/TopNavigation';
+import TopNavigation from '../components/common/navigation/TopNavigation';
 import logo from '../assets/icons/심볼.svg';
 import { useForm } from 'react-hook-form';
 import { postLogin } from '../apis/accounts';

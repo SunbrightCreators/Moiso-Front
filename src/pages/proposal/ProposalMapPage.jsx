@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import TopNavigation from '../components/common/TopNavigation';
-import BottomNavigation from '../components/common/BottomNavigation';
+import TopNavigation from '../components/common/navigation/TopNavigation';
+import BottomNavigation from '../components/common/navigation/BottomNavigation';
 import { MapBottomsheet } from '../components/common/Bottomsheet';
 import ProposalItem from '../components/proposal/ProposalList';
 import {

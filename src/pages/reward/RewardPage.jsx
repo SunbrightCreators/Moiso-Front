@@ -1,5 +1,5 @@
-import TopNavigation from '../components/common/TopNavigation';
-import BottomNavigation from '../components/common/BottomNavigation';
+import TopNavigation from '../components/common/navigation/TopNavigation';
+import BottomNavigation from '../components/common/navigation/BottomNavigation';
 import styled from 'styled-components';
 import EmptyIllust from '../assets/icons/rewardempty.svg';
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import TopNavigation from '../components/common/TopNavigation';
-import InputSearch from '../components/common/InputSearch';
+import TopNavigation from '../components/common/navigation/TopNavigation';
+import InputSearch from '../components/common/input/InputSearch';
 import styled from 'styled-components';
 import { Button } from '@chakra-ui/react';
 import Dialog from '../components/common/Dialog';

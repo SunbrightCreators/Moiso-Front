@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import TopNavigation from '../components/common/TopNavigation';
+import TopNavigation from '../components/common/navigation/TopNavigation';
 import styled from 'styled-components';
 import { Button, CheckboxCard } from '@chakra-ui/react';
 import useModeStore from '../stores/useModeStore';

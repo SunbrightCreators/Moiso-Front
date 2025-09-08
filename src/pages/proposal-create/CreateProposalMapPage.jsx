@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import TopNavigation from '../components/common/TopNavigation';
+import TopNavigation from '../components/common/navigation/TopNavigation';
 import { createTypedCircle } from '../components/map/Circle';
 import { createTypedMarker } from '../components/map/Marker';
 import {

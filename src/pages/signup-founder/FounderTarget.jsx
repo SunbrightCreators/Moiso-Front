@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Button, CheckboxCard } from '@chakra-ui/react';
-import TopNavigation from '../components/common/TopNavigation';
+import TopNavigation from '../components/common/navigation/TopNavigation';
 
 // === 레이아웃용 styled-components 정의 ===
 const PageContainer = styled.div`

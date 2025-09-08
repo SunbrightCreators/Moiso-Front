@@ -1,9 +1,8 @@
-// ProposalCreatePage.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import TopNavigation from '../components/common/TopNavigation';
-import Timepicker from '../components/common/Timepicker';
+import TopNavigation from '../components/common/navigation/TopNavigation';
+import Timepicker from '../components/common/input/Timepicker';
 import { Field, Input, Textarea } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import useModalBottomsheetStore from '../stores/useModalBottomsheetStore';

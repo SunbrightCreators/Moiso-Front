@@ -5,8 +5,8 @@ import SignUpPage1 from './SignUpPage1';
 import SignUpPage2 from './SignUpPage2';
 import OnBoardingSelect from './OnBardingSelect';
 import NeighborhoodSettingsPage from './NeighborhoodSettingsPage';
-import FounderTarget from './FounderTarget';
-import FounderTime from './FounderTime';
+import FounderTarget from '../signup-founder/FounderTarget';
+import FounderTime from '../signup-founder/FounderTime';
 import WelcomePage from './WelcomePage';
 
 function SignUpIndex() {

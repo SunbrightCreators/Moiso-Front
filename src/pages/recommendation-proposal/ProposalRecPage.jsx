@@ -4,7 +4,7 @@ import { EmptyState, Badge, Avatar } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { ROUTE_PATH } from '../constants/route';
 import Carousel from '../components/common/Carousel';
-import BottomNavigation from '../components/common/BottomNavigation';
+import BottomNavigation from '../components/common/navigation/BottomNavigation';
 import HeartDefault from '../assets/icons/heart_default.svg';
 import HeartPressed from '../assets/icons/heart_pressed.svg';
 import HeartDisabled from '../assets/icons/heart_disabled.svg';

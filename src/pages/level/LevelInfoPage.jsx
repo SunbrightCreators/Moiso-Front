@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import TopNavigation from '../components/common/TopNavigation';
+import TopNavigation from '../components/common/navigation/TopNavigation';
 
 import Lv1Icon from '../assets/icons/lv1.svg';
 import Lv2Icon from '../assets/icons/lv2.svg';

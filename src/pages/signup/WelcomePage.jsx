@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import TopNavigation from '../components/common/TopNavigation';
+import TopNavigation from '../components/common/navigation/TopNavigation';
 import useModeStore from '../stores/useModeStore';
 import { ROUTE_PATH } from '../constants/route';
 // GIF 파일을 임포트합니다. 파일 경로는 실제 위치에 맞게 수정하세요.

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { useForm } from 'react-hook-form';
-import TopNavigation from '../components/common/TopNavigation';
+import TopNavigation from '../components/common/navigation/TopNavigation';
 import Dialog from '../components/common/Dialog';
 import useDialogStore from '../stores/useDialogStore';
 import { SEX } from '../constants/enum';
@@ -181,18 +181,18 @@ const ScrollText = styled.div`
 
 function SignUpPage2({ onNextStep }) {
   const setAlertDialog = useDialogStore((s) => s.setAlertDialog);
-  const TERMS_TXT = `본 약관은 지역 주민의 제안과 창업자의 참여를 기반으로 동네 상권을 활성화하는 크라우드 펀딩 플랫폼 「모이소」(이하 ‘서비스’) 의 이용과 관련하여 회사와 이용자 간의 권리·의무 및 책임 사항을 규정함을 목적으로 합니다. 
+  const TERMS_TXT = `본 약관은 지역 주민의 제안과 창업자의 참여를 기반으로 동네 상권을 활성화하는 크라우드 펀딩 플랫폼 「모이소」(이하 ‘서비스’) 의 이용과 관련하여 회사와 이용자 간의 권리·의무 및 책임 사항을 규정함을 목적으로 합니다.
 
 제1조 (목적)
 이 약관은 「모이소」 서비스를 제공하는 회사(이하 “회사”)와 서비스 이용자(이하 “이용자”) 간의 서비스 이용에 관한 권리, 의무 및 책임사항, 기타 필요한 사항을 규정합니다.
- 
+
 제2조 (정의)
 	1.	“서비스”란 회사가 제공하는 웹/모바일 기반 플랫폼으로, 주민이 원하는 가게 아이디어(제안글)를 등록하고, 창업자가 이를 수락하여 펀딩 및 개업까지 이어질 수 있도록 지원하는 일련의 기능을 의미합니다.
 	2.	“이용자”란 본 약관에 동의하고 서비스를 이용하는 자를 말하며, 제안자, 창업자, 후원자로 구분됩니다.
 	3.	“제안자”란 특정 지역 내에서 필요한 가게 아이디어를 제안하는 이용자를 말합니다.
 	4.	“창업자”란 제안글을 검토·수락하여 실제 개업을 준비하는 이용자를 말합니다.
 	5.	“후원자”란 제안이나 창업 과정에 금전적으로 참여하는 이용자를 의미합니다.
-	6.	“콘텐츠”란 서비스 내에서 제공되거나 이용자가 업로드하는 모든 텍스트, 이미지, 영상, 데이터 등을 포함합니다. 
+	6.	“콘텐츠”란 서비스 내에서 제공되거나 이용자가 업로드하는 모든 텍스트, 이미지, 영상, 데이터 등을 포함합니다.
 
 제3조 (약관의 효력 및 변경)
 	1.	본 약관은 서비스 초기 화면 또는 별도 연결 화면에 게시함으로써 효력이 발생합니다.
