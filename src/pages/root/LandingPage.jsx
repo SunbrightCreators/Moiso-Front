@@ -4,7 +4,7 @@ import styled from 'styled-components'; // styled-components import
 import { Link } from 'react-router-dom';
 import { ROUTE_PATH } from '../../constants/route';
 
-function LandingPage() {
+const LandingPage = () => {
   return (
     <Flex direction='column' minH='100%' font='font: var(--text-sm-semibold);'>
       <VStack spacing={4} flex='1' justify='center'>
@@ -26,7 +26,7 @@ function LandingPage() {
       </VStack>
     </Flex>
   );
-}
+};
 
 const StyledLoginButton = styled(Button)`
   width: 22.375rem;

@@ -8,7 +8,7 @@ import { SEX } from '../../constants/enum';
 
 // --- 리액트 컴포넌트 정의 ---
 
-function SignUpPage2({ onNextStep }) {
+const SignUpPage2 = ({ onNextStep }) => {
   const setAlertDialog = useDialogStore((s) => s.setAlertDialog);
   const TERMS_TXT = `본 약관은 지역 주민의 제안과 창업자의 참여를 기반으로 동네 상권을 활성화하는 크라우드 펀딩 플랫폼 「모이소」(이하 ‘서비스’) 의 이용과 관련하여 회사와 이용자 간의 권리·의무 및 책임 사항을 규정함을 목적으로 합니다.
 
@@ -395,7 +395,7 @@ function SignUpPage2({ onNextStep }) {
       <Dialog />
     </Container>
   );
-}
+};
 
 export default SignUpPage2;
 

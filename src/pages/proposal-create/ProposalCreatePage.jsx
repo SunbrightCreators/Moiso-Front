@@ -308,6 +308,7 @@ function IndustrySheetContent({ onConfirm, onCancel }) {
     </SheetWrap>
   );
 }
+export default ProposalCreatePage;
 
 /* ===== styled ===== */
 const Page = styled.div`
@@ -446,5 +447,3 @@ const Thumbs = styled.div`
     border: 0.1rem solid #e5e7eb;
   }
 `;
-
-export default ProposalCreatePage;

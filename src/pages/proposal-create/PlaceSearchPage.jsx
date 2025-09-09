@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import InputSearch from '../../components/common/input/InputSearch'; // 공통 검색바 사용
 
-export default function PlaceSearchPage({ onPrevStep }) {
+const PlaceSearchPage = ({ onPrevStep }) => {
   const pick = (item) => {
     const label = `${item.title} ${item.sub}`; // 저장할 문자열 형태
     onPrevStep?.({ location: label }); // 값 저장 + 생성페이지로 복귀
@@ -46,7 +46,9 @@ export default function PlaceSearchPage({ onPrevStep }) {
       </Main>
     </Page>
   );
-}
+};
+
+export default PlaceSearchPage;
 
 /* ========== styled ==========");
    모바일 폭(480px) 고정 컨테이너 + 상단 고정 헤더 + 본문 스크롤  */
