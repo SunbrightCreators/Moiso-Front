@@ -5,9 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import TopNavigation from '../components/common/navigation/TopNavigation';
 import useModeStore from '../stores/useModeStore';
 import { ROUTE_PATH } from '../constants/route';
-// GIF 파일을 임포트합니다. 파일 경로는 실제 위치에 맞게 수정하세요.
-import founderWelcomeGif from '../assets/icons/Foundergif.gif';
-import proposerWelcomeGif from '../assets/icons/Proposergif.gif';
+import founderWelcomeGif from '../../assets/icons/symbol_animated_founder.gif';
+import proposerWelcomeGif from '../../assets/icons/symbol_animated_proposer.gif';
 
 // === 레이아웃용 styled-components 정의 ===
 const PageContainer = styled.div`

@@ -2,12 +2,12 @@ import React from 'react';
 import { Avatar, Badge, DataList, Progress } from '@chakra-ui/react';
 import styled from 'styled-components';
 import Carousel from '../common/Carousel.jsx';
-import DefaultImageSrc from '../../assets/Default Image.svg';
-import ActiveHeartIcon from '../../assets/icons/List_Favorite_filled.svg';
-import DefaultHeartIcon from '../../assets/icons/List_Favorite_dafault.svg';
-import DisabledHeartIcon from '../../assets/icons/List_Favorite_disabled.svg';
-import ActiveScrapIcon from '../../assets/icons/List_Bookmark_filled.svg';
-import DefaultScrapIcon from '../../assets/icons/List_Bookmark_dafault.svg';
+import DefaultImageSrc from '../../assets/default_image.svg';
+import DefaultHeartIcon from '../../assets/icons/heart_default.svg';
+import ActiveHeartIcon from '../../assets/icons/heart_pressed.svg';
+import DisabledHeartIcon from '../../assets/icons/heart_disabled.svg';
+import DefaultScrapIcon from '../../assets/icons/scrap_default.svg';
+import ActiveScrapIcon from '../../assets/icons/scrap_pressed.svg';
 
 // ———————————————————————————————————————————
 

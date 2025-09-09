@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import TopNavigation from '../components/common/navigation/TopNavigation';
 import useModeStore from '../stores/useModeStore'; // isProposerMode: true(주민) / false(창업자)
-import EmptyProposer from '../assets/icons/EmptyProposer.svg'; // 창업자용
-import EmptySupporter from '../assets/icons/EmptySupporter.svg';
+import EmptyProposer from '../../assets/EmptyProposer.svg';
+import EmptySupporter from '../../assets/EmptySupporter.svg';
 import { useNavigate } from 'react-router-dom';
 
 const MyFundingPage = () => {

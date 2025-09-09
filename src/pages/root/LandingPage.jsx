@@ -1,5 +1,5 @@
 import { Flex, VStack, Heading, Text, Button, Box } from '@chakra-ui/react';
-import logo from '../assets/icons/logo1.svg';
+import logo from '../../assets/icons/logo.svg';
 import styled from 'styled-components'; // styled-components import
 import { Link } from 'react-router-dom';
 import { ROUTE_PATH } from '../constants/route';
