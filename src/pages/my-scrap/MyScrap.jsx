@@ -4,7 +4,7 @@ import TopNavigation from '../components/common/navigation/TopNavigation';
 import useModeStore from '../stores/useModeStore';
 
 const ProposalItemLazy = React.lazy(
-  () => import('../components/proposal/ProposalList'),
+  () => import('../components/proposal/ProposalItem'),
 );
 const FundingItemLazy = React.lazy(
   () => import('../components/funding/FundingItem'),

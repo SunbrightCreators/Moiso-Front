@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import TopNavigation from '../components/common/navigation/TopNavigation';
 import BottomNavigation from '../components/common/navigation/BottomNavigation';
 import { MapBottomsheet } from '../components/common/Bottomsheet';
-import ProposalItem from '../components/proposal/ProposalList';
+import ProposalItem from '../components/proposal/ProposalItem';
 import {
   createTypedMarker,
   updateMarkerSelection,
