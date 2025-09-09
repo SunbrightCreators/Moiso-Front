@@ -1,1 +1,1 @@
-export { default as FundingList } from './FundingList';
+export { default as FundingItem } from './FundingItem';

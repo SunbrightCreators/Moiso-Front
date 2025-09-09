@@ -7,7 +7,7 @@ const ProposalItemLazy = React.lazy(
   () => import('../components/proposal/ProposalList'),
 );
 const FundingItemLazy = React.lazy(
-  () => import('../components/funding/FundingList'),
+  () => import('../components/funding/FundingItem'),
 );
 
 class ErrorBoundary extends React.Component {
