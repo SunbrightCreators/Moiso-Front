@@ -1,24 +1,24 @@
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import TopNavigation from '../components/common/navigation/TopNavigation';
-import BottomNavigation from '../components/common/navigation/BottomNavigation';
-import { MapBottomsheet } from '../components/common/Bottomsheet';
-import ProposalItem from '../components/proposal/ProposalItem';
+import TopNavigation from '../../components/common/navigation/TopNavigation';
+import BottomNavigation from '../../components/common/navigation/BottomNavigation';
+import { MapBottomsheet } from '../../components/common/Bottomsheet';
+import ProposalItem from '../../components/proposal/ProposalItem';
 import {
   createTypedMarker,
   updateMarkerSelection,
-} from '../components/map/Marker';
+} from '../../components/map/Marker';
 import {
   createMarkerClusterer,
   getMapDisplayType,
   ZOOM_DISTANCE_MAPPING,
-} from '../components/map/MarkerClustering';
+} from '../../components/map/MarkerClustering';
 
-import useModeStore from '../stores/useModeStore';
-import PencilIcon from '../assets/icons/pencil.svg';
-import { getProposalMap } from '../apis/proposals';
-import { getPositionToLegal } from '../apis/maps';
-import { INDUSTRY } from '../constants/enum';
+import useModeStore from '../../stores/useModeStore';
+import PencilIcon from '../../assets/icons/pencil.svg';
+import { getProposalMap } from '../../apis/proposals';
+import { getPositionToLegal } from '../../apis/maps';
+import { INDUSTRY } from '../../constants/enum';
 
 /**
  * 제안글(Proposal) 지도 탐색 */

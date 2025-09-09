@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
-import InputSearch from '../components/common/input/InputSearch'; // 공통 검색바 사용
+import InputSearch from '../../components/common/input/InputSearch'; // 공통 검색바 사용
 
 export default function PlaceSearchPage({ onPrevStep }) {
   const pick = (item) => {

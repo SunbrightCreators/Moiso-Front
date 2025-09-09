@@ -1,54 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Button } from '@chakra-ui/react';
-import TopNavigation from '../components/common/navigation/TopNavigation';
-import Timepicker from '../components/common/input/Timepicker';
+import TopNavigation from '../../components/common/navigation/TopNavigation';
+import Timepicker from '../../components/common/input/Timepicker';
 import { useForm } from 'react-hook-form';
-
-const PageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-`;
-const MainContent = styled.main`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: 1.5rem;
-  overflow: hidden;
-`;
-const BottomButtonContainer = styled.div`
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
-  padding: 1.5rem;
-  padding-top: 0;
-  background-color: white;
-`;
-const HeadingSection = styled.div`
-  margin-bottom: 1.5rem;
-`;
-const StyledHeading = styled.h1`
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-`;
-const StyledSubHeading = styled.p`
-  font-size: 0.875rem;
-  color: #a1a1aa;
-`;
-const StyledButton = styled(Button)`
-  background-color: ${(props) => (props.isactive ? 'black' : 'gray')};
-  color: white;
-
-  &:disabled,
-  &[aria-disabled='true'],
-  &[data-disabled] {
-    background-color: #a1a1aa;
-    cursor: not-allowed;
-    pointer-events: none; /* 클릭 차단 */
-  }
-`;
 
 const FounderTime = ({ onNextStep }) => {
   const { register, watch } = useForm();
@@ -94,3 +49,48 @@ const FounderTime = ({ onNextStep }) => {
 };
 
 export default FounderTime;
+
+const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+`;
+const MainContent = styled.main`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.5rem;
+  overflow: hidden;
+`;
+const BottomButtonContainer = styled.div`
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  padding: 1.5rem;
+  padding-top: 0;
+  background-color: white;
+`;
+const HeadingSection = styled.div`
+  margin-bottom: 1.5rem;
+`;
+const StyledHeading = styled.h1`
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+`;
+const StyledSubHeading = styled.p`
+  font-size: 0.875rem;
+  color: #a1a1aa;
+`;
+const StyledButton = styled(Button)`
+  background-color: ${(props) => (props.isactive ? 'black' : 'gray')};
+  color: white;
+
+  &:disabled,
+  &[aria-disabled='true'],
+  &[data-disabled] {
+    background-color: #a1a1aa;
+    cursor: not-allowed;
+    pointer-events: none; /* 클릭 차단 */
+  }
+`;

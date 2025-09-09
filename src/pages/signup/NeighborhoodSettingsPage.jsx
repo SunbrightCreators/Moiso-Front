@@ -1,106 +1,11 @@
 import React, { useState } from 'react';
-import TopNavigation from '../components/common/navigation/TopNavigation';
-import InputSearch from '../components/common/input/InputSearch';
+import TopNavigation from '../../components/common/navigation/TopNavigation';
+import InputSearch from '../../components/common/input/InputSearch';
 import styled from 'styled-components';
 import { Button } from '@chakra-ui/react';
-import Dialog from '../components/common/Dialog';
-import useDialogStore from '../stores/useDialogStore';
-import useModeStore from '../stores/useModeStore';
-
-const PageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
-
-const MainContent = styled.main`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: 1.5rem;
-  overflow: hidden;
-`;
-
-const ScrollableListContainer = styled.div`
-  flex: 1;
-  overflow-y: auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const BottomButtonContainer = styled.div`
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
-  padding: 1.5rem;
-  padding-top: 0;
-  background-color: white;
-`;
-
-const HeadingSection = styled.div`
-  margin-bottom: 1.5rem;
-`;
-
-const SearchInputContainer = styled.div`
-  margin-bottom: 1.5rem;
-`;
-
-const NeighborhoodList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-`;
-
-const NeighborhoodItem = styled.button`
-  width: 100%;
-  text-align: left;
-  background: none;
-  border: none;
-  padding: 1rem;
-  border-bottom: 0.0625rem solid #e2e8f0;
-  cursor: pointer;
-
-  &:last-child {
-    border-bottom: none;
-  }
-`;
-const StyledButton = styled(Button)`
-  background-color: ${(props) => (props.isAuthComplete ? 'gray' : 'black')};
-  color: white;
-`;
-
-const TagContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  padding: 0 1.5rem;
-  margin-bottom: 1rem;
-`;
-const Tag = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 0.5rem 0.75rem;
-  background-color: #f4f4f5;
-  border-radius: 9999px;
-  color: #27272a;
-  font-size: 0.875rem;
-`;
-
-const neighborhoods = [
-  '서울 서대문구 대현동',
-  '서울 서대문구 대신동',
-  '서울 서대문구 대신동',
-  '서울 서대문구 대신동',
-  '서울 서대문구 대신동',
-  '서울 서대문구 대신동',
-  '서울 서대문구 대신동',
-  '서울 서대문구 대신동',
-  '서울 서대문구 대신동',
-  '서울 서대문구 대신동',
-];
+import Dialog from '../../components/common/Dialog';
+import useDialogStore from '../../stores/useDialogStore';
+import useModeStore from '../../stores/useModeStore';
 
 const NeighborhoodSettingsPage = ({ onNextStep }) => {
   const { setConfirmDialog, setAlertDialog } = useDialogStore();
@@ -207,3 +112,98 @@ const NeighborhoodSettingsPage = ({ onNextStep }) => {
 };
 
 export default NeighborhoodSettingsPage;
+
+const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
+const MainContent = styled.main`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.5rem;
+  overflow: hidden;
+`;
+
+const ScrollableListContainer = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const BottomButtonContainer = styled.div`
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  padding: 1.5rem;
+  padding-top: 0;
+  background-color: white;
+`;
+
+const HeadingSection = styled.div`
+  margin-bottom: 1.5rem;
+`;
+
+const SearchInputContainer = styled.div`
+  margin-bottom: 1.5rem;
+`;
+
+const NeighborhoodList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;
+
+const NeighborhoodItem = styled.button`
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 1rem;
+  border-bottom: 0.0625rem solid #e2e8f0;
+  cursor: pointer;
+
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+const StyledButton = styled(Button)`
+  background-color: ${(props) => (props.isAuthComplete ? 'gray' : 'black')};
+  color: white;
+`;
+
+const TagContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0 1.5rem;
+  margin-bottom: 1rem;
+`;
+const Tag = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background-color: #f4f4f5;
+  border-radius: 9999px;
+  color: #27272a;
+  font-size: 0.875rem;
+`;
+
+const neighborhoods = [
+  '서울 서대문구 대현동',
+  '서울 서대문구 대신동',
+  '서울 서대문구 대신동',
+  '서울 서대문구 대신동',
+  '서울 서대문구 대신동',
+  '서울 서대문구 대신동',
+  '서울 서대문구 대신동',
+  '서울 서대문구 대신동',
+  '서울 서대문구 대신동',
+  '서울 서대문구 대신동',
+];

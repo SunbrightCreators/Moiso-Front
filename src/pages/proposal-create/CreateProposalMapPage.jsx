@@ -1,16 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import TopNavigation from '../components/common/navigation/TopNavigation';
-import { createTypedCircle } from '../components/map/Circle';
-import { createTypedMarker } from '../components/map/Marker';
+import TopNavigation from '../../components/common/navigation/TopNavigation';
+import { createTypedCircle } from '../../components/map/Circle';
+import { createTypedMarker } from '../../components/map/Marker';
 import {
   getAddressToPosition,
   getAddressToLegal,
   getPositionToLegal,
 } from '../apis/maps';
 
-import CurrentLocation from '../assets/icons/CreateProposalMapPage_target.svg';
+import CurrentLocation from '../../assets/icons/CreateProposalMapPage_target.svg';
 /**
  * 제안글 등록 시 장소 선택 페이지
  */
