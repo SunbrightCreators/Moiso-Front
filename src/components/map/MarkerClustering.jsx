@@ -11,8 +11,8 @@ const DEFAULT_CLUSTER_OPTIONS = {
 };
 
 /**
- * 줌 레벨에 따른 거리 매핑
- * 네이버 지도의 줌 레벨과 실제 거리 관계
+ * Zoom Level에 따른 → "" 거리 "" 매핑
+ *  (네이버 지도의 줌 레벨과 실제 거리 관계)
  */
 const ZOOM_DISTANCE_MAPPING = {
   // 10km 이상: 도(시)지도 - 줌 레벨 10~11
@@ -26,7 +26,7 @@ const ZOOM_DISTANCE_MAPPING = {
 };
 
 /**
- * 줌 레벨에 따른 지도 표시 타입 반환
+ * Zoom Level에 따른 → "' 지도 표시 type "" 반환
  * @param {number} zoomLevel - 현재 줌 레벨
  * @returns {string} 지도 표시 타입
  */
@@ -43,7 +43,7 @@ const getMapDisplayType = (zoomLevel) => {
 };
 
 /**
- * 줌 레벨에 따른 지역명 결정
+ * Zoom Level에 따른 →  "" 지역명 "" 결정
  * @param {string} fullAreaName - 전체 지역명 (예: "서울특별시 강남구 역삼동")
  * @param {number} zoomLevel - 현재 줌 레벨
  * @returns {string} 줌 레벨에 맞는 지역명
@@ -66,7 +66,7 @@ const getAreaNameByZoom = (fullAreaName, zoomLevel) => {
 };
 
 /**
- * 줌 레벨에 따른 클러스터 크기 결정
+ * Zoom Level에 따른 → "" 클러스터 크기 "" 결정
  * @param {number} zoomLevel - 현재 줌 레벨
  * @returns {Object} 크기 정보 {width, height, fontSize, padding}
  */
@@ -105,7 +105,7 @@ const getClusterSizeByZoom = (zoomLevel) => {
 };
 
 /**
- * 줌 레벨에 따른 클러스터 원 크기 결정
+Zoom Level 에 따른 → "" 클러스터 원 크기 "" 결정
  * @param {number} zoomLevel
  * @returns {Object}
  */

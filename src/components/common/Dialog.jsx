@@ -8,10 +8,6 @@ import {
 import styled from 'styled-components';
 import useDialogStore from '../../stores/useDialogStore'; //
 
-const ContentDiv = styled.div`
-  white-space: pre-line;
-`;
-
 const Dialog = () => {
   const {
     isOpen,
@@ -69,5 +65,11 @@ const Dialog = () => {
     </ChakraDialog.Root>
   );
 };
+
+// ———————————————————  styled-components ———————————————————
+
+const ContentDiv = styled.div`
+  white-space: pre-line;
+`;
 
 export default Dialog;
