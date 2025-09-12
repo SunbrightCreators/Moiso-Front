@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import TopNavigation from '../../components/common/navigation/TopNavigation';
 import Lv1Icon from '../../assets/icons/lv1.svg';

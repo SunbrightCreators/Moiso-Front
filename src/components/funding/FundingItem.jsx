@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import { Avatar, Badge, DataList, Progress } from '@chakra-ui/react';
 import Carousel from '../common/Carousel.jsx';

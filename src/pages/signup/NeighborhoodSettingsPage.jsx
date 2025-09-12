@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { Button } from '@chakra-ui/react';
 import Dialog from '../../components/common/Dialog';
