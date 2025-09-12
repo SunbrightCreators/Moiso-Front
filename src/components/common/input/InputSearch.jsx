@@ -10,7 +10,7 @@ const SearchBarContainer = styled.div`
   gap: var(--spacing-2);
   width: 100%;
   padding: 0 var(--spacing-3)
-  height: 3rem; /* 48px */
+  height: 3rem;
   background-color: var(--colors-gray-100, #f4f4f5);
   border-radius: var(--radii-md); 
   overflow: hidden;
@@ -23,15 +23,15 @@ const SearchInput = styled.input`
   width: 100%;
   height: 100%;
   font-family: 'Inter', sans-serif;
-  font-size: 1rem; /* 16px */
+  font-size: 1rem;
   font-weight: 500;
   color: var(--colors-text-default, #27272a);
-  line-height: 1.5rem; /* 24px */
+  line-height: 1.5rem;
   &::placeholder {
     color: var(--colors-gray-400, #a1a1aa);
   }
   &[type='search'] {
-    -webkit-appearance: textfield; /* 
+    -webkit-appearance: textfield;
   }
 `;
 

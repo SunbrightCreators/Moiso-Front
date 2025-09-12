@@ -1,8 +1,4 @@
 /**
- * Circle 컴포넌트(?)
- */
-
-/**
  * 타입 & 선택 상태 → Cicle 스타일  반환
  * @param {number} type - 1: 우리동네, 2: 다른동네
  * @param {boolean} isSelected - 선택(selected) 상태

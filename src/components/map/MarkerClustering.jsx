@@ -1,7 +1,3 @@
-/**
- * MarkerClustering
- */
-
 const DEFAULT_CLUSTER_OPTIONS = {
   minClusterSize: 1, // 클러스터 최소 마커 수 : 1개 이상이면 클러스터로 표시
   maxZoom: 17, // 클러스터가 해제되는 최대 줌 레벨 (500m 미만에서 개별 마커)

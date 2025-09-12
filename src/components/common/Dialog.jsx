@@ -5,7 +5,7 @@ import {
   Dialog as ChakraDialog,
   Portal,
 } from '@chakra-ui/react';
-import useDialogStore from '../../stores/useDialogStore'; //
+import useDialogStore from '../../stores/useDialogStore';
 
 const Dialog = () => {
   const {

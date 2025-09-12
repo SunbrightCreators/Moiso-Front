@@ -1,4 +1,3 @@
-// src/pages/MyScrap.jsx
 import React, { Suspense } from 'react';
 import TopNavigation from '../../components/common/navigation/TopNavigation';
 import useModeStore from '../../stores/useModeStore';

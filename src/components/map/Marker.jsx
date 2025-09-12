@@ -1,7 +1,3 @@
-/**
- * Marker 컴포넌트
- */
-
 import Type1DefaultIcon from '../../assets/icons/marker_my_default.svg';
 import Type1SelectedIcon from '../../assets/icons/marker_my_selected.svg';
 import Type2DefaultIcon from '../../assets/icons/marker_other_default.svg';
