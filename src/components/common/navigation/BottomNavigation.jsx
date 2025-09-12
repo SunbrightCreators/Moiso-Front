@@ -1,13 +1,12 @@
-import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import useModeStore from '../../../stores/useModeStore';
 import styled from 'styled-components';
 import { ROUTE_PATH } from '../../../constants/route';
-import { ReactComponent as ProposalIcon } from '../../../assets/icons/proposal.svg';
+import useModeStore from '../../../stores/useModeStore';
 import { ReactComponent as FundingIcon } from '../../../assets/icons/funding.svg';
-import { ReactComponent as RewardIcon } from '../../../assets/icons/reward.svg';
 import { ReactComponent as MyIcon } from '../../../assets/icons/my.svg';
+import { ReactComponent as ProposalIcon } from '../../../assets/icons/proposal.svg';
 import { ReactComponent as RecommendIcon } from '../../../assets/icons/recommend.svg';
+import { ReactComponent as RewardIcon } from '../../../assets/icons/reward.svg';
 
 const proposerNavItems = [
   { path: ROUTE_PATH.PROPOSAL, label: '제안', Icon: ProposalIcon },
@@ -38,7 +37,7 @@ const SLink = styled(Link)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  textdecoration: none;
+  text-decoration: none;
   color: ${({ isActive }) =>
     isActive
       ? 'var(--colors-text-default, #27272A)'

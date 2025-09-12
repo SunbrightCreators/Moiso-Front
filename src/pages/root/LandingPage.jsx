@@ -1,8 +1,8 @@
-import { Flex, VStack, Button, Box } from '@chakra-ui/react';
-import logo from '../../assets/icons/logo.svg';
-import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import { Button, Box, Flex, VStack } from '@chakra-ui/react';
 import { ROUTE_PATH } from '../../constants/route';
+import logo from '../../assets/icons/logo.svg';
 
 const LandingPage = () => {
   return (

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import TopNavigation from '../../components/common/navigation/TopNavigation';
-import InputSearch from '../../components/common/input/InputSearch';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { Button } from '@chakra-ui/react';
-import Dialog from '../../components/common/Dialog';
+import { Dialog } from '../../components/common';
+import { InputSearch } from '../../components/common/input';
+import { TopNavigation } from '../../components/common/navigation';
 import useDialogStore from '../../stores/useDialogStore';
 import useModeStore from '../../stores/useModeStore';
 

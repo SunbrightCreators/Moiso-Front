@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as SearchIcon } from '../../../assets/icons/search.svg';
 import { ReactComponent as ClearIcon } from '../../../assets/icons/exit.svg';
+import { ReactComponent as SearchIcon } from '../../../assets/icons/search.svg';
 
 // --- 스타일 정의 (모든 px 단위를 rem으로 수정) ---
 const SearchBarContainer = styled.div`
@@ -9,10 +9,10 @@ const SearchBarContainer = styled.div`
   align-items: center;
   gap: var(--spacing-2);
   width: 100%;
-  padding: 0 var(--spacing-3)
-  height: 3rem; /* 48px */
+  padding: 0 var(--spacing-3);
+  height: 3rem;
   background-color: var(--colors-gray-100, #f4f4f5);
-  border-radius: var(--radii-md); 
+  border-radius: var(--radii-md);
   overflow: hidden;
 `;
 
@@ -23,15 +23,15 @@ const SearchInput = styled.input`
   width: 100%;
   height: 100%;
   font-family: 'Inter', sans-serif;
-  font-size: 1rem; /* 16px */
+  font-size: 1rem;
   font-weight: 500;
   color: var(--colors-text-default, #27272a);
-  line-height: 1.5rem; /* 24px */
+  line-height: 1.5rem;
   &::placeholder {
     color: var(--colors-gray-400, #a1a1aa);
   }
   &[type='search'] {
-    -webkit-appearance: textfield; /* 
+    -webkit-appearance: textfield;
   }
 `;
 

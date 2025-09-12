@@ -1,7 +1,27 @@
-// src/pages/MyScrap.jsx
-import React, { Suspense } from 'react';
-import TopNavigation from '../../components/common/navigation/TopNavigation';
+import { useState, Suspense, lazy, Component } from 'react';
+import { TopNavigation } from '../../components/common/navigation';
+const ProposalItemLazy = lazy(
+  () => import('../../components/proposal/ProposalItem'),
+);
+const FundingItemLazy = lazy(
+  () => import('../../components/funding/FundingItem'),
+);
 import useModeStore from '../../stores/useModeStore';
+
+class ErrorBoundary extends Component {
+  constructor(p) {
+    super(p);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  render() {
+    return this.state.hasError
+      ? this.props.fallback || null
+      : this.props.children;
+  }
+}
 
 const MyScrap = () => {
   const { isProposerMode } = useModeStore(); // true=제안자, false=창업자
@@ -16,7 +36,7 @@ const MyScrap = () => {
     id: `f${i + 1}`,
   }));
 
-  const [tab, setTab] = React.useState('proposal');
+  const [tab, setTab] = useState('proposal');
 
   const showFundingTab = true;
   const fundingTabLabel = profile === 'founder' ? '창업' : '펀딩';
@@ -120,28 +140,6 @@ const MyScrap = () => {
 };
 
 export default MyScrap;
-
-const ProposalItemLazy = React.lazy(
-  () => import('../../components/proposal/ProposalItem'),
-);
-const FundingItemLazy = React.lazy(
-  () => import('../../components/funding/FundingItem'),
-);
-
-class ErrorBoundary extends React.Component {
-  constructor(p) {
-    super(p);
-    this.state = { hasError: false };
-  }
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-  render() {
-    return this.state.hasError
-      ? this.props.fallback || null
-      : this.props.children;
-  }
-}
 
 /* ===== Fallback & Skeleton & Empty ===== */
 function SkeletonCard() {

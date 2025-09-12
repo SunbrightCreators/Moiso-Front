@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import styled, { css } from 'styled-components';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import TopNavigation from '../../components/common/navigation/TopNavigation';
-import Dialog from '../../components/common/Dialog';
-import useDialogStore from '../../stores/useDialogStore';
+import styled, { css } from 'styled-components';
+import { Dialog } from '../../components/common';
+import { TopNavigation } from '../../components/common/navigation';
 import { SEX } from '../../constants/enum';
+import useDialogStore from '../../stores/useDialogStore';
 
 // --- 리액트 컴포넌트 정의 ---
 
