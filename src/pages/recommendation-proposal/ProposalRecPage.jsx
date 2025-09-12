@@ -63,21 +63,20 @@ const ProposalRecPage = () => {
                   <>
                     <HeroBg />
                     <OverlayWrap>
-                      <EmptyState.Root
-                        height='100%'
-                        display='flex'
-                        alignItems='center'
-                        justifyContent='center'
-                      >
-                        <EmptyState.Content>
-                          <EmptyState.Indicator>
-                            <Sparkle />
-                          </EmptyState.Indicator>
-                          <EmptyState.Title>
-                            추천 결과가 없어요
-                          </EmptyState.Title>
-                        </EmptyState.Content>
-                      </EmptyState.Root>
+                      <EmptyCard>
+                        <EmptyState.Root>
+                          <EmptyState.Content>
+                            <EmptyState.Indicator>
+                              <Sparkle />
+                            </EmptyState.Indicator>
+                            <CustomTitle>추천 결과가 없어요</CustomTitle>
+                            <CustomDescription>
+                              충분한 데이터가 쌓이지 않았어요. <br />
+                              마음에 드는 제안들을 더 스크랩 해 주세요
+                            </CustomDescription>
+                          </EmptyState.Content>
+                        </EmptyState.Root>
+                      </EmptyCard>
                     </OverlayWrap>
                   </>
                 )}
@@ -119,7 +118,7 @@ const ProposalRecPage = () => {
                 <EmptyState.Indicator>
                   <Sparkle />
                 </EmptyState.Indicator>
-                <EmptyState.Title>추천 결과가 없어요</EmptyState.Title>
+                <CustomTitle>추천 결과가 없어요</CustomTitle>
               </EmptyState.Content>
             </EmptyState.Root>
           )}
@@ -158,7 +157,7 @@ const ProposalRecPage = () => {
                 <EmptyState.Indicator>
                   <Sparkle />
                 </EmptyState.Indicator>
-                <EmptyState.Title>추천 결과가 없어요</EmptyState.Title>
+                <CustomTitle>추천 결과가 없어요</CustomTitle>
               </EmptyState.Content>
             </EmptyState.Root>
           )}
@@ -271,6 +270,44 @@ const OverlayWrap = styled.div`
   pointer-events: none;
 `;
 
+const CustomTitle = styled(EmptyState.Title)`
+  color: var(--colors-text-default, #27272a);
+  text-align: center;
+
+  /* md/semibold */
+  font-family: var(--fonts-body, Inter);
+  font-size: var(--font-sizes-md, 1rem);
+  font-style: normal;
+  font-weight: var(--font-weights-semibold, 600);
+  line-height: var(--line-heights-md, 1.5rem); /* 150% */
+`;
+const CustomDescription = styled(EmptyState.Description)`
+  color: var(--colors-text-muted, #52525b);
+  text-align: center;
+
+  /* sm/normal */
+  font-family: var(--fonts-body, Inter);
+  font-size: var(--font-sizes-sm, 0.875rem);
+  font-style: normal;
+  font-weight: var(--font-weights-normal, 400);
+`;
+
+const EmptyCard = styled.div`
+  width: 20rem;
+  height: 32rem;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+  background: #fff;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+
+  pointer-events: auto;
+`;
+
 /* 도트 */
 const Dots = styled.div`
   display: flex;
@@ -294,78 +331,63 @@ const BottomBarWrap = styled.div`
   padding-bottom: env(safe-area-inset-bottom);
 `;
 
-/* =========================== 목데이터 =========================== */
-const big = [
-  {
-    id: 3,
-    created_at: '30초 전',
-    user: {
-      name: '최**',
-      profile_image: 'https://example.com/...',
-      proposer_level: {
-        address: {
-          sido: '시도',
-          sigungu: '시군구',
-          eupmyundong: '읍면동',
+/* =========================== 목데이터 =========================== */ const big =
+  [
+    {
+      id: 3,
+      created_at: '30초 전',
+      user: {
+        name: '최**',
+        profile_image: 'https://example.com/...',
+        proposer_level: {
+          address: { sido: '시도', sigungu: '시군구', eupmyundong: '읍면동' },
+          level: 2,
         },
-        level: 2,
       },
+      title: '제안글 제목',
+      content: '제안글 내용',
+      industry: '카페/디저트',
+      business_hours: { start: '09:00', end: '18:00' },
+      address: {
+        sido: '시도',
+        sigungu: '시군구',
+        eupmyundong: '읍면동',
+        jibun_detail: '지번 주소 상세',
+        road_detail: '도로명 주소 상세',
+      },
+      radius: '500m',
+      image: ['https://example.com/...'],
+      likes_count: 300,
+      scraps_count: 178,
     },
-    title: '제안글 제목',
-    content: '제안글 내용',
-    industry: '카페/디저트',
-    business_hours: {
-      start: '09:00',
-      end: '18:00',
-    },
-    address: {
-      sido: '시도',
-      sigungu: '시군구',
-      eupmyundong: '읍면동',
-      jibun_detail: '지번 주소 상세',
-      road_detail: '도로명 주소 상세',
-    },
-    radius: '500m',
-    image: ['https://example.com/...'],
-    likes_count: 300,
-    scraps_count: 178,
-  },
-  {
-    id: 2,
-    created_at: '30초 전',
-    user: {
-      name: '최**',
-      profile_image: 'https://example.com/...',
-      proposer_level: {
-        address: {
-          sido: '시도',
-          sigungu: '시군구',
-          eupmyundong: '읍면동',
+    {
+      id: 2,
+      created_at: '30초 전',
+      user: {
+        name: '최**',
+        profile_image: 'https://example.com/...',
+        proposer_level: {
+          address: { sido: '시도', sigungu: '시군구', eupmyundong: '읍면동' },
+          level: 2,
         },
-        level: 2,
       },
+      title: '제안글 제목',
+      content: '제안글 내용',
+      industry: '카페/디저트',
+      business_hours: { start: '09:00', end: '18:00' },
+      address: {
+        sido: '시도',
+        sigungu: '시군구',
+        eupmyundong: '읍면동',
+        jibun_detail: '지번 주소 상세',
+        road_detail: '도로명 주소 상세',
+      },
+      radius: '500m',
+      image: ['https://example.com/...'],
+      likes_count: 300,
+      scraps_count: 178,
     },
-    title: '제안글 제목',
-    content: '제안글 내용',
-    industry: '카페/디저트',
-    business_hours: {
-      start: '09:00',
-      end: '18:00',
-    },
-    address: {
-      sido: '시도',
-      sigungu: '시군구',
-      eupmyundong: '읍면동',
-      jibun_detail: '지번 주소 상세',
-      road_detail: '도로명 주소 상세',
-    },
-    radius: '500m',
-    image: ['https://example.com/...'],
-    likes_count: 300,
-    scraps_count: 178,
-  },
-];
-
+  ];
 const similar = [
   {
     id: 1,
@@ -374,11 +396,7 @@ const similar = [
       name: '김**',
       profile_image: null,
       proposer_level: {
-        address: {
-          sido: '시도',
-          sigungu: '시군구',
-          eupmyundong: '대흥동',
-        },
+        address: { sido: '시도', sigungu: '시군구', eupmyundong: '대흥동' },
         level: 2,
       },
     },
@@ -406,17 +424,13 @@ const similar = [
       name: '이**',
       profile_image: null,
       proposer_level: {
-        address: {
-          sido: '시도',
-          sigungu: '시군구',
-          eupmyundong: '창천동',
-        },
+        address: { sido: '시도', sigungu: '시군구', eupmyundong: '창천동' },
         level: 1,
       },
     },
     title: '아침을 든든하게, 테이크아웃 커피&토스트 세트 전문점',
     content:
-      "아침 식사를 거르는 학생들이 많지만, 든든한 한 끼를 저렴하게 먹을 곳은 부족합니다. 아침 등교 시간에 맞춰 따뜻한 토스트를 판매하는 테이크아웃 전문점을 제안합니다. 커피와 함께 세트 메뉴로 구성하면, 바쁜 아침에 큰 도움이 될 거예요. 카페인에 예민한 날을 위해 커피 외에 아이스티나 아샷추(아이스티 아메리카노 샷추가)같은 같이 먹을 음료도 꼭 있으면 좋겠어요!! 저렴하지만 속이 꽉 찬 메뉴를 개발하고, 모바일 앱을 통한 사전 주문 및 픽업 서비스를 제공해서 시간을 절약할 수 있도록 하면 너무 좋겠어요. 매일 바뀌는 '오늘의 토스트' 메뉴로 신선함을 더하면 좋을 것 같아요.  이대, 서강대, 연대 학생증 할인도 기대할게요~~ㅎㅎ",
+      "아침 식사를 거르는 학생들이 많지만, 든든한 한 끼를 저렴하게 먹을 곳은 부족합니다. 아침 등교 시간에 맞춰 따뜻한 토스트를 판매하는 테이크아웃 전문점을 제안합니다. 커피와 함께 세트 메뉴로 구성하면, 바쁜 아침에 큰 도움이 될 거예요. 카페인에 예민한 날을 위해 커피 외에 아이스티나 아샷추(아이스티 아메리카노 샷추가)같은 같이 먹을 음료도 꼭 있으면 좋겠어요!! 저렴하지만 속이 꽉 찬 메뉴를 개발하고, 모바일 앱을 통한 사전 주문 및 픽업 서비스를 제공해서 시간을 절약할 수 있도록 하면 너무 좋겠어요. 매일 바뀌는 '오늘의 토스트' 메뉴로 신선함을 더하면 좋을 것 같아요. 이대, 서강대, 연대 학생증 할인도 기대할게요~~ㅎㅎ",
     industry: '카페/디저트',
     business_hours: { start: '08:00', end: '22:00' },
     address: {
@@ -432,7 +446,6 @@ const similar = [
     scraps_count: 30,
   },
 ];
-
 const highSuccess = [
   {
     id: 1,
@@ -441,21 +454,14 @@ const highSuccess = [
       name: '최**',
       profile_image: 'https://example.com/...',
       proposer_level: {
-        address: {
-          sido: '시도',
-          sigungu: '시군구',
-          eupmyundong: '읍면동',
-        },
+        address: { sido: '시도', sigungu: '시군구', eupmyundong: '읍면동' },
         level: 2,
       },
     },
     title: '제안글 제목',
     content: '제안글 내용',
     industry: '카페/디저트',
-    business_hours: {
-      start: '09:00',
-      end: '18:00',
-    },
+    business_hours: { start: '09:00', end: '18:00' },
     address: {
       sido: '시도',
       sigungu: '시군구',
@@ -475,21 +481,14 @@ const highSuccess = [
       name: '최**',
       profile_image: 'https://example.com/...',
       proposer_level: {
-        address: {
-          sido: '시도',
-          sigungu: '시군구',
-          eupmyundong: '읍면동',
-        },
+        address: { sido: '시도', sigungu: '시군구', eupmyundong: '읍면동' },
         level: 2,
       },
     },
     title: '제안글 제목',
     content: '제안글 내용',
     industry: '카페/디저트',
-    business_hours: {
-      start: '09:00',
-      end: '18:00',
-    },
+    business_hours: { start: '09:00', end: '18:00' },
     address: {
       sido: '시도',
       sigungu: '시군구',
