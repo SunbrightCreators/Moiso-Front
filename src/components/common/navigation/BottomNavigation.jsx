@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import useModeStore from '../../../stores/useModeStore';
 import styled from 'styled-components';
 import { ROUTE_PATH } from '../../../constants/route';
-
 import { ReactComponent as ProposalIcon } from '../../../assets/icons/proposal.svg';
 import { ReactComponent as FundingIcon } from '../../../assets/icons/funding.svg';
 import { ReactComponent as RewardIcon } from '../../../assets/icons/reward.svg';

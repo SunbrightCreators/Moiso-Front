@@ -1,11 +1,11 @@
 import { Field, Input, Button } from '@chakra-ui/react';
 import styled from 'styled-components';
-import TopNavigation from '../components/common/navigation/TopNavigation';
+import TopNavigation from '../../components/common/navigation/TopNavigation';
 import logo from '../../assets/icons/symbol.svg';
 import { useForm } from 'react-hook-form';
-import { postLogin } from '../apis/accounts';
-import useModeStore from '../stores/useModeStore';
-import { ROUTE_PATH } from '../constants/route';
+import { postLogin } from '../../apis/accounts';
+import useModeStore from '../../stores/useModeStore';
+import { ROUTE_PATH } from '../../constants/route';
 import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
@@ -78,6 +78,8 @@ const LoginPage = () => {
   );
 };
 
+export default LoginPage;
+
 const SLayout = styled.div`
   display: flex;
   flex-flow: column nowrap;
@@ -123,5 +125,3 @@ const LoginButton = styled(Button)`
   border-radius: 0.5rem;
   background: var(--Fill-primary, #303742);
 `;
-
-export default LoginPage;

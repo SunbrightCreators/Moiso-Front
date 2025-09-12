@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Badge, DataList, Progress } from '@chakra-ui/react';
+import { Avatar, Badge, DataList } from '@chakra-ui/react';
 import styled from 'styled-components';
 import Carousel from '../common/Carousel.jsx';
 import DefaultImageSrc from '../../assets/default_image.svg';
@@ -8,38 +8,6 @@ import ActiveHeartIcon from '../../assets/icons/heart_pressed.svg';
 import DisabledHeartIcon from '../../assets/icons/heart_disabled.svg';
 import DefaultScrapIcon from '../../assets/icons/scrap_default.svg';
 import ActiveScrapIcon from '../../assets/icons/scrap_pressed.svg';
-
-// ———————————————————————————————————————————
-
-// Styled checkbox components for Like and Scrap buttons
-const LikeButton = styled.input.attrs({ type: 'checkbox' })`
-  appearance: none;
-  width: var(--sizes-4, 1rem);
-  height: var(--sizes-4, 1rem);
-  background: url(${DefaultHeartIcon}) no-repeat center/contain;
-  cursor: pointer;
-
-  &:checked {
-    background: url(${ActiveHeartIcon}) no-repeat center/contain;
-  }
-
-  &:disabled {
-    background: url(${DisabledHeartIcon}) no-repeat center/contain;
-    cursor: not-allowed;
-  }
-`;
-
-const ScrapButton = styled.input.attrs({ type: 'checkbox' })`
-  appearance: none;
-  width: var(--sizes-4, 1rem);
-  height: var(--sizes-4, 1rem);
-  background: url(${DefaultScrapIcon}) no-repeat center/contain;
-  cursor: pointer;
-
-  &:checked {
-    background: url(${ActiveScrapIcon}) no-repeat center/contain;
-  }
-`;
 
 // ———————————————————————————————————————————
 
@@ -295,6 +263,37 @@ const STimeAgo = styled.span`
   line-height: var(--line-heights-xs, 1rem); /* 133.333% */
 `;
 
+// ————————————— Like 랑 Scrap 버튼 쪽 영역 스타일링 ———————————————
+
+const LikeButton = styled.input.attrs({ type: 'checkbox' })`
+  appearance: none;
+  width: var(--sizes-4, 1rem);
+  height: var(--sizes-4, 1rem);
+  background: url(${DefaultHeartIcon}) no-repeat center/contain;
+  cursor: pointer;
+
+  &:checked {
+    background: url(${ActiveHeartIcon}) no-repeat center/contain;
+  }
+
+  &:disabled {
+    background: url(${DisabledHeartIcon}) no-repeat center/contain;
+    cursor: not-allowed;
+  }
+`;
+
+const ScrapButton = styled.input.attrs({ type: 'checkbox' })`
+  appearance: none;
+  width: var(--sizes-4, 1rem);
+  height: var(--sizes-4, 1rem);
+  background: url(${DefaultScrapIcon}) no-repeat center/contain;
+  cursor: pointer;
+
+  &:checked {
+    background: url(${ActiveScrapIcon}) no-repeat center/contain;
+  }
+`;
+
 const SActionContainer = styled.div`
   display: grid;
   grid-template-columns: 2rem 2.5rem;
@@ -305,7 +304,7 @@ const SActionContainer = styled.div`
   justify-content: flex-end;
 `;
 
-// 좋아요 버튼 래퍼 - 고정 위치 안하면 숫자 따라 크기가 변해서..ㅠㅠ
+// 좋아요 버튼 래퍼를 지정하지 않으면 좋아요 수에 따라 크기가 변해서..
 const SLikeButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-start;

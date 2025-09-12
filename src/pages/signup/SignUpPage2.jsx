@@ -1,185 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { useForm } from 'react-hook-form';
-import TopNavigation from '../components/common/navigation/TopNavigation';
-import Dialog from '../components/common/Dialog';
-import useDialogStore from '../stores/useDialogStore';
-import { SEX } from '../constants/enum';
-
-// --- 스타일 정의 ---
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background: white;
-`;
-
-const ContentArea = styled.main`
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 1.5rem 1rem;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const ButtonArea = styled.div`
-  padding: 0.5rem 1rem 1.25rem;
-`;
-
-const FormLabel = styled.label`
-  display: block;
-  margin-bottom: 0.25rem;
-  color: #27272a;
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.25rem;
-`;
-
-const GenderOption = styled.label`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 3.5rem;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  ${(props) =>
-    props.isSelected
-      ? css`
-          background: #303742;
-          color: white;
-          border: 0.0625rem solid #303742;
-        `
-      : css`
-          background: white;
-          color: #303742;
-          border: 0.0625rem solid #cad1db;
-        `}
-`;
-
-const ChevronIcon = styled.span`
-  display: inline-block;
-  width: 0.5rem;
-  height: 0.5rem;
-  border-top: 0.125rem solid #a6afbd;
-  border-right: 0.125rem solid #a6afbd;
-  transform: rotate(45deg);
-`;
-
-const ChevronBtn = styled.button`
-  border: none;
-  background: transparent;
-  padding: 0.125rem;
-  cursor: pointer;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-
-  > div {
-    margin-bottom: 1.5rem;
-  }
-  .gender-container {
-    margin-bottom: 2rem;
-  }
-  > div:last-child {
-    margin-bottom: 0;
-  }
-
-  input[type='text'],
-  input[type='email'],
-  input[type='password'] {
-    width: 22.375rem;
-    height: 3.5rem; /* 56px */
-    padding: 0 1rem; /* 0 16px */
-    border-radius: 0.5rem; /* 8px */
-    border: 0.0625rem solid #cad1db; /* 1px */
-    font-size: 1rem; /* 16px */
-    box-sizing: border-box;
-    &::placeholder {
-      color: #cad1db;
-    }
-  }
-
-  .gender-group {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .agreement-group {
-    display: flex;
-    flex-direction: column;
-    margin-top: 0.5rem;
-  }
-
-  .agreement-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1rem;
-    padding: 0.625rem 0.25rem;
-  }
-
-  .agreement-group .agreement-item:first-child {
-    border-bottom: 0.0625rem solid #f4f4f5;
-  }
-
-  .agreement-item-left {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-`;
-
-const ErrorMessage = styled.p`
-  color: #ff3b30;
-  font-size: 0.75rem;
-  margin-top: 0.25rem;
-`;
-
-const Button = styled.button`
-  width: 100%;
-  height: 3.5rem;
-  border: none;
-  border-radius: 0.5rem;
-  color: white;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  background-color: ${(props) => (props.disabled ? '#a6afbd' : '#303742')};
-  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
-`;
-
-const ScrollText = styled.div`
-  line-height: 1.5; /* 단위 없는 line-height */
-  max-block-size: calc(17 * 1lh); /* 정확히 7줄 높이 */
-  overflow-y: auto; /* 이후 내용은 스크롤 */
-  white-space: pre-wrap; /* 개행 유지 */
-  word-break: keep-all; /* 한국어 단어 뭉텅이 방지 */
-  overscroll-behavior: contain; /* 모달 밖으로 스크롤 전파 방지 */
-  -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
-
-  /* 크롬/사파리/크로뮴 엣지 */
-  &::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-    display: none;
-  }
-
-  /* IE/구버전 Edge */
-  -ms-overflow-style: none;
-`;
+import TopNavigation from '../../components/common/navigation/TopNavigation';
+import Dialog from '../../components/common/Dialog';
+import useDialogStore from '../../stores/useDialogStore';
+import { SEX } from '../../constants/enum';
 
 // --- 리액트 컴포넌트 정의 ---
 
-function SignUpPage2({ onNextStep }) {
+const SignUpPage2 = ({ onNextStep }) => {
   const setAlertDialog = useDialogStore((s) => s.setAlertDialog);
   const TERMS_TXT = `본 약관은 지역 주민의 제안과 창업자의 참여를 기반으로 동네 상권을 활성화하는 크라우드 펀딩 플랫폼 「모이소」(이하 ‘서비스’) 의 이용과 관련하여 회사와 이용자 간의 권리·의무 및 책임 사항을 규정함을 목적으로 합니다.
 
@@ -566,6 +395,177 @@ function SignUpPage2({ onNextStep }) {
       <Dialog />
     </Container>
   );
-}
+};
 
 export default SignUpPage2;
+
+// --- 스타일 정의 ---
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: white;
+`;
+
+const ContentArea = styled.main`
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 1.5rem 1rem;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const ButtonArea = styled.div`
+  padding: 0.5rem 1rem 1.25rem;
+`;
+
+const FormLabel = styled.label`
+  display: block;
+  margin-bottom: 0.25rem;
+  color: #27272a;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+`;
+
+const GenderOption = styled.label`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3.5rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  ${(props) =>
+    props.isSelected
+      ? css`
+          background: #303742;
+          color: white;
+          border: 0.0625rem solid #303742;
+        `
+      : css`
+          background: white;
+          color: #303742;
+          border: 0.0625rem solid #cad1db;
+        `}
+`;
+
+const ChevronIcon = styled.span`
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-top: 0.125rem solid #a6afbd;
+  border-right: 0.125rem solid #a6afbd;
+  transform: rotate(45deg);
+`;
+
+const ChevronBtn = styled.button`
+  border: none;
+  background: transparent;
+  padding: 0.125rem;
+  cursor: pointer;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+
+  > div {
+    margin-bottom: 1.5rem;
+  }
+  .gender-container {
+    margin-bottom: 2rem;
+  }
+  > div:last-child {
+    margin-bottom: 0;
+  }
+
+  input[type='text'],
+  input[type='email'],
+  input[type='password'] {
+    width: 22.375rem;
+    height: 3.5rem; /* 56px */
+    padding: 0 1rem; /* 0 16px */
+    border-radius: 0.5rem; /* 8px */
+    border: 0.0625rem solid #cad1db; /* 1px */
+    font-size: 1rem; /* 16px */
+    box-sizing: border-box;
+    &::placeholder {
+      color: #cad1db;
+    }
+  }
+
+  .gender-group {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .agreement-group {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.5rem;
+  }
+
+  .agreement-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+    padding: 0.625rem 0.25rem;
+  }
+
+  .agreement-group .agreement-item:first-child {
+    border-bottom: 0.0625rem solid #f4f4f5;
+  }
+
+  .agreement-item-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+`;
+
+const ErrorMessage = styled.p`
+  color: #ff3b30;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+`;
+
+const Button = styled.button`
+  width: 100%;
+  height: 3.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  background-color: ${(props) => (props.disabled ? '#a6afbd' : '#303742')};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+`;
+
+const ScrollText = styled.div`
+  line-height: 1.5; /* 단위 없는 line-height */
+  max-block-size: calc(17 * 1lh); /* 정확히 7줄 높이 */
+  overflow-y: auto; /* 이후 내용은 스크롤 */
+  white-space: pre-wrap; /* 개행 유지 */
+  word-break: keep-all; /* 한국어 단어 뭉텅이 방지 */
+  overscroll-behavior: contain; /* 모달 밖으로 스크롤 전파 방지 */
+  -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
+
+  /* 크롬/사파리/크로뮴 엣지 */
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+
+  /* IE/구버전 Edge */
+  -ms-overflow-style: none;
+`;

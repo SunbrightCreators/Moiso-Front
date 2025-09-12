@@ -1,71 +1,9 @@
 // src/pages/MyScrap.jsx
 import React, { Suspense } from 'react';
-import TopNavigation from '../components/common/navigation/TopNavigation';
-import useModeStore from '../stores/useModeStore';
+import TopNavigation from '../../components/common/navigation/TopNavigation';
+import useModeStore from '../../stores/useModeStore';
 
-const ProposalItemLazy = React.lazy(
-  () => import('../components/proposal/ProposalItem'),
-);
-const FundingItemLazy = React.lazy(
-  () => import('../components/funding/FundingItem'),
-);
-
-class ErrorBoundary extends React.Component {
-  constructor(p) {
-    super(p);
-    this.state = { hasError: false };
-  }
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-  render() {
-    return this.state.hasError
-      ? this.props.fallback || null
-      : this.props.children;
-  }
-}
-
-/* -------------------- 목데이터 -------------------- */
-const baseProposal = {
-  id: 'p1',
-  label: 'Label',
-  title: '제안글 제목',
-  description: '제안을 실현할 작은 모임입니다.',
-  timeInput: '07:00',
-  timeInputEnd: '22:00',
-  locationInput: '신촌역',
-  additionalText: '500m',
-  imageList: [],
-  authorName: '홍길동',
-  timeAgo: '20분 전',
-  isLiked: false,
-  isScraped: true,
-  likeCount: 173,
-  scrapCount: 176,
-};
-const baseFunding = {
-  id: 'f1',
-  label: 'Label',
-  title: '런칭 프로젝트 제목',
-  description: '런칭 프로젝트 설명입니다.',
-  YearInput: 2025,
-  MonthInput: 8,
-  locationInput: '홍대입구역',
-  additionalText: '500m',
-  FundingAmount: 9257890,
-  targetAmount: 14500000,
-  end: '2025-12-31',
-  imageList: [],
-  authorName: '제안자A',
-  uploadDate: '2025년 08월 12일',
-  isLiked: true,
-  isScraped: true,
-  likeCount: 178,
-  scrapCount: 176,
-};
-/* ------------------------------------------------ */
-
-export default function MyScrap() {
+const MyScrap = () => {
   const { isProposerMode } = useModeStore(); // true=제안자, false=창업자
   const profile = isProposerMode ? 'proposer' : 'founder';
 
@@ -80,7 +18,6 @@ export default function MyScrap() {
 
   const [tab, setTab] = React.useState('proposal');
 
-  // ✅ 두 모드 모두 탭 노출, 라벨만 모드에 맞게
   const showFundingTab = true;
   const fundingTabLabel = profile === 'founder' ? '창업' : '펀딩';
 
@@ -91,7 +28,6 @@ export default function MyScrap() {
         #myscrap-root{max-width:100vw; overflow-x:hidden;}
         #myscrap-root *{box-sizing:border-box;}
         #myscrap-root img{max-width:100%; height:auto; display:block;}
-        /* 카드가 px 고정이어도 강제 수축 허용 */
         #myscrap-root .fluid{min-width:0; max-width:100%;}
       `}</style>
 
@@ -181,6 +117,30 @@ export default function MyScrap() {
       </div>
     </>
   );
+};
+
+export default MyScrap;
+
+const ProposalItemLazy = React.lazy(
+  () => import('../../components/proposal/ProposalItem'),
+);
+const FundingItemLazy = React.lazy(
+  () => import('../../components/funding/FundingItem'),
+);
+
+class ErrorBoundary extends React.Component {
+  constructor(p) {
+    super(p);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  render() {
+    return this.state.hasError
+      ? this.props.fallback || null
+      : this.props.children;
+  }
 }
 
 /* ===== Fallback & Skeleton & Empty ===== */
@@ -244,3 +204,43 @@ function FundingFallback({ data }) {
     </div>
   );
 }
+
+/* -------------------- 목데이터 -------------------- */
+const baseProposal = {
+  id: 'p1',
+  label: 'Label',
+  title: '제안글 제목',
+  description: '제안을 실현할 작은 모임입니다.',
+  timeInput: '07:00',
+  timeInputEnd: '22:00',
+  locationInput: '신촌역',
+  additionalText: '500m',
+  imageList: [],
+  authorName: '홍길동',
+  timeAgo: '20분 전',
+  isLiked: false,
+  isScraped: true,
+  likeCount: 173,
+  scrapCount: 176,
+};
+const baseFunding = {
+  id: 'f1',
+  label: 'Label',
+  title: '런칭 프로젝트 제목',
+  description: '런칭 프로젝트 설명입니다.',
+  YearInput: 2025,
+  MonthInput: 8,
+  locationInput: '홍대입구역',
+  additionalText: '500m',
+  FundingAmount: 9257890,
+  targetAmount: 14500000,
+  end: '2025-12-31',
+  imageList: [],
+  authorName: '제안자A',
+  uploadDate: '2025년 08월 12일',
+  isLiked: true,
+  isScraped: true,
+  likeCount: 178,
+  scrapCount: 176,
+};
+/* ------------------------------------------------ */

@@ -1,7 +1,42 @@
 import { Flex, VStack, Button, Box } from '@chakra-ui/react';
 import logo from '../../assets/icons/logo.svg';
 import styled from 'styled-components';
-import useModeStore from '../stores/useModeStore';
+import useModeStore from '../../stores/useModeStore';
+
+const SignUpPage1 = ({ onNextStep }) => {
+  const setIsProposerMode = useModeStore((s) => s.setIsProposerMode);
+  // '창업자로 가입' 버튼 클릭 시 실행될 함수
+  const handleFounderClick = () => {
+    setIsProposerMode(false); // 창업자 모드
+    onNextStep?.();
+  };
+
+  const handleResidentClick = () => {
+    setIsProposerMode(true); // 주민 모드
+    onNextStep?.();
+  };
+
+  return (
+    <Flex direction='column' minH='100%' font='font: var(--text-sm-semibold);'>
+      <VStack spacing={4} flex='1' justify='center'>
+        <LogoBox>
+          <img src={logo} alt='서비스 로고' />
+        </LogoBox>
+      </VStack>
+
+      <VStack spacing={3} w='100%' maxW='md' mx='auto' mt='1.44rem' pb='5.5rem'>
+        <StyledLoginButton onClick={handleResidentClick}>
+          지역주민으로 가입
+        </StyledLoginButton>
+        <StyledLoginButton2 onClick={handleFounderClick}>
+          창업자로 가입
+        </StyledLoginButton2>
+      </VStack>
+    </Flex>
+  );
+};
+
+export default SignUpPage1;
 
 const StyledLoginButton = styled(Button)`
   width: 22.375rem;
@@ -54,38 +89,3 @@ const LogoBox = styled(Box)`
   border-radius: 0.4375rem;
   background: var(--Surface, #ffffffff);
 `;
-
-function SignUpPage1({ onNextStep }) {
-  const setIsProposerMode = useModeStore((s) => s.setIsProposerMode);
-  // '창업자로 가입' 버튼 클릭 시 실행될 함수
-  const handleFounderClick = () => {
-    setIsProposerMode(false); // 창업자 모드
-    onNextStep?.();
-  };
-
-  const handleResidentClick = () => {
-    setIsProposerMode(true); // 주민 모드
-    onNextStep?.();
-  };
-
-  return (
-    <Flex direction='column' minH='100%' font='font: var(--text-sm-semibold);'>
-      <VStack spacing={4} flex='1' justify='center'>
-        <LogoBox>
-          <img src={logo} alt='서비스 로고' />
-        </LogoBox>
-      </VStack>
-
-      <VStack spacing={3} w='100%' maxW='md' mx='auto' mt='1.44rem' pb='5.5rem'>
-        <StyledLoginButton onClick={handleResidentClick}>
-          지역주민으로 가입
-        </StyledLoginButton>
-        <StyledLoginButton2 onClick={handleFounderClick}>
-          창업자로 가입
-        </StyledLoginButton2>
-      </VStack>
-    </Flex>
-  );
-}
-
-export default SignUpPage1;

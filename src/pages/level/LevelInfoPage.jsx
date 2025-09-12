@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import TopNavigation from '../components/common/navigation/TopNavigation';
+import TopNavigation from '../../components/common/navigation/TopNavigation';
 
-import Lv1Icon from '../assets/icons/lv1.svg';
-import Lv2Icon from '../assets/icons/lv2.svg';
-import Lv3Icon from '../assets/icons/lv3.svg';
+import Lv1Icon from '../../assets/icons/lv1.svg';
+import Lv2Icon from '../../assets/icons/lv2.svg';
+import Lv3Icon from '../../assets/icons/lv3.svg';
 
 const LevelInfoPage = () => {
   return (

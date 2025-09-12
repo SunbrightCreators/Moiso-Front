@@ -1,8 +1,32 @@
-import { Flex, VStack, Heading, Text, Button, Box } from '@chakra-ui/react';
+import { Flex, VStack, Button, Box } from '@chakra-ui/react';
 import logo from '../../assets/icons/logo.svg';
-import styled from 'styled-components'; // styled-components import
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { ROUTE_PATH } from '../constants/route';
+import { ROUTE_PATH } from '../../constants/route';
+
+const LandingPage = () => {
+  return (
+    <Flex direction='column' minH='100%' font='font: var(--text-sm-semibold);'>
+      <VStack spacing={4} flex='1' justify='center'>
+        <LogoBox>
+          <img src={logo} alt='서비스 로고' />
+        </LogoBox>
+      </VStack>
+
+      <VStack spacing={3} w='100%' maxW='md' mx='auto' mt='1.44rem' pb='5.5rem'>
+        {/* 로그인 버튼 클릭 시 ROUTE_PATH.LOGIN 경로로 이동 */}
+        <StyledLoginButton as={Link} to={ROUTE_PATH.LOGIN}>
+          로그인
+        </StyledLoginButton>
+
+        {/* 회원가입 버튼 클릭 시 ROUTE_PATH.SIGNUP 경로로 이동 */}
+        <StyledSignupButton as={Link} to={ROUTE_PATH.SIGNUP}>
+          회원가입
+        </StyledSignupButton>
+      </VStack>
+    </Flex>
+  );
+};
 
 const StyledLoginButton = styled(Button)`
   width: 22.375rem;
@@ -48,29 +72,5 @@ const LogoBox = styled(Box)`
   border-radius: 0.4375rem;
   background: var(--Surface, #ffffffff);
 `;
-
-function LandingPage() {
-  return (
-    <Flex direction='column' minH='100%' font='font: var(--text-sm-semibold);'>
-      <VStack spacing={4} flex='1' justify='center'>
-        <LogoBox>
-          <img src={logo} alt='서비스 로고' />
-        </LogoBox>
-      </VStack>
-
-      <VStack spacing={3} w='100%' maxW='md' mx='auto' mt='1.44rem' pb='5.5rem'>
-        {/* 로그인 버튼 클릭 시 ROUTE_PATH.LOGIN 경로로 이동 */}
-        <StyledLoginButton as={Link} to={ROUTE_PATH.LOGIN}>
-          로그인
-        </StyledLoginButton>
-
-        {/* 회원가입 버튼 클릭 시 ROUTE_PATH.SIGNUP 경로로 이동 */}
-        <StyledSignupButton as={Link} to={ROUTE_PATH.SIGNUP}>
-          회원가입
-        </StyledSignupButton>
-      </VStack>
-    </Flex>
-  );
-}
 
 export default LandingPage;

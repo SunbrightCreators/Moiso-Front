@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import useModeStore from '../stores/useModeStore';
+import useModeStore from '../../stores/useModeStore';
 
 import SignUpPage1 from './SignUpPage1';
 import SignUpPage2 from './SignUpPage2';

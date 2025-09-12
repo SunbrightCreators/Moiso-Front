@@ -1,11 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { ROUTE_PATH } from '../constants/route';
+import { ROUTE_PATH } from '../../constants/route';
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
-import useModeStore from '../stores/useModeStore';
-import useDialogStore from '../stores/useDialogStore';
-import TopNavigation from '../components/common/navigation/TopNavigation';
-import BottomNavigation from '../components/common/navigation/BottomNavigation';
+import useModeStore from '../../stores/useModeStore';
+import useDialogStore from '../../stores/useDialogStore';
+import {
+  TopNavigation,
+  BottomNavigation,
+} from '../../components/common/navigation/index';
 import { Switch, Button, Progress, Avatar } from '@chakra-ui/react';
 import ToProposer from '../../assets/icons/change_to_proposer.svg';
 import ToFounder from '../../assets/icons/change_to_founder.svg';
@@ -13,7 +15,6 @@ import Lv1 from '../../assets/icons/lv1.svg';
 import Lv2 from '../../assets/icons/lv2.svg';
 import Lv3 from '../../assets/icons/lv3.svg';
 import ScrapIcon from '../../assets/icons/scrap_default.svg';
-
 import MyProposalIcon from '../../assets/icons/proposal.svg';
 import MyFundingIcon from '../../assets/icons/funding.svg';
 import ChevronRight from '../../assets/icons/chevron_right.svg';

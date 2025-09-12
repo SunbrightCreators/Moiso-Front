@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import TopNavigation from '../components/common/navigation/TopNavigation';
+import TopNavigation from '../../components/common/navigation/TopNavigation';
 import { useNavigate } from 'react-router-dom';
 import emptyImg from '../../assets/EmptyState (5).svg';
 
