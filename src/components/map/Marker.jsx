@@ -2,10 +2,10 @@
  * Marker 컴포넌트
  */
 
-import Type1DefaultIcon from '../../assets/icons/Map-pin_T1_default.svg';
-import Type1SelectedIcon from '../../assets/icons/Map-pin_T1_Selected.svg';
-import Type2DefaultIcon from '../../assets/icons/Map-pin_T2_default.svg';
-import Type2SelectedIcon from '../../assets/icons/Map-pin_T2_Selected.svg';
+import Type1DefaultIcon from '../../assets/icons/marker_my_default.svg';
+import Type1SelectedIcon from '../../assets/icons/marker_my_selected.svg';
+import Type2DefaultIcon from '../../assets/icons/marker_other_default.svg';
+import Type2SelectedIcon from '../../assets/icons/marker_other_selected.svg';
 
 /**
  * 마커 타입과 선택 상태에 따른 아이콘을 반환하는 함수

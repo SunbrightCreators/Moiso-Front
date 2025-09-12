@@ -9,16 +9,15 @@ import {
   BottomNavigation,
 } from '../../components/common/navigation/index';
 import { Switch, Button, Progress, Avatar } from '@chakra-ui/react';
-import ToProposer from '../../assets/icons/ChangetoPr.svg';
-import ToFounder from '../../assets/icons/ChangetoFo.svg';
+import ToProposer from '../../assets/icons/change_to_proposer.svg';
+import ToFounder from '../../assets/icons/change_to_founder.svg';
 import Lv1 from '../../assets/icons/lv1.svg';
 import Lv2 from '../../assets/icons/lv2.svg';
 import Lv3 from '../../assets/icons/lv3.svg';
 import ScrapIcon from '../../assets/icons/scrap_default.svg';
-
-import MyProposalIcon from '../../assets/icons/BNB_proposal.svg';
-import MyFundingIcon from '../../assets/icons/BNB_funding.svg';
-import ChevronRight from '../../assets/icons/chevron-right.svg';
+import MyProposalIcon from '../../assets/icons/proposal.svg';
+import MyFundingIcon from '../../assets/icons/funding.svg';
+import ChevronRight from '../../assets/icons/chevron_right.svg';
 
 const MyPage = () => {
   const { isProposerMode, setIsProposerMode } = useModeStore();

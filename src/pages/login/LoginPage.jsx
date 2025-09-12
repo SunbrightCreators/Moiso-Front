@@ -1,7 +1,7 @@
 import { Field, Input, Button } from '@chakra-ui/react';
 import styled from 'styled-components';
 import TopNavigation from '../../components/common/navigation/TopNavigation';
-import logo from '../../assets/icons/심볼.svg';
+import logo from '../../assets/icons/symbol.svg';
 import { useForm } from 'react-hook-form';
 import { postLogin } from '../../apis/accounts';
 import useModeStore from '../../stores/useModeStore';

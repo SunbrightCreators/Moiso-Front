@@ -1,5 +1,5 @@
 import { Flex, VStack, Button, Box } from '@chakra-ui/react';
-import logo from '../../assets/icons/logo1.svg';
+import logo from '../../assets/icons/logo.svg';
 import styled from 'styled-components';
 import useModeStore from '../../stores/useModeStore';
 
