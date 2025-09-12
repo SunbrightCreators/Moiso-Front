@@ -1,6 +1,6 @@
 import ProposalRecPage from './ProposalRecPage';
-import BigCard from './Card/BigCard';
-import SmallCard from './Card/SmallCard';
+import BigCard from './BigCard';
+import SmallCard from './SmallCard';
 
 export default ProposalRecPage;
 
