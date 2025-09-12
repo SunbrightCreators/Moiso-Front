@@ -1,58 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Button, CheckboxCard } from '@chakra-ui/react';
-import TopNavigation from '../components/common/navigation/TopNavigation';
-
-// === 레이아웃용 styled-components 정의 ===
-const PageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-`;
-const MainContent = styled.main`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: 1.5rem;
-  overflow: hidden;
-`;
-const BottomButtonContainer = styled.div`
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
-  padding: 1.5rem;
-  padding-top: 0;
-  background-color: white;
-`;
-const HeadingSection = styled.div`
-  margin-bottom: 1.5rem;
-`;
-const StyledHeading = styled.h1`
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-`;
-const StyledSubHeading = styled.p`
-  font-size: 0.875rem;
-  color: #a1a1aa;
-`;
-const StyledButton = styled(Button)`
-  background-color: ${(props) => (props.isactive ? 'black' : 'gray')};
-  color: white;
-
-  /* Chakra가 disabled를 aria-disabled/data-disabled로 줄 때도 완전 차단 */
-  &:disabled,
-  &[aria-disabled='true'],
-  &[data-disabled] {
-    background-color: #a1a1aa; /* gray */
-    cursor: not-allowed;
-    pointer-events: none; /* 클릭 자체 차단 */
-  }
-`;
-const CardWrapper = styled.div`
-  max-width: 100%;
-  margin-bottom: 1rem;
-`;
+import TopNavigation from '../../components/common/navigation/TopNavigation';
 
 const FounderTarget = ({ onNextStep }) => {
   const [selectedTargets, setSelectedTargets] = useState([]);
@@ -144,3 +93,54 @@ const FounderTarget = ({ onNextStep }) => {
 };
 
 export default FounderTarget;
+
+// === 레이아웃용 styled-components 정의 ===
+const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+`;
+const MainContent = styled.main`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.5rem;
+  overflow: hidden;
+`;
+const BottomButtonContainer = styled.div`
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  padding: 1.5rem;
+  padding-top: 0;
+  background-color: white;
+`;
+const HeadingSection = styled.div`
+  margin-bottom: 1.5rem;
+`;
+const StyledHeading = styled.h1`
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+`;
+const StyledSubHeading = styled.p`
+  font-size: 0.875rem;
+  color: #a1a1aa;
+`;
+const StyledButton = styled(Button)`
+  background-color: ${(props) => (props.isactive ? 'black' : 'gray')};
+  color: white;
+
+  /* Chakra가 disabled를 aria-disabled/data-disabled로 줄 때도 완전 차단 */
+  &:disabled,
+  &[aria-disabled='true'],
+  &[data-disabled] {
+    background-color: #a1a1aa; /* gray */
+    cursor: not-allowed;
+    pointer-events: none; /* 클릭 자체 차단 */
+  }
+`;
+const CardWrapper = styled.div`
+  max-width: 100%;
+  margin-bottom: 1rem;
+`;

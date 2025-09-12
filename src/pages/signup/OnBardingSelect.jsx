@@ -1,10 +1,108 @@
 import React, { useState, useEffect } from 'react';
-import TopNavigation from '../components/common/navigation/TopNavigation';
+import TopNavigation from '../../components/common/navigation/TopNavigation';
 import styled from 'styled-components';
 import { Button, CheckboxCard } from '@chakra-ui/react';
-import useModeStore from '../stores/useModeStore';
-import { INDUSTRY } from '../constants/enum';
-import Dialog from '../components/common/Dialog';
+import useModeStore from '../../stores/useModeStore';
+import { INDUSTRY } from '../../constants/enum';
+import Dialog from '../../components/common/Dialog';
+
+const OnBoardingSelect = ({ onNextStep }) => {
+  const [selectedIndustries, setSelectedIndustries] = useState([]);
+
+  const { isProposerMode } = useModeStore();
+  const toggleValue = (value) => {
+    setSelectedIndustries((prev) => {
+      const on = prev.includes(value);
+      if (on) return prev.filter((v) => v !== value);
+      if (prev.length >= 3) return prev;
+      return [...prev, value];
+    });
+  };
+
+  const removeTag = (tagToRemove) => {
+    setSelectedIndustries((prev) =>
+      prev.filter((item) => item !== tagToRemove),
+    );
+  };
+
+  const isButtonActive = selectedIndustries.length > 0;
+  const topNavTitle = isProposerMode ? '지역주민 가입' : '창업자 가입';
+
+  return (
+    <PageContainer>
+      <TopNavigation
+        left='back'
+        title={topNavTitle}
+        subTitle='관심 업종 선택'
+      />
+      <MainContent>
+        <HeadingSection>
+          <h1>관심 업종을 선택해주세요</h1>
+          <p>최대 3개까지 설정 가능해요</p>
+        </HeadingSection>
+
+        <ScrollableListContainer>
+          <IndustryGrid>
+            {INDUSTRY.map((item) => {
+              const checked = selectedIndustries.includes(item.value);
+              return (
+                <StyledCheckboxCard
+                  key={item.value}
+                  checked={checked}
+                  onCheckedChange={() => toggleValue(item.value)}
+                  value={item.value}
+                >
+                  <CheckboxCard.HiddenInput />
+                  <CheckboxCard.Content>
+                    <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>
+                      {item.icon}
+                    </div>
+                    <CheckboxCard.Label style={{ fontSize: '0.875rem' }}>
+                      {item.label}
+                    </CheckboxCard.Label>
+                  </CheckboxCard.Content>
+                </StyledCheckboxCard>
+              );
+            })}
+          </IndustryGrid>
+        </ScrollableListContainer>
+      </MainContent>
+
+      {selectedIndustries.length > 0 && (
+        <TagContainer>
+          {selectedIndustries.map((tag) => {
+            const found = INDUSTRY.find((i) => i.value === tag);
+            return (
+              <Tag key={tag}>
+                {found?.label ?? tag}
+                <TagCloseButton onClick={() => removeTag(tag)}>
+                  &times;
+                </TagCloseButton>
+              </Tag>
+            );
+          })}
+        </TagContainer>
+      )}
+
+      <BottomButtonContainer>
+        <StyledButton
+          width='100%'
+          size='lg'
+          $active={isButtonActive}
+          isDisabled={!isButtonActive}
+          onClick={() =>
+            isButtonActive && onNextStep?.({ industries: selectedIndustries })
+          }
+        >
+          다음
+        </StyledButton>
+      </BottomButtonContainer>
+      <Dialog />
+    </PageContainer>
+  );
+};
+
+export default OnBoardingSelect;
 
 const PageContainer = styled.div`
   display: flex;
@@ -104,101 +202,3 @@ const TagCloseButton = styled.button`
   cursor: pointer;
   color: #a1a1aa;
 `;
-
-const OnBoardingSelect = ({ onNextStep }) => {
-  const [selectedIndustries, setSelectedIndustries] = useState([]);
-
-  const { isProposerMode } = useModeStore();
-  const toggleValue = (value) => {
-    setSelectedIndustries((prev) => {
-      const on = prev.includes(value);
-      if (on) return prev.filter((v) => v !== value);
-      if (prev.length >= 3) return prev;
-      return [...prev, value];
-    });
-  };
-
-  const removeTag = (tagToRemove) => {
-    setSelectedIndustries((prev) =>
-      prev.filter((item) => item !== tagToRemove),
-    );
-  };
-
-  const isButtonActive = selectedIndustries.length > 0;
-  const topNavTitle = isProposerMode ? '지역주민 가입' : '창업자 가입';
-
-  return (
-    <PageContainer>
-      <TopNavigation
-        left='back'
-        title={topNavTitle}
-        subTitle='관심 업종 선택'
-      />
-      <MainContent>
-        <HeadingSection>
-          <h1>관심 업종을 선택해주세요</h1>
-          <p>최대 3개까지 설정 가능해요</p>
-        </HeadingSection>
-
-        <ScrollableListContainer>
-          <IndustryGrid>
-            {INDUSTRY.map((item) => {
-              const checked = selectedIndustries.includes(item.value);
-              return (
-                <StyledCheckboxCard
-                  key={item.value}
-                  checked={checked}
-                  onCheckedChange={() => toggleValue(item.value)}
-                  value={item.value}
-                >
-                  <CheckboxCard.HiddenInput />
-                  <CheckboxCard.Content>
-                    <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>
-                      {item.icon}
-                    </div>
-                    <CheckboxCard.Label style={{ fontSize: '0.875rem' }}>
-                      {item.label}
-                    </CheckboxCard.Label>
-                  </CheckboxCard.Content>
-                </StyledCheckboxCard>
-              );
-            })}
-          </IndustryGrid>
-        </ScrollableListContainer>
-      </MainContent>
-
-      {selectedIndustries.length > 0 && (
-        <TagContainer>
-          {selectedIndustries.map((tag) => {
-            const found = INDUSTRY.find((i) => i.value === tag);
-            return (
-              <Tag key={tag}>
-                {found?.label ?? tag}
-                <TagCloseButton onClick={() => removeTag(tag)}>
-                  &times;
-                </TagCloseButton>
-              </Tag>
-            );
-          })}
-        </TagContainer>
-      )}
-
-      <BottomButtonContainer>
-        <StyledButton
-          width='100%'
-          size='lg'
-          $active={isButtonActive}
-          isDisabled={!isButtonActive}
-          onClick={() =>
-            isButtonActive && onNextStep?.({ industries: selectedIndustries })
-          }
-        >
-          다음
-        </StyledButton>
-      </BottomButtonContainer>
-      <Dialog />
-    </PageContainer>
-  );
-};
-
-export default OnBoardingSelect;

@@ -1,7 +1,9 @@
-import TopNavigation from '../components/common/navigation/TopNavigation';
-import BottomNavigation from '../components/common/navigation/BottomNavigation';
+import {
+  TopNavigation,
+  BottomNavigation,
+} from '../../components/common/navigation/index';
 import styled from 'styled-components';
-import EmptyIllust from '../assets/icons/rewardempty.svg';
+import EmptyIllust from '../../assets/icons/rewardempty.svg';
 
 const RewardPage = () => {
   return (

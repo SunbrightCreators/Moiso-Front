@@ -2,56 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import TopNavigation from '../components/common/navigation/TopNavigation';
-import useModeStore from '../stores/useModeStore';
-import { ROUTE_PATH } from '../constants/route';
+import TopNavigation from '../../components/common/navigation/TopNavigation';
+import useModeStore from '../../stores/useModeStore';
+import { ROUTE_PATH } from '../../constants/route';
 // GIF 파일을 임포트합니다. 파일 경로는 실제 위치에 맞게 수정하세요.
-import founderWelcomeGif from '../assets/icons/Foundergif.gif';
-import proposerWelcomeGif from '../assets/icons/Proposergif.gif';
-
-// === 레이아웃용 styled-components 정의 ===
-const PageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-  justify-content: space-between;
-`;
-const MainContent = styled.main`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: 1.5rem;
-  overflow: hidden;
-  align-items: center;
-  justify-content: center;
-`;
-const BottomButtonContainer = styled.div`
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
-  padding: 1.5rem;
-  padding-top: 0;
-  background-color: white;
-`;
-
-const NavBtn = styled(Button)`
-  background-color: black;
-  color: white;
-`;
-
-const CenterTextWrapper = styled.div`
-  text-align: center;
-  margin-bottom: 2rem;
-`;
-const MainText = styled.p`
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-`;
-const SubText = styled.p`
-  font-size: 1rem;
-  color: #a1a1aa;
-`;
+import founderWelcomeGif from '../../assets/icons/Foundergif.gif';
+import proposerWelcomeGif from '../../assets/icons/Proposergif.gif';
 
 const WelcomePage = ({ data }) => {
   //인덱스에서 데이터 가져오기
@@ -103,3 +59,47 @@ const WelcomePage = ({ data }) => {
 };
 
 export default WelcomePage;
+
+// === 레이아웃용 styled-components 정의 ===
+const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  justify-content: space-between;
+`;
+const MainContent = styled.main`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.5rem;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+`;
+const BottomButtonContainer = styled.div`
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  padding: 1.5rem;
+  padding-top: 0;
+  background-color: white;
+`;
+
+const NavBtn = styled(Button)`
+  background-color: black;
+  color: white;
+`;
+
+const CenterTextWrapper = styled.div`
+  text-align: center;
+  margin-bottom: 2rem;
+`;
+const MainText = styled.p`
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+`;
+const SubText = styled.p`
+  font-size: 1rem;
+  color: #a1a1aa;
+`;
