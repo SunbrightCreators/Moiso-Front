@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { ReactComponent as CloseIcon } from '../../../src/assets/icons/Topnavigation_X.svg';
-import { ReactComponent as BackIcon } from '../../../src/assets/icons/Topnavigation_Back.svg';
-import { ReactComponent as BellIcon } from '../../../src/assets/icons/Topnavigation_bell.svg';
+import { ReactComponent as CloseIcon } from '../../../assets/icons/Topnavigation_X.svg';
+import { ReactComponent as BackIcon } from '../../../assets/icons/Topnavigation_Back.svg';
+import { ReactComponent as BellIcon } from '../../../assets/icons/Topnavigation_bell.svg';
 
 /**
  * TopNavigation 컴포넌트
@@ -72,10 +72,10 @@ const TopNavigation = ({ left, title, subTitle, right }) => {
 
 export default TopNavigation;
 
-// Styled Components
+// ———————————————————  styled-components ———————————————————
+
 const SLayout = styled.header`
-  // 시멘틱 태그 활용
-  position: sticky;
+  position: sticky; // ⇽ Navigation 바의 position은 sticky
   top: 0;
   width: 100%;
   background: #ffffff;

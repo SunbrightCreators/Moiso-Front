@@ -11,38 +11,6 @@ import DefaultScrapIcon from '../../assets/icons/List_Bookmark_dafault.svg';
 
 // ———————————————————————————————————————————
 
-// Styled checkbox components for Like and Scrap buttons
-const LikeButton = styled.input.attrs({ type: 'checkbox' })`
-  appearance: none;
-  width: var(--sizes-4, 1rem);
-  height: var(--sizes-4, 1rem);
-  background: url(${DefaultHeartIcon}) no-repeat center/contain;
-  cursor: pointer;
-
-  &:checked {
-    background: url(${ActiveHeartIcon}) no-repeat center/contain;
-  }
-
-  &:disabled {
-    background: url(${DisabledHeartIcon}) no-repeat center/contain;
-    cursor: not-allowed;
-  }
-`;
-
-const ScrapButton = styled.input.attrs({ type: 'checkbox' })`
-  appearance: none;
-  width: var(--sizes-4, 1rem);
-  height: var(--sizes-4, 1rem);
-  background: url(${DefaultScrapIcon}) no-repeat center/contain;
-  cursor: pointer;
-
-  &:checked {
-    background: url(${ActiveScrapIcon}) no-repeat center/contain;
-  }
-`;
-
-// ———————————————————————————————————————————
-
 /**
  * FundingItem 컴포넌트
  * 개별 펀딩글 아이템을 렌더링하는 컴포넌트
@@ -52,6 +20,9 @@ const ScrapButton = styled.input.attrs({ type: 'checkbox' })`
  * @param {Function} onScrap - 스크랩 토글 함수
  * @param {string} profile - 사용자 타입 ('founder' | 'proposer') : API 명세서 보고 작업했어요!
  */
+
+// ———————————————————————————————————————————
+
 const FundingItem = ({ funding, onLike, onScrap, profile = 'proposer' }) => {
   const handleLikeClick = (fundingid, isLiked) => {
     if (onLike) {
@@ -65,12 +36,10 @@ const FundingItem = ({ funding, onLike, onScrap, profile = 'proposer' }) => {
     }
   };
 
-  // ———————————————————————————————————————————
-
   return (
     <SFundingCard>
       <SBadgeWrapper>
-        <Badge>{funding.label}</Badge>
+        <Badge>{funding.industry}</Badge>
       </SBadgeWrapper>
 
       <STitleWrapper>
@@ -78,7 +47,7 @@ const FundingItem = ({ funding, onLike, onScrap, profile = 'proposer' }) => {
       </STitleWrapper>
 
       <SDescriptionWrapper>
-        <SDescription>{funding.description}</SDescription>
+        <SDescription>{funding.summary}</SDescription>
       </SDescriptionWrapper>
 
       <SDataListContainer>
@@ -86,13 +55,13 @@ const FundingItem = ({ funding, onLike, onScrap, profile = 'proposer' }) => {
           <SCustomItem>
             <SCustomLabel>예상개업일</SCustomLabel>
             <SCustomValue>
-              {funding.YearInput}년 {funding.MonthInput}월
+              {funding.expected_opening_date}
             </SCustomValue>
           </SCustomItem>
           <SCustomItem>
             <SCustomLabel>개업장소</SCustomLabel>
             <SCustomValue>
-              {funding.locationInput} + {funding.additionalText}
+              {funding.address.sigungu} {funding.address.eupmyundong} + {funding.radius}
             </SCustomValue>
           </SCustomItem>
         </DataList.Root>
@@ -102,34 +71,20 @@ const FundingItem = ({ funding, onLike, onScrap, profile = 'proposer' }) => {
         <SProgressLabelContainer>
           <SPercentContainer>
             <SPercentWrapper>
-              {Math.round((funding.FundingAmount / funding.targetAmount) * 100)}
-              %
+              {funding.progress.rate}%
             </SPercentWrapper>
             <SAmountWrapper>
-              {(funding.FundingAmount || 0).toLocaleString()}원
+              {(funding.progress.amount || 0).toLocaleString()}원
             </SAmountWrapper>
           </SPercentContainer>
 
           <SDatetWrapper>
-            {(() => {
-              try {
-                const endDate = new Date(funding.end);
-                const today = new Date();
-                const diffTime = endDate - today;
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                return diffDays > 0 ? `${diffDays}일 남음` : '종료됨';
-              } catch (error) {
-                return '날짜 정보 없음';
-              }
-            })()}
+            {funding.days_left > 0 ? `${funding.days_left}일 남음` : '종료됨'}
           </SDatetWrapper>
         </SProgressLabelContainer>
         <SRootWrapper>
           <Progress.Root
-            value={Math.min(
-              100,
-              Math.max(0, (funding.FundingAmount / funding.targetAmount) * 100),
-            )}
+            value={Math.min(100, Math.max(0, funding.progress.rate))}
             size='md'
           >
             <SProgressRange />
@@ -140,12 +95,12 @@ const FundingItem = ({ funding, onLike, onScrap, profile = 'proposer' }) => {
       <SImageCarouselWrapper>
         <Carousel gap='0.5rem'>
           {Array.from({ length: 3 }, (_, index) => {
-            const hasImage = funding.imageList && funding.imageList[index];
+            const hasImage = funding.image && funding.image[index];
             return (
               <SImageItem key={index}>
                 <SImage
-                  src={hasImage ? funding.imageList[index] : DefaultImageSrc}
-                  alt={hasImage ? `제안글 이미지 ${index + 1}` : '기본 이미지'}
+                  src={hasImage ? funding.image[index] : DefaultImageSrc}
+                  alt={hasImage ? `펀딩글 이미지 ${index + 1}` : '기본 이미지'}
                 />
               </SImageItem>
             );
@@ -156,38 +111,38 @@ const FundingItem = ({ funding, onLike, onScrap, profile = 'proposer' }) => {
       <SFooterContainer>
         <SUserInfoContainer>
           <Avatar.Root size='xs'>
-            <Avatar.Fallback name={funding.authorName} />
+            <Avatar.Fallback name={funding.founder.name} />
           </Avatar.Root>
-          {funding.authorName}
+          {funding.founder.name}
           <SSeparator>|</SSeparator>
-          <STimeAgo>{funding.uploadDate}</STimeAgo>
+          <STimeAgo>{funding.schedule.end}</STimeAgo>
         </SUserInfoContainer>
         <SActionContainer>
           <SLikeButtonWrapper>
             <LikeButton
-              checked={funding.isLiked && profile === 'proposer'}
+              checked={funding.is_liked && profile === 'proposer'}
               disabled={profile === 'founder'}
               onChange={() =>
                 profile === 'proposer' &&
-                handleLikeClick(funding.id, funding.isLiked)
+                handleLikeClick(funding.id, funding.is_liked)
               }
               onClick={(e) => e.stopPropagation()}
             />
             <SActionCount
-              $isActive={profile === 'proposer' && funding.isLiked}
+              $isActive={profile === 'proposer' && funding.is_liked}
               $isDisabled={profile === 'founder'}
             >
-              {funding.likeCount}
+              {funding.likes_count}
             </SActionCount>
           </SLikeButtonWrapper>
           <SScrapButtonWrapper>
             <ScrapButton
-              checked={funding.isScraped}
-              onChange={() => handleScrapClick(funding.id, funding.isScraped)}
+              checked={funding.is_scrapped}
+              onChange={() => handleScrapClick(funding.id, funding.is_scrapped)}
               onClick={(e) => e.stopPropagation()}
             />
-            <SScrapActionCount $isActive={funding.isScraped}>
-              {funding.scrapCount}
+            <SScrapActionCount $isActive={funding.is_scrapped}>
+              {funding.scraps_count}
             </SScrapActionCount>
           </SScrapButtonWrapper>
         </SActionContainer>
@@ -196,9 +151,7 @@ const FundingItem = ({ funding, onLike, onScrap, profile = 'proposer' }) => {
   );
 };
 
-// ———————————————————————————————————————————
-
-// Styled Components
+// ———————————————————  styled-components ———————————————————
 
 const SFundingCard = styled.div`
   display: flex;
@@ -412,6 +365,8 @@ const STimeAgo = styled.span`
   line-height: var(--line-heights-xs, 1rem); /* 133.333% */
 `;
 
+// ————————————— Like 랑 Scrap 버튼 쪽 영역 스타일링 ———————————————
+
 const SActionContainer = styled.div`
   display: grid;
   grid-template-columns: 2rem 2.5rem;
@@ -422,8 +377,8 @@ const SActionContainer = styled.div`
   justify-content: flex-end;
 `;
 
-// 좋아요 버튼 래퍼 - 고정 위치 안하면 숫자 따라 크기가 변해서..ㅠㅠ
 const SLikeButtonWrapper = styled.div`
+  // 좋아요 버튼 래퍼를 지정하지 않으면 좋아요 수에 따라 크기가 변해서..
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -510,6 +465,35 @@ const SScrapActionCount = styled.span`
     }
     return 'var(--colors-bg-default, #27272a)';
   }};
+`;
+
+const LikeButton = styled.input.attrs({ type: 'checkbox' })`
+  appearance: none;
+  width: var(--sizes-4, 1rem);
+  height: var(--sizes-4, 1rem);
+  background: url(${DefaultHeartIcon}) no-repeat center/contain;
+  cursor: pointer;
+
+  &:checked {
+    background: url(${ActiveHeartIcon}) no-repeat center/contain;
+  }
+
+  &:disabled {
+    background: url(${DisabledHeartIcon}) no-repeat center/contain;
+    cursor: not-allowed;
+  }
+`;
+
+const ScrapButton = styled.input.attrs({ type: 'checkbox' })`
+  appearance: none;
+  width: var(--sizes-4, 1rem);
+  height: var(--sizes-4, 1rem);
+  background: url(${DefaultScrapIcon}) no-repeat center/contain;
+  cursor: pointer;
+
+  &:checked {
+    background: url(${ActiveScrapIcon}) no-repeat center/contain;
+  }
 `;
 
 export default FundingItem;
