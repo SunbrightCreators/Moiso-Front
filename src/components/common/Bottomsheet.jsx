@@ -3,91 +3,8 @@ import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import useModalBottomsheetStore from '../../stores/useModalBottomsheetStore';
 
-// 공통 styled-components
-const SHandleBar = styled.div`
-  position: absolute;
-  top: 0.625rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 2.5rem;
-  height: 0.25rem;
-  background-color: var(--colors-bg-emphasized);
-  border-radius: 0.125rem;
-  cursor: grab;
-  touch-action: none;
-  user-select: none;
+// —————————————————————— 공통 드래그 핸들러 훅 ——————————————————————
 
-  &:active {
-    cursor: grabbing;
-  }
-`;
-
-const SContent = styled.div`
-  width: 100%;
-  overflow-y: auto;
-  transition: height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-`;
-
-const SMapContent = styled(SContent)`
-  height: ${({ $level }) => {
-    if ($level === 1) return '0';
-    if ($level === 2) return '40vh';
-    if ($level === 3) return '70vh';
-  }};
-`;
-
-const SModalContent = styled(SContent)`
-  height: ${({ $level }) => {
-    if ($level === 2) return '50vh';
-    if ($level === 3) return '80vh';
-    return '50vh'; // 기본값
-  }};
-`;
-
-// 공통 레이아웃 —————————————————————————————————————————————————
-const SLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  background-color: var(--colors-bg);
-  position: fixed;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-50%);
-  max-width: 480px;
-  border-radius: 1rem 1rem 0 0;
-  padding-top: 1.5rem;
-`;
-
-// 지도 탐색용 바텀시트 (non-modal) —————————————————————————————————
-const SMapBottomsheetLayout = styled(SLayout)`
-  z-index: 10;
-`;
-
-// 그 외 페이지용 바텀시트 (modal) ——————————————————————————————————
-const SModalBottomsheetScrim = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  max-width: 480px;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1300;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  opacity: ${({ $transition }) => ($transition === 'open' ? 1 : 0)};
-  transition: opacity 0.3s ease;
-`;
-
-const SModalBottomsheetLayout = styled(SLayout)`
-  transform: translateX(-50%)
-    translateY(${({ $transition }) => ($transition === 'open' ? '0' : '100%')});
-  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-`;
-
-// 공통 드래그 핸들러 훅 —————————————————————————————————————————————
 const useDragHandler = (
   currentLevel,
   setLevel,
@@ -143,10 +60,9 @@ const useDragHandler = (
     handlePointerUp,
   };
 };
-// ———————————————————————————————————————————————————————————————
-//
 
-// 지도 탐색용 바텀시트 (non-Modal)
+// ———————————————— 지도 탐색용 바텀시트 (non-modal) ————————————————
+
 const MapBottomsheet = ({ children, level = 1, onLevelChange }) => {
   const { handlePointerDown, handlePointerMove, handlePointerUp } =
     useDragHandler(
@@ -172,7 +88,8 @@ const MapBottomsheet = ({ children, level = 1, onLevelChange }) => {
   );
 };
 
-// 그 외 페이지용 바텀시트 (Modal)
+// ———————————————— 그 외 페이지용 바텀시트 (modal) ————————————————
+
 const ModalBottomsheet = () => {
   const { isOpen, transition, children, close } = useModalBottomsheetStore();
 
@@ -215,5 +132,91 @@ const ModalBottomsheet = () => {
     document.getElementById('modal'),
   );
 };
+
+// —————————————————————— 공통 레이아웃 ——————————————————————
+
+const SLayout = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: var(--colors-bg);
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  max-width: 480px;
+  border-radius: 1rem 1rem 0 0;
+  padding-top: 1.5rem;
+`;
+
+// ——————————————————— 공통 styled-components ———————————————————
+
+const SHandleBar = styled.div`
+  position: absolute;
+  top: 0.625rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2.5rem;
+  height: 0.25rem;
+  background-color: var(--colors-bg-emphasized);
+  border-radius: 0.125rem;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+
+  &:active {
+    cursor: grabbing;
+  }
+`;
+
+const SContent = styled.div`
+  width: 100%;
+  overflow-y: auto;
+  transition: height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+`;
+
+const SMapContent = styled(SContent)`
+  height: ${({ $level }) => {
+    if ($level === 1) return '0';
+    if ($level === 2) return '40vh';
+    if ($level === 3) return '70vh';
+  }};
+`;
+
+const SModalContent = styled(SContent)`
+  height: ${({ $level }) => {
+    if ($level === 2) return '50vh';
+    if ($level === 3) return '80vh';
+    return '50vh'; // 기본값
+  }};
+`;
+
+const SModalBottomsheetLayout = styled(SLayout)`
+  transform: translateX(-50%)
+    translateY(${({ $transition }) => ($transition === 'open' ? '0' : '100%')});
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+`;
+
+// ———————————————— 지도 탐색용 바텀시트 (non-modal) ————————————————
+const SMapBottomsheetLayout = styled(SLayout)`
+  z-index: 10;
+`;
+
+// ———————————————— 그 외 페이지용 바텀시트 (modal) ————————————————
+const SModalBottomsheetScrim = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-width: 480px;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1300;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  opacity: ${({ $transition }) => ($transition === 'open' ? 1 : 0)};
+  transition: opacity 0.3s ease;
+`;
 
 export { MapBottomsheet, ModalBottomsheet };

@@ -72,10 +72,10 @@ const TopNavigation = ({ left, title, subTitle, right }) => {
 
 export default TopNavigation;
 
-// Styled Components
+// ———————————————————  styled-components ———————————————————
+
 const SLayout = styled.header`
-  // 시멘틱 태그 활용
-  position: sticky;
+  position: sticky; // ⇽ Navigation 바의 position은 sticky
   top: 0;
   width: 100%;
   background: #ffffff;

@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import TopNavigation from '../../components/common/navigation/TopNavigation';
+import { TopNavigation } from '../../components/common/navigation';
 import { createTypedCircle } from '../../components/map/Circle';
 import { createTypedMarker } from '../../components/map/Marker';
 import {
-  getAddressToPosition,
+  getAddressToPosition, 
   getAddressToLegal,
   getPositionToLegal,
-} from '../apis/maps';
+} from '../../apis/maps';
 
 import CurrentLocation from '../../assets/icons/CreateProposalMapPage_target.svg';
 /**
@@ -326,7 +326,8 @@ const CreateProposalMapPage = () => {
 
 export default CreateProposalMapPage;
 
-// Styled Components
+// —————————————————————— Styled Components ——————————————————————
+
 const SLayout = styled.div`
   display: flex;
   flex-direction: column;
