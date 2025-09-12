@@ -7,8 +7,7 @@ import {
   getPositionToLegal,
 } from '../../apis/maps';
 import { TopNavigation } from '../../components/common/navigation';
-import { createTypedCircle } from '../../components/map/Circle';
-import { createTypedMarker } from '../../components/map/Marker';
+import { createTypedCircle, createTypedMarker } from '../../components/map';
 import CurrentLocation from '../../assets/icons/CreateProposalMapPage_target.svg';
 
 /**

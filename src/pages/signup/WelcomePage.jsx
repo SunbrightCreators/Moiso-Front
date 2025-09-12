@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from '@chakra-ui/react';
-import TopNavigation from '../../components/common/navigation/TopNavigation';
+import { TopNavigation } from '../../components/common/navigation';
 import { ROUTE_PATH } from '../../constants/route';
 import useModeStore from '../../stores/useModeStore';
 import founderWelcomeGif from '../../assets/icons/symbol_animated_founder.gif';

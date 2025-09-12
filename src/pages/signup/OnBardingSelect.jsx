@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Button, CheckboxCard } from '@chakra-ui/react';
-import Dialog from '../../components/common/Dialog';
-import TopNavigation from '../../components/common/navigation/TopNavigation';
+import { Dialog } from '../../components/common';
+import { TopNavigation } from '../../components/common/navigation';
 import { INDUSTRY } from '../../constants/enum';
 import useModeStore from '../../stores/useModeStore';
 

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import styled, { css } from 'styled-components';
-import Dialog from '../../components/common/Dialog';
-import TopNavigation from '../../components/common/navigation/TopNavigation';
+import { Dialog } from '../../components/common';
+import { TopNavigation } from '../../components/common/navigation';
 import { SEX } from '../../constants/enum';
 import useDialogStore from '../../stores/useDialogStore';
 

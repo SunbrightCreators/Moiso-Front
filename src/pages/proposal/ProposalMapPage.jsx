@@ -11,12 +11,10 @@ import { ProposalItem } from '../../components/proposal';
 import {
   createTypedMarker,
   updateMarkerSelection,
-} from '../../components/map/Marker';
-import {
   createMarkerClusterer,
   getMapDisplayType,
   ZOOM_DISTANCE_MAPPING,
-} from '../../components/map/MarkerClustering';
+} from '../../components/map';
 import { INDUSTRY } from '../../constants/enum';
 import useModeStore from '../../stores/useModeStore';
 import PencilIcon from '../../assets/icons/pencil.svg';
@@ -324,34 +322,38 @@ const ProposalMapPage = () => {
     console.log('제안글 좋아요 토글:', proposalId);
     // TODO: API 호출로 좋아요 상태 변경
     // 현재는 로컬 상태만 업데이트
-    setProposals(prev => 
-      prev.map(proposal => 
-        proposal.id === proposalId 
-          ? { 
-              ...proposal, 
+    setProposals((prev) =>
+      prev.map((proposal) =>
+        proposal.id === proposalId
+          ? {
+              ...proposal,
               is_liked: !proposal.is_liked,
-              likes_count: proposal.is_liked ? proposal.likes_count - 1 : proposal.likes_count + 1
+              likes_count: proposal.is_liked
+                ? proposal.likes_count - 1
+                : proposal.likes_count + 1,
             }
-          : proposal
-      )
+          : proposal,
+      ),
     );
   };
 
-  // 스크랩 토글 핸들러  
+  // 스크랩 토글 핸들러
   const handleScrapToggle = async (proposalId) => {
     console.log('제안글 스크랩 토글:', proposalId);
     // TODO: API 호출로 스크랩 상태 변경
     // 현재는 로컬 상태만 업데이트
-    setProposals(prev => 
-      prev.map(proposal => 
-        proposal.id === proposalId 
-          ? { 
-              ...proposal, 
+    setProposals((prev) =>
+      prev.map((proposal) =>
+        proposal.id === proposalId
+          ? {
+              ...proposal,
               is_scrapped: !proposal.is_scrapped,
-              scraps_count: proposal.is_scrapped ? proposal.scraps_count - 1 : proposal.scraps_count + 1
+              scraps_count: proposal.is_scrapped
+                ? proposal.scraps_count - 1
+                : proposal.scraps_count + 1,
             }
-          : proposal
-      )
+          : proposal,
+      ),
     );
   };
 
@@ -676,8 +678,8 @@ const ProposalMapPage = () => {
                   onClick={() => handleProposalItemClick(proposal)}
                   style={{ cursor: 'pointer' }}
                 >
-                  <ProposalItem 
-                    proposal={proposal} 
+                  <ProposalItem
+                    proposal={proposal}
                     onLike={handleLikeToggle}
                     onScrap={handleScrapToggle}
                     profile={isProposerMode ? 'proposer' : 'founder'}

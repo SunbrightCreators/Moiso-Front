@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import TopNavigation from '../../components/common/navigation/TopNavigation';
+import { TopNavigation } from '../../components/common/navigation';
 import useModeStore from '../../stores/useModeStore';
 import EmptyProposer from '../../assets/EmptyProposer.svg';
 import EmptySupporter from '../../assets/EmptySupporter.svg';

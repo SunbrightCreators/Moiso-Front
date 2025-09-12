@@ -5,7 +5,7 @@ import { Avatar, Button, Progress, Switch } from '@chakra-ui/react';
 import {
   TopNavigation,
   BottomNavigation,
-} from '../../components/common/navigation/index';
+} from '../../components/common/navigation';
 import { ROUTE_PATH } from '../../constants/route';
 import useDialogStore from '../../stores/useDialogStore';
 import useModeStore from '../../stores/useModeStore';

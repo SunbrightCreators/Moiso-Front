@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import { Button, Field, Input } from '@chakra-ui/react';
 import { postLogin } from '../../apis/accounts';
-import TopNavigation from '../../components/common/navigation/TopNavigation';
+import { TopNavigation } from '../../components/common/navigation';
 import { ROUTE_PATH } from '../../constants/route';
 import useModeStore from '../../stores/useModeStore';
 import logo from '../../assets/icons/symbol.svg';

@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import { Button } from '@chakra-ui/react';
-import Timepicker from '../../components/common/input/Timepicker';
-import TopNavigation from '../../components/common/navigation/TopNavigation';
+import { Timepicker } from '../../components/common/input';
+import { TopNavigation } from '../../components/common/navigation';
 
 const FounderTime = ({ onNextStep }) => {
   const { register, watch } = useForm();

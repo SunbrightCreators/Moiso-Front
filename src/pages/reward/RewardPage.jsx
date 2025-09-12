@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import {
   TopNavigation,
   BottomNavigation,
-} from '../../components/common/navigation/index';
+} from '../../components/common/navigation';
 import EmptyIllust from '../../assets/EmptyReward.svg';
 
 const RewardPage = () => {

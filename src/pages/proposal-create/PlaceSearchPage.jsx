@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import styled from 'styled-components';
-import InputSearch from '../../components/common/input/InputSearch';
+import { InputSearch } from '../../components/common/input';
 
 const PlaceSearchPage = ({ onPrevStep }) => {
   const pick = (item) => {

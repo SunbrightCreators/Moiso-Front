@@ -1,5 +1,5 @@
 import { useState, Suspense, lazy, Component } from 'react';
-import TopNavigation from '../../components/common/navigation/TopNavigation';
+import { TopNavigation } from '../../components/common/navigation';
 const ProposalItemLazy = lazy(
   () => import('../../components/proposal/ProposalItem'),
 );
