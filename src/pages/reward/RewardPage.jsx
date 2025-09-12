@@ -3,7 +3,7 @@ import {
   TopNavigation,
   BottomNavigation,
 } from '../../components/common/navigation/index';
-import EmptyIllust from '../../assets/icons/rewardempty.svg';
+import EmptyIllust from '../../assets/EmptyReward.svg';
 
 const RewardPage = () => {
   return (
