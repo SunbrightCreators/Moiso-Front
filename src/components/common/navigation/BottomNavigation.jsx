@@ -37,7 +37,7 @@ const SLink = styled(Link)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  textdecoration: none;
+  text-decoration: none;
   color: ${({ isActive }) =>
     isActive
       ? 'var(--colors-text-default, #27272A)'

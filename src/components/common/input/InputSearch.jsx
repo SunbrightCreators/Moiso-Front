@@ -9,10 +9,10 @@ const SearchBarContainer = styled.div`
   align-items: center;
   gap: var(--spacing-2);
   width: 100%;
-  padding: 0 var(--spacing-3)
+  padding: 0 var(--spacing-3);
   height: 3rem;
   background-color: var(--colors-gray-100, #f4f4f5);
-  border-radius: var(--radii-md); 
+  border-radius: var(--radii-md);
   overflow: hidden;
 `;
 
