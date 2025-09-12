@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import TopNavigation from '../../components/common/navigation/TopNavigation';
-import { useNavigate } from 'react-router-dom';
 import emptyImg from '../../assets/EmptyState (5).svg';
 
 const MyProposalPage = () => {

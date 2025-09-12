@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import { getPositionToLegal } from '../../apis/maps';
+import { getProposalMap } from '../../apis/proposals';
+import { MapBottomsheet } from '../../components/common';
 import {
   TopNavigation,
   BottomNavigation,
 } from '../../components/common/navigation';
-import { MapBottomsheet } from '../../components/common';
 import { ProposalItem } from '../../components/proposal';
 import {
   createTypedMarker,
@@ -15,12 +17,9 @@ import {
   getMapDisplayType,
   ZOOM_DISTANCE_MAPPING,
 } from '../../components/map/MarkerClustering';
-
+import { INDUSTRY } from '../../constants/enum';
 import useModeStore from '../../stores/useModeStore';
 import PencilIcon from '../../assets/icons/pencil.svg';
-import { getProposalMap } from '../../apis/proposals';
-import { getPositionToLegal } from '../../apis/maps';
-import { INDUSTRY } from '../../constants/enum';
 
 /**
  * 제안글(Proposal) 지도 탐색 */

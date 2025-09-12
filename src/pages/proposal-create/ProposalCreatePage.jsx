@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import TopNavigation from '../../components/common/navigation/TopNavigation';
-import Timepicker from '../../components/common/input/Timepicker';
-import { Field, Input, Textarea } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import useModalBottomsheetStore from '../../stores/useModalBottomsheetStore';
+import styled from 'styled-components';
+import { Field, Input, Textarea } from '@chakra-ui/react';
+import Timepicker from '../../components/common/input/Timepicker';
+import TopNavigation from '../../components/common/navigation/TopNavigation';
 import { INDUSTRY } from '../../constants/enum';
-import useDialogStore from '../../stores/useDialogStore';
 import { ROUTE_PATH } from '../../constants/route';
+import useDialogStore from '../../stores/useDialogStore';
+import useModalBottomsheetStore from '../../stores/useModalBottomsheetStore';
 
 const ProposalCreatePage = ({ data, onNextStep }) => {
   const open = useModalBottomsheetStore((s) => s.open);

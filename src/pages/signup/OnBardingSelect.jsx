@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import TopNavigation from '../../components/common/navigation/TopNavigation';
 import styled from 'styled-components';
 import { Button, CheckboxCard } from '@chakra-ui/react';
-import useModeStore from '../../stores/useModeStore';
-import { INDUSTRY } from '../../constants/enum';
 import Dialog from '../../components/common/Dialog';
+import TopNavigation from '../../components/common/navigation/TopNavigation';
+import { INDUSTRY } from '../../constants/enum';
+import useModeStore from '../../stores/useModeStore';
 
 const OnBoardingSelect = ({ onNextStep }) => {
   const [selectedIndustries, setSelectedIndustries] = useState([]);

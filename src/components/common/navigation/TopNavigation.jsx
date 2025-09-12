@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { ReactComponent as CloseIcon } from '../../../assets/icons/exit.svg';
-import { ReactComponent as BackIcon } from '../../../assets/icons/chevron_left.svg';
 import { ReactComponent as BellIcon } from '../../../assets/icons/bell.svg';
+import { ReactComponent as BackIcon } from '../../../assets/icons/chevron_left.svg';
+import { ReactComponent as CloseIcon } from '../../../assets/icons/exit.svg';
 
 /**
  * TopNavigation 컴포넌트

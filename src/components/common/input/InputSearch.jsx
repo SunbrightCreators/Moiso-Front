@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as SearchIcon } from '../../../assets/icons/search.svg';
 import { ReactComponent as ClearIcon } from '../../../assets/icons/exit.svg';
+import { ReactComponent as SearchIcon } from '../../../assets/icons/search.svg';
 
 // --- 스타일 정의 (모든 px 단위를 rem으로 수정) ---
 const SearchBarContainer = styled.div`

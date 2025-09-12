@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, Children, cloneElement } from 'react';
+import { useState, useEffect, useRef, Children, cloneElement } from 'react';
 import styled from 'styled-components';
 
 const CarouselContainer = styled.div`

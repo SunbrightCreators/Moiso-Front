@@ -1,7 +1,7 @@
-import { Flex, VStack, Button, Box } from '@chakra-ui/react';
-import logo from '../../assets/icons/logo.svg';
 import styled from 'styled-components';
+import { Button, Box, Flex, VStack } from '@chakra-ui/react';
 import useModeStore from '../../stores/useModeStore';
+import logo from '../../assets/icons/logo.svg';
 
 const SignUpPage1 = ({ onNextStep }) => {
   const setIsProposerMode = useModeStore((s) => s.setIsProposerMode);

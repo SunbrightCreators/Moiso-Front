@@ -1,18 +1,18 @@
 import { useState } from 'react';
-import styled from 'styled-components';
-import { EmptyState, Badge, Avatar } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import { ROUTE_PATH } from '../../constants/route';
+import styled from 'styled-components';
+import { Avatar, Badge, EmptyState } from '@chakra-ui/react';
 import Carousel from '../../components/common/Carousel';
 import BottomNavigation from '../../components/common/navigation/BottomNavigation';
+import { ROUTE_PATH } from '../../constants/route';
+import img_sandwich from '../../assets/sandwich.jpg';
+import img_toast from '../../assets/toast.jpg';
 import HeartDefault from '../../assets/icons/heart_default.svg';
-import HeartPressed from '../../assets/icons/heart_pressed.svg';
 import HeartDisabled from '../../assets/icons/heart_disabled.svg';
+import HeartPressed from '../../assets/icons/heart_pressed.svg';
 import ScrapDefault from '../../assets/icons/scrap_default.svg';
 import ScrapPressed from '../../assets/icons/scrap_pressed.svg';
 import { ReactComponent as Sparkle } from '../../assets/icons/sparkle.svg';
-import img_sandwich from '../../assets/sandwich.jpg';
-import img_toast from '../../assets/toast.jpg';
 
 /* =========================== 컴포넌트 =========================== */
 const ProposalRecPage = () => {
