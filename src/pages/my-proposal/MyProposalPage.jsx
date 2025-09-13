@@ -2,7 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { TopNavigation } from '../../components/common/navigation';
-import emptyImg from '../../assets/EmptyState (5).svg';
+import emptyImg from '../../assets/icons/frown.svg';
+import { EmptyState } from '@chakra-ui/react';
 
 const MyProposalPage = () => {
   const total = 3;
@@ -96,9 +97,19 @@ const MyProposalPage = () => {
             </Item>
           ))}
 
-          {items.length === 0 && (
+           {items.length === 0 && (
             <Empty>
-              <EmptyImg src={emptyImg} alt='작성한 제안글 없음' />
+              <EmptyState.Root>
+                <EmptyState.Content>
+                  <EmptyState.Indicator>
+                    <img src={emptyImg} width='32' height='32' />
+                  </EmptyState.Indicator>
+                  <CustomTitle>아직 작성한 제안글이 없어요 </CustomTitle>
+                  <CustomDescription>
+                    우리 동네에 생기길 바라는 가게를 제안해 보세요.
+                  </CustomDescription>
+                </EmptyState.Content>
+              </EmptyState.Root>
             </Empty>
           )}
         </List>
@@ -246,11 +257,31 @@ const Empty = styled.div`
   text-align: center;
 `;
 
-const EmptyImg = styled.img`
-  width: 100%; /* ← 세미콜론 추가 */
-  height: auto;
-  opacity: 0.95;
+
+const CustomTitle = styled(EmptyState.Title)`
+  color: var(--colors-text-default, #27272a);
+  text-align: center;
+
+  /* md/semibold */
+  font-family: var(--fonts-body, Inter);
+  font-size: var(--font-sizes-md, 1rem);
+  font-style: normal;
+  font-weight: var(--font-weights-semibold, 600);
+  line-height: var(--line-heights-md, 1.5rem); /* 150% */
 `;
+
+const CustomDescription = styled(EmptyState.Description)`
+  color: var(--colors-text-muted, #52525b);
+  text-align: center;
+
+  /* sm/normal */
+  font-family: var(--fonts-body, Inter);
+  font-size: var(--font-sizes-sm, 0.875rem);
+  font-style: normal;
+  font-weight: var(--font-weights-normal, 400);
+  line-height: var(--line-heights-sm, 1.25rem); /* 142.857% */
+`;
+
 
 /*목데이터 */
 const MOCK_ITEMS = [
