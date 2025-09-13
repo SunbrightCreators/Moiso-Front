@@ -1,9 +1,10 @@
-import styled from 'styled-components';
 import {
   TopNavigation,
   BottomNavigation,
-} from '../../components/common/navigation';
-import EmptyIllust from '../../assets/EmptyReward.svg';
+} from '../../components/common/navigation/index';
+import styled from 'styled-components';
+import EmptyIllust from '../../assets/icons/rewardempty.svg';
+import { EmptyState } from '@chakra-ui/react';
 
 const RewardPage = () => {
   return (
@@ -133,7 +134,6 @@ const BorderedEmpty = styled(EmptyState.Root)`
   border: 0.5px solid var(--colors-border-default, #e4e4e7);
   border-radius: var(--radii-lg, 0.5rem);
 `;
-
 const EmptyCard = styled.div`
   border-radius: 0.75rem;
 
@@ -143,7 +143,6 @@ const EmptyCard = styled.div`
   justify-content: center;
   gap: 0.5rem;
 `;
-
 const CustomTitle = styled(EmptyState.Title)`
   color: var(--colors-text-subtle, #a1a1aa);
   text-align: center;
