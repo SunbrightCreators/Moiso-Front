@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getPositionToLegal } from '../../apis/maps';
 import { getProposalMap } from '../../apis/proposals';
@@ -16,14 +17,54 @@ import {
   ZOOM_DISTANCE_MAPPING,
 } from '../../components/map';
 import { INDUSTRY } from '../../constants/enum';
+import { ROUTE_PATH } from '../../constants/route';
+import { NCLOUD_CLIENT_ID } from '../../constants/env';
 import useModeStore from '../../stores/useModeStore';
 import PencilIcon from '../../assets/icons/pencil.svg';
 
 /**
  * 제안글(Proposal) 지도 탐색 */
 
+// 네이버 지도 API 동적 로딩 함수
+const loadNaverMapScript = () => {
+  return new Promise((resolve, reject) => {
+    // 이미 로드되어 있는지 확인
+    if (window.naver && window.naver.maps) {
+      resolve();
+      return;
+    }
+
+    // 이미 스크립트 태그가 있는지 확인
+    const existingScript = document.querySelector(
+      'script[src*="openapi.map.naver.com"]',
+    );
+    if (existingScript) {
+      existingScript.onload = () => resolve();
+      existingScript.onerror = () =>
+        reject(new Error('네이버 지도 API 로드 실패'));
+      return;
+    }
+
+    // 새 스크립트 태그 생성
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${NCLOUD_CLIENT_ID}`;
+    script.onload = () => {
+      console.log('네이버 지도 API 로드 완료');
+      resolve();
+    };
+    script.onerror = () => {
+      console.error('네이버 지도 API 로드 실패');
+      reject(new Error('네이버 지도 API 로드 실패'));
+    };
+
+    document.head.appendChild(script);
+  });
+};
+
 const ProposalMapPage = () => {
   const { isProposerMode } = useModeStore(); // 전역 상태
+  const navigate = useNavigate(); // 페이지 이동을 위한 hook
 
   // 지도
   const mapRef = useRef(null);
@@ -91,70 +132,55 @@ const ProposalMapPage = () => {
 
   // 네이버 지도 초기화
   useEffect(() => {
-    // DOM이 준비되면 지도 초기화
-    const timer = setTimeout(() => {
-      initializeMap();
-    }, 100);
-
-    return () => clearTimeout(timer);
+    // 네이버 지도 API 로드 후 지도 초기화
+    loadNaverMapScript()
+      .then(() => {
+        initializeMap();
+      })
+      .catch((error) => {
+        console.error('네이버 지도 API 로드 오류:', error);
+      });
   }, []);
 
   // 지도 초기화 함수
   const initializeMap = () => {
-    const checkNaverMaps = () => {
-      if (
-        window.naver &&
-        window.naver.maps &&
-        window.naver.maps.Map &&
-        mapRef.current
-      ) {
-        try {
-          const mapInstance = new naver.maps.Map(mapRef.current, {
-            center: new naver.maps.LatLng(
-              currentLocation.lat,
-              currentLocation.lng,
-            ),
-            zoom: zoomLevel,
-            mapTypeControl: true,
-            mapTypeControlOptions: {
-              style: naver.maps.MapTypeControlStyle.BUTTON,
-              position: naver.maps.Position.TOP_RIGHT,
-            },
-            zoomControl: true,
-            zoomControlOptions: {
-              style: naver.maps.ZoomControlStyle.SMALL,
-              position: naver.maps.Position.TOP_RIGHT,
-            },
-          });
-          setMap(mapInstance);
+    if (!mapRef.current) {
+      console.error('지도 컨테이너가 준비되지 않음');
+      return;
+    }
 
-          // 지도 줌 변경 이벤트 리스너 추가
-          naver.maps.Event.addListener(mapInstance, 'zoom_changed', () => {
-            const mapZoom = mapInstance.getZoom();
-            setZoomLevel(mapZoom);
-          });
+    try {
+      const mapInstance = new naver.maps.Map(mapRef.current, {
+        center: new naver.maps.LatLng(currentLocation.lat, currentLocation.lng),
+        zoom: zoomLevel,
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+          style: naver.maps.MapTypeControlStyle.BUTTON,
+          position: naver.maps.Position.TOP_RIGHT,
+        },
+        zoomControl: true,
+        zoomControlOptions: {
+          style: naver.maps.ZoomControlStyle.SMALL,
+          position: naver.maps.Position.TOP_RIGHT,
+        },
+      });
+      setMap(mapInstance);
 
-          // 지도 중심 변경 이벤트 리스너 추가 (현재 지역 정보 업데이트)
-          naver.maps.Event.addListener(mapInstance, 'center_changed', () => {
-            updateCurrentRegion(mapInstance);
-          });
+      // 지도 줌 변경 이벤트 리스너 추가
+      naver.maps.Event.addListener(mapInstance, 'zoom_changed', () => {
+        const mapZoom = mapInstance.getZoom();
+        setZoomLevel(mapZoom);
+      });
 
-          console.log('네이버 지도 초기화 성공');
-        } catch (error) {
-          console.error('지도 초기화 실패:', error);
-        }
-      } else {
-        // 100ms 후 다시 시도 (최대 50번)
-        const retryCount = checkNaverMaps.retryCount || 0;
-        if (retryCount < 50) {
-          checkNaverMaps.retryCount = retryCount + 1;
-          setTimeout(checkNaverMaps, 100);
-        } else {
-          console.error('네이버 지도 API 로드 오류');
-        }
-      }
-    };
-    checkNaverMaps();
+      // 지도 중심 변경 이벤트 리스너 추가 (현재 지역 정보 업데이트)
+      naver.maps.Event.addListener(mapInstance, 'center_changed', () => {
+        updateCurrentRegion(mapInstance);
+      });
+
+      console.log('네이버 지도 초기화 성공');
+    } catch (error) {
+      console.error('지도 초기화 실패:', error);
+    }
   };
 
   // 슬라이더 줌 레벨 변경 핸들러
@@ -582,7 +608,7 @@ const ProposalMapPage = () => {
           <SProposeButton
             $bottomsheetLevel={bottomsheetLevel}
             onClick={() => {
-              /* 페이지 이동 : 구현해야 됨! */
+              navigate(ROUTE_PATH.PROPOSAL_CREATE);
             }}
           >
             <img
