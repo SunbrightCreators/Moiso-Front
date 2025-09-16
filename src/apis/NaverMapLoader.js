@@ -13,14 +13,19 @@ const loadNaverMapScript = async () => {
   );
 
   if (existingScript) {
-    return new Promise((resolve, reject) => {
+    await new Promise((resolve, reject) => {
+      if (existingScript.onload) {
+        resolve();
+        return;
+      }
       existingScript.onload = () => resolve();
       existingScript.onerror = () =>
         reject(new Error('네이버 지도 API 로드 실패'));
     });
+    return;
   }
 
-  return new Promise((resolve, reject) => {
+  await new Promise((resolve, reject) => {
     const script = document.createElement('script');
     script.type = 'text/javascript';
     script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${NCLOUD_CLIENT_ID}`;

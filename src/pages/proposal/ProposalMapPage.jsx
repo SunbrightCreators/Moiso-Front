@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { getPositionToLegal } from '../../apis/maps';
 import { getProposalMap } from '../../apis/proposals';
@@ -18,53 +18,18 @@ import {
 } from '../../components/map';
 import { INDUSTRY } from '../../constants/enum';
 import { ROUTE_PATH } from '../../constants/route';
-import { NCLOUD_CLIENT_ID } from '../../constants/env';
+import {
+  loadNaverMapScript,
+  removeNaverMapScript,
+} from '../../apis/naverMapLoader';
 import useModeStore from '../../stores/useModeStore';
 import PencilIcon from '../../assets/icons/pencil.svg';
 
 /**
  * 제안글(Proposal) 지도 탐색 */
 
-// 네이버 지도 API 동적 로딩 함수
-const loadNaverMapScript = () => {
-  return new Promise((resolve, reject) => {
-    // 이미 로드되어 있는지 확인
-    if (window.naver && window.naver.maps) {
-      resolve();
-      return;
-    }
-
-    // 이미 스크립트 태그가 있는지 확인
-    const existingScript = document.querySelector(
-      'script[src*="openapi.map.naver.com"]',
-    );
-    if (existingScript) {
-      existingScript.onload = () => resolve();
-      existingScript.onerror = () =>
-        reject(new Error('네이버 지도 API 로드 실패'));
-      return;
-    }
-
-    // 새 스크립트 태그 생성
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${NCLOUD_CLIENT_ID}`;
-    script.onload = () => {
-      console.log('네이버 지도 API 로드 완료');
-      resolve();
-    };
-    script.onerror = () => {
-      console.error('네이버 지도 API 로드 실패');
-      reject(new Error('네이버 지도 API 로드 실패'));
-    };
-
-    document.head.appendChild(script);
-  });
-};
-
 const ProposalMapPage = () => {
   const { isProposerMode } = useModeStore(); // 전역 상태
-  const navigate = useNavigate(); // 페이지 이동을 위한 hook
 
   // 지도
   const mapRef = useRef(null);
@@ -132,14 +97,19 @@ const ProposalMapPage = () => {
 
   // 네이버 지도 초기화
   useEffect(() => {
-    // 네이버 지도 API 로드 후 지도 초기화
-    loadNaverMapScript()
-      .then(() => {
+    (async () => {
+      try {
+        await loadNaverMapScript();
         initializeMap();
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error('네이버 지도 API 로드 오류:', error);
-      });
+      }
+    })();
+
+    // 컴포넌트 언마운트 시 스크립트 태그 정리
+    return () => {
+      removeNaverMapScript();
+    };
   }, []);
 
   // 지도 초기화 함수
@@ -606,10 +576,9 @@ const ProposalMapPage = () => {
         {/* 제안자 모드일 때만 : 플로팅 버튼으로, '제안하기' - 화면상 고정 위치 */}
         {isProposerMode && (
           <SProposeButton
+            as={Link}
+            to={ROUTE_PATH.PROPOSAL_CREATE}
             $bottomsheetLevel={bottomsheetLevel}
-            onClick={() => {
-              navigate(ROUTE_PATH.PROPOSAL_CREATE);
-            }}
           >
             <img
               src={PencilIcon}
