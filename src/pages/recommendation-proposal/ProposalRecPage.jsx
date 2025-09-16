@@ -69,10 +69,6 @@ const ProposalRecPage = () => {
                               <Sparkle />
                             </EmptyState.Indicator>
                             <CustomTitle>추천 결과가 없어요</CustomTitle>
-                            <CustomDescription>
-                              충분한 데이터가 쌓이지 않았어요. <br />
-                              마음에 드는 제안들을 더 스크랩 해 주세요
-                            </CustomDescription>
                           </EmptyState.Content>
                         </EmptyState.Root>
                       </EmptyCard>
@@ -281,10 +277,7 @@ const CustomDescription = styled(EmptyState.Description)`
 
   /* sm/normal */
   font: var(--text-sm-normal);
-  font-family: var(--fonts-body, Inter);
   font-size: var(--font-sizes-sm, 0.875rem);
-  font-style: normal;
-  font-weight: var(--font-weights-normal, 400);
 `;
 
 const EmptyCard = styled.div`
@@ -326,63 +319,63 @@ const BottomBarWrap = styled.div`
   padding-bottom: env(safe-area-inset-bottom);
 `;
 
-/* =========================== 목데이터 =========================== */ const big =
-  [
-    {
-      id: 3,
-      created_at: '30초 전',
-      user: {
-        name: '최**',
-        profile_image: 'https://example.com/...',
-        proposer_level: {
-          address: { sido: '시도', sigungu: '시군구', eupmyundong: '읍면동' },
-          level: 2,
-        },
+/* =========================== 목데이터 =========================== */
+const big = [
+  {
+    id: 3,
+    created_at: '30초 전',
+    user: {
+      name: '최**',
+      profile_image: 'https://example.com/...',
+      proposer_level: {
+        address: { sido: '시도', sigungu: '시군구', eupmyundong: '읍면동' },
+        level: 2,
       },
-      title: '제안글 제목',
-      content: '제안글 내용',
-      industry: '카페/디저트',
-      business_hours: { start: '09:00', end: '18:00' },
-      address: {
-        sido: '시도',
-        sigungu: '시군구',
-        eupmyundong: '읍면동',
-        jibun_detail: '지번 주소 상세',
-        road_detail: '도로명 주소 상세',
-      },
-      radius: '500m',
-      image: ['https://example.com/...'],
-      likes_count: 300,
-      scraps_count: 178,
     },
-    {
-      id: 2,
-      created_at: '30초 전',
-      user: {
-        name: '최**',
-        profile_image: 'https://example.com/...',
-        proposer_level: {
-          address: { sido: '시도', sigungu: '시군구', eupmyundong: '읍면동' },
-          level: 2,
-        },
-      },
-      title: '제안글 제목',
-      content: '제안글 내용',
-      industry: '카페/디저트',
-      business_hours: { start: '09:00', end: '18:00' },
-      address: {
-        sido: '시도',
-        sigungu: '시군구',
-        eupmyundong: '읍면동',
-        jibun_detail: '지번 주소 상세',
-        road_detail: '도로명 주소 상세',
-      },
-      radius: '500m',
-      image: ['https://example.com/...'],
-      likes_count: 300,
-      scraps_count: 178,
+    title: '제안글 제목',
+    content: '제안글 내용',
+    industry: '카페/디저트',
+    business_hours: { start: '09:00', end: '18:00' },
+    address: {
+      sido: '시도',
+      sigungu: '시군구',
+      eupmyundong: '읍면동',
+      jibun_detail: '지번 주소 상세',
+      road_detail: '도로명 주소 상세',
     },
-  ];
+    radius: '500m',
+    image: ['https://example.com/...'],
+    likes_count: 300,
+    scraps_count: 178,
+  },
+  {
+    id: 2,
+    created_at: '30초 전',
+    user: {
+      name: '최**',
+      profile_image: 'https://example.com/...',
+      proposer_level: {
+        address: { sido: '시도', sigungu: '시군구', eupmyundong: '읍면동' },
+        level: 2,
+      },
+    },
+    title: '제안글 제목',
+    content: '제안글 내용',
+    industry: '카페/디저트',
+    business_hours: { start: '09:00', end: '18:00' },
+    address: {
+      sido: '시도',
+      sigungu: '시군구',
+      eupmyundong: '읍면동',
+      jibun_detail: '지번 주소 상세',
+      road_detail: '도로명 주소 상세',
+    },
+    radius: '500m',
+    image: ['https://example.com/...'],
+    likes_count: 300,
+    scraps_count: 178,
+  },
+];
 const similar = [
   {
     id: 1,
