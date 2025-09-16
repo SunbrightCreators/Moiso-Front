@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { Badge, Avatar } from '@chakra-ui/react';
-import HeartDefault from '../../../assets/icons/heart_default.svg';
-import HeartPressed from '../../../assets/icons/heart_pressed.svg';
-import HeartDisabled from '../../../assets/icons/heart_disabled.svg';
-import ScrapDefault from '../../../assets/icons/scrap_default.svg';
-import ScrapPressed from '../../../assets/icons/scrap_pressed.svg';
+import HeartDefault from '../../assets/icons/heart_default.svg';
+import HeartPressed from '../../assets/icons/heart_pressed.svg';
+import HeartDisabled from '../../assets/icons/heart_disabled.svg';
+import ScrapDefault from '../../assets/icons/scrap_default.svg';
+import ScrapPressed from '../../assets/icons/scrap_pressed.svg';
 
 const SmallCard = ({ item, liked, scrapped, onToggleLike, onToggleScrap }) => {
   return (

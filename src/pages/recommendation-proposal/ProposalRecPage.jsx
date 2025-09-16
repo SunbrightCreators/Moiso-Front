@@ -9,8 +9,7 @@ import { ReactComponent as Sparkle } from '../../assets/icons/sparkle.svg';
 import img_sandwich from '../../assets/sandwich.jpg';
 import img_toast from '../../assets/toast.jpg';
 
-import BigCard from './Card/BigCard';
-import SmallCard from './Card/SmallCard';
+import { BigCard, SmallCard } from '../../components/proposal/index';
 
 /* =========================== 컴포넌트 =========================== */
 const ProposalRecPage = () => {
