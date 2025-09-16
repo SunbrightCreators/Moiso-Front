@@ -1,9 +1,9 @@
+import styled from 'styled-components';
 import {
   TopNavigation,
   BottomNavigation,
 } from '../../components/common/navigation/index';
-import styled from 'styled-components';
-import EmptyIllust from '../../assets/icons/rewardempty.svg';
+import { ReactComponent as Reward } from '../../assets/icons/rewardempty.svg';
 import { EmptyState } from '@chakra-ui/react';
 
 const RewardPage = () => {
@@ -24,12 +24,7 @@ const RewardPage = () => {
             <BorderedEmpty>
               <EmptyState.Content>
                 <EmptyState.Indicator>
-                  <img
-                    src={EmptyIllust}
-                    alt='리워드 없음'
-                    width='32'
-                    height='32'
-                  />
+                  <Reward width={32} height={32} />
                 </EmptyState.Indicator>
                 <CustomTitle>아직 발급된 리워드가 없어요</CustomTitle>
               </EmptyState.Content>
@@ -51,12 +46,7 @@ const RewardPage = () => {
           <BorderedEmpty>
             <EmptyState.Content>
               <EmptyState.Indicator>
-                <img
-                  src={EmptyIllust}
-                  alt='리워드 없음'
-                  width='var(--sizes-8, 2rem)'
-                  height='var(--sizes-8, 2rem)'
-                />
+                <Reward width={32} height={32} />
               </EmptyState.Indicator>
               <CustomTitle>아직 발급된 리워드가 없어요</CustomTitle>
             </EmptyState.Content>
@@ -100,11 +90,7 @@ const SectionTitle = styled.h2`
   color: var(--colors-text-default, #27272a);
 
   /* md/semibold */
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-md, 1rem);
-  font-style: normal;
-  font-weight: var(--font-weights-semibold, 600);
-  line-height: var(--line-heights-md, 1.5rem); /* 150% */
+  font: var(--text-md-semibold);
 `;
 
 const SectionDesc = styled.p`
@@ -112,11 +98,7 @@ const SectionDesc = styled.p`
   color: var(--colors-text-subtle, #a1a1aa);
 
   /* sm/normal */
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-sm, 0.875rem);
-  font-style: normal;
-  font-weight: var(--font-weights-normal, 400);
-  line-height: var(--line-heights-sm, 1.25rem); /* 142.857% */
+  font: var(--text-sm-normal);
 `;
 
 const BorderedEmpty = styled(EmptyState.Root)`
@@ -147,11 +129,7 @@ const CustomTitle = styled(EmptyState.Title)`
   color: var(--colors-text-subtle, #a1a1aa);
   text-align: center;
 
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-md, 1rem);
-  font-style: normal;
-  font-weight: var(--font-weights-medium, 500);
-  line-height: var(--line-heights-md, 1.5rem); /* 150% */
+  font: var(--text-md-medium);
 `;
 
 const Divider = styled.hr`
