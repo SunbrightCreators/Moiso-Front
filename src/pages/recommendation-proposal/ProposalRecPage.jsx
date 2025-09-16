@@ -274,18 +274,14 @@ const CustomTitle = styled(EmptyState.Title)`
   color: var(--colors-text-default, #27272a);
   text-align: center;
 
-  /* md/semibold */
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-md, 1rem);
-  font-style: normal;
-  font-weight: var(--font-weights-semibold, 600);
-  line-height: var(--line-heights-md, 1.5rem); /* 150% */
+  font: var(--text-md-semibold);
 `;
 const CustomDescription = styled(EmptyState.Description)`
   color: var(--colors-text-muted, #52525b);
   text-align: center;
 
   /* sm/normal */
+  font: var(--text-sm-normal);
   font-family: var(--fonts-body, Inter);
   font-size: var(--font-sizes-sm, 0.875rem);
   font-style: normal;
