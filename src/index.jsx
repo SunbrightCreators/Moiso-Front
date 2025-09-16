@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Provider from './styles/provider';
+import ChakraProvider from './styles/provider';
 import Router from './Router';
 import { ModalBottomsheet } from './components/common/Bottomsheet';
 import Dialog from './components/common/Dialog';
@@ -15,12 +15,12 @@ document.documentElement.style.colorScheme = 'light';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Provider>
+    <ChakraProvider>
       <Router />
       <ModalBottomsheet />
       <Dialog />
       <Toaster />
-    </Provider>
+    </ChakraProvider>
   </React.StrictMode>,
 );
 
