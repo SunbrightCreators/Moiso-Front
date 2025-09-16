@@ -365,9 +365,7 @@ const ProposalRecPage = () => {
         </Section>
       </Page>
 
-      <BottomBarWrap>
-        <BottomNavigation />
-      </BottomBarWrap>
+      <BottomNavigation />
     </>
   );
 };
@@ -940,11 +938,4 @@ const Page = styled.main`
   gap: 28px;
 
   padding: 16px;
-`;
-const BottomBarWrap = styled.div`
-  position: sticky;
-  bottom: 0;
-  background: #fff;
-  z-index: 100;
-  padding-bottom: env(safe-area-inset-bottom);
 `;

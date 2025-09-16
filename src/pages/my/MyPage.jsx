@@ -217,11 +217,8 @@ const MyPage = () => {
             </>
           )}
         </MenuSection>
-
-        <Bottom>
-          <BottomNavigation />
-        </Bottom>
       </Scontent>
+      <BottomNavigation />
     </PageWrapper>
   );
 };
@@ -240,21 +237,6 @@ const Scontent = styled.main`
   flex-direction: column;
   flex-grow: 1;
   overflow-y: auto;
-`;
-const Bottom = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  z-index: 100;
-  background: #fff;
-  padding-bottom: env(safe-area-inset-bottom);
-
-  /* 컨테이너쿼리 지원 브라우저에서 PageWrapper 너비 그대로 사용 */
-  @supports (width: 1cqi) {
-    width: 100cqi; /* PageWrapper의 inline size와 동일 */
-  }
 `;
 
 /* 모드변환부분 */
