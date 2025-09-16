@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ChakraProvider from './styles/provider';
 import Router from './Router';
 import { ModalBottomsheet } from './components/common/Bottomsheet';
@@ -12,15 +13,19 @@ import subscribePush from './service-workers/subscribePush';
 document.documentElement.className = 'light';
 document.documentElement.style.colorScheme = 'light';
 
+const queryClient = new QueryClient();
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ChakraProvider>
-      <Router />
-      <ModalBottomsheet />
-      <Dialog />
-      <Toaster />
-    </ChakraProvider>
+    <QueryClientProvider client={queryClient}>
+      <ChakraProvider>
+        <Router />
+        <ModalBottomsheet />
+        <Dialog />
+        <Toaster />
+      </ChakraProvider>
+    </QueryClientProvider>
   </React.StrictMode>,
 );
 
