@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { TopNavigation } from '../../components/common/navigation';
-import emptyImg from '../../assets/icons/frown.svg';
+import { ReactComponent as Frown } from '../../assets/icons/frown.svg';
 import { EmptyState } from '@chakra-ui/react';
 
 const MyProposalPage = () => {
@@ -97,12 +97,12 @@ const MyProposalPage = () => {
             </Item>
           ))}
 
-           {items.length === 0 && (
+          {items.length === 0 && (
             <Empty>
               <EmptyState.Root>
                 <EmptyState.Content>
                   <EmptyState.Indicator>
-                    <img src={emptyImg} width='32' height='32' />
+                    <Frown width={32} height={32} />
                   </EmptyState.Indicator>
                   <CustomTitle>아직 작성한 제안글이 없어요 </CustomTitle>
                   <CustomDescription>
@@ -144,11 +144,8 @@ const Toolbar = styled.div`
 
 const Count = styled.span`
   color: var(--colors-fg-subtle, #a1a1aa);
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-sm, 0.875rem);
-  font-style: normal;
-  font-weight: var(--font-weights-normal, 400);
-  line-height: var(--line-heights-sm, 1.25rem);
+  /* sm/normal */
+  font: var(--text-sm-normal);
 `;
 
 const List = styled.div`
@@ -168,20 +165,12 @@ const Item = styled.div`
 `;
 
 const Title = styled.p`
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-sm, 0.875rem);
-  font-style: normal;
-  font-weight: var(--font-weights-medium, 500);
-  line-height: var(--line-heights-sm, 1.25rem);
+  font: var(--text-sm-medium);
 `;
 
 const Meta = styled.p`
   color: var(--colors-text-subtle, #a1a1aa);
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-xs, 0.75rem);
-  font-style: normal;
-  font-weight: var(--font-weights-normal, 400);
-  line-height: var(--line-heights-xs, 1rem);
+  font: var(--text-xs-normal);
 `;
 
 const Dropdown = styled.div`
@@ -257,17 +246,12 @@ const Empty = styled.div`
   text-align: center;
 `;
 
-
 const CustomTitle = styled(EmptyState.Title)`
   color: var(--colors-text-default, #27272a);
   text-align: center;
 
   /* md/semibold */
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-md, 1rem);
-  font-style: normal;
-  font-weight: var(--font-weights-semibold, 600);
-  line-height: var(--line-heights-md, 1.5rem); /* 150% */
+  font: var(--text-md-semibold);
 `;
 
 const CustomDescription = styled(EmptyState.Description)`
@@ -275,13 +259,8 @@ const CustomDescription = styled(EmptyState.Description)`
   text-align: center;
 
   /* sm/normal */
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-sm, 0.875rem);
-  font-style: normal;
-  font-weight: var(--font-weights-normal, 400);
-  line-height: var(--line-heights-sm, 1.25rem); /* 142.857% */
+  font: var(--text-sm-normal);
 `;
-
 
 /*목데이터 */
 const MOCK_ITEMS = [
