@@ -1,45 +1,68 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { authClient } from './instance';
+
+const queryClient = useQueryClient();
 
 /**
  * 제안 추가
- * @param {str} title
- * @param {str} content
- * @param {INDUSTRY.value} industry
- * @param {object} business_hours
- * @param {object} address
- * @param {object} position
- * @param {int} radius
- * @param {list} imageList fileInput.files
+ * @param {string} title `string`
+ * @param {string} content `string`
+ * @param {INDUSTRY.value} industry `INDUSTRY.value`
+ * @param {object} business_hours `object`
+ * @param {object} address `object`
+ * @param {object} position `object`
+ * @param {RADIUS.M0 | RADIUS.M250 | RADIUS.M500 | RADIUS.M750 | RADIUS.M1000} radius `RADIUS.M0 | RADIUS.M250 | RADIUS.M500 | RADIUS.M750 | RADIUS.M1000`
+ * @param {FileList | null} imageList `FileList | null` fileInput.files 또는 `null`
  */
-const postProposal = async (
-  title,
-  content,
-  industry,
-  business_hours,
-  address,
-  position,
-  radius,
-  imageList,
-) => {
-  const formData = new FormData();
-  formData.append('title', title);
-  formData.append('content', content);
-  formData.append('industry', industry);
-  formData.append('business_hours', business_hours);
-  formData.append('address', address);
-  formData.append('position', position);
-  formData.append('radius', radius);
-  formData.append('image', imageList);
-  return await authClient.post(`/proposals`, formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
+const usePostProposal = () => {
+  return useMutation({
+    mutationFn: ({
+      title,
+      content,
+      industry,
+      business_hours,
+      address,
+      position,
+      radius,
+      imageList,
+    }) => {
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('content', content);
+      formData.append('industry', industry);
+      formData.append('business_hours', business_hours);
+      formData.append('address', address);
+      formData.append('position', position);
+      formData.append('radius', radius);
+      formData.append('image', imageList);
+      return authClient.post(`/proposals`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+    },
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['useGetProposalMap'],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['useGetProposalMyCreatedList'],
+        }),
+      ]);
+    },
   });
 };
 
 /**
  * 제안 지도 조회
- * @param {str} profile `'proposer'` 또는 `'founder'`
+ * @param {PROFILE.proposer | PROFILE.founder} profile `PROFILE.proposer | PROFILE.founder`
+ * @param {ZOOM.M0 | ZOOM.M500 | ZOOM.M2000 | ZOOM.M10000} zoom `ZOOM.M0 | ZOOM.M500 | ZOOM.M2000 | ZOOM.M10000`
+ * @param {string | null} sido `string | null`
+ * @param {string | null} sigungu `string | null`
+ * @param {string | null} eupmyundong `string | null`
+ * @param {string | null} order `string | null`
+ * @param {INDUSTRY.value | null} industry `INDUSTRY.value | null`
  */
-const getProposalMap = async (
+const useGetProposalMap = (
   profile,
   zoom,
   sido,
@@ -48,81 +71,132 @@ const getProposalMap = async (
   order,
   industry,
 ) => {
-  const params = new URLSearchParams();
-  params.append('sido', sido);
-  params.append('sigungu', sigungu);
-  params.append('eupmyundong', eupmyundong);
-  params.append('order', order);
-  params.append('industry', industry);
-  return await authClient.get(`/proposals/${profile}/${zoom}`, {
-    params: params,
+  return useQuery({
+    queryKey: [
+      'useGetProposalMap',
+      profile,
+      zoom,
+      sido,
+      sigungu,
+      eupmyundong,
+      order,
+      industry,
+    ],
+    queryFn: () => {
+      const params = new URLSearchParams();
+      sido && params.append('sido', sido);
+      sigungu && params.append('sigungu', sigungu);
+      eupmyundong && params.append('eupmyundong', eupmyundong);
+      order && params.append('order', order);
+      industry && params.append('industry', industry);
+      return authClient.get(`/proposals/${profile}/${zoom}`, {
+        params: params,
+      });
+    },
   });
 };
 
 /**
  * 제안 상세 조회
- * @param {str} profile `'proposer'` 또는 `'founder'`
+ * @param {number} proposal_id `number`
+ * @param {PROFILE.proposer | PROFILE.founder} profile `PROFILE.proposer | PROFILE.founder`
  */
-const getProposalDetail = async (proposal_id, profile) => {
-  return await authClient.get(`/proposals/${proposal_id}/${profile}`);
+const useGetProposalDetail = (proposal_id, profile) => {
+  return useQuery({
+    queryKey: ['useGetProposalDetail', proposal_id, profile],
+    queryFn: () => {
+      return authClient.get(`/proposals/${proposal_id}/${profile}`);
+    },
+  });
 };
 
 /**
  * 내가 만든 제안 목록 조회
+ * @param {string | null} sido `string | null`
+ * @param {string | null} sigungu `string | null`
+ * @param {string | null} eupmyundong `string | null`
  */
-const getProposalMyCreatedList = async (sido, sigungu, eupmyundong) => {
-  const params = new URLSearchParams();
-  params.append('sido', sido);
-  params.append('sigungu', sigungu);
-  params.append('eupmyundong', eupmyundong);
-  return await authClient.get(`/proposals/proposer/my-created`, {
-    params: params,
+const useGetProposalMyCreatedList = (sido, sigungu, eupmyundong) => {
+  return useQuery({
+    queryKey: ['useGetProposalMyCreatedList', sido, sigungu, eupmyundong],
+    queryFn: () => {
+      const params = new URLSearchParams();
+      sido && params.append('sido', sido);
+      sigungu && params.append('sigungu', sigungu);
+      eupmyundong && params.append('eupmyundong', eupmyundong);
+      return authClient.get(`/proposals/proposer/my-created`, {
+        params: params,
+      });
+    },
   });
 };
 
 /**
  * 제안 좋아요 추가/삭제
+ * @param {number} proposal_id `number`
  */
-const postProposalLike = async (proposal_id) => {
-  return await authClient.post(
-    `/proposals/proposer/like`,
-    { proposal_id },
-    { headers: { 'Content-Type': 'application/json' } },
-  );
+const usePostProposalLike = () => {
+  return useMutation({
+    mutationFn: ({ proposal_id }) => {
+      return authClient.post(
+        `/proposals/proposer/like`,
+        { proposal_id },
+        { headers: { 'Content-Type': 'application/json' } },
+      );
+    },
+  });
 };
 
 /**
  * 제안 스크랩 추가/삭제
- * @param {str} profile `'proposer'` 또는 `'founder'`
+ * @param {PROFILE.proposer | PROFILE.founder} profile `PROFILE.proposer | PROFILE.founder`
+ * @param {number} proposal_id `number`
  */
-const postProposalScrap = async (profile, proposal_id) => {
-  return await authClient.post(
-    `/proposals/${profile}/scrap`,
-    { proposal_id },
-    { headers: { 'Content-Type': 'application/json' } },
-  );
+const usePostProposalScrap = () => {
+  return useMutation({
+    mutationFn: ({ profile, proposal_id }) => {
+      return authClient.post(
+        `/proposals/${profile}/scrap`,
+        { proposal_id },
+        { headers: { 'Content-Type': 'application/json' } },
+      );
+    },
+    onSuccess: async (data, { profile }) => {
+      await queryClient.invalidateQueries({
+        queryKey: ['useGetProposalScrapList', profile],
+      });
+    },
+  });
 };
 
 /**
  * 제안 스크랩 목록 조회
- * @param {str} profile `'proposer'` 또는 `'founder'`
+ * @param {PROFILE.proposer | PROFILE.founder} profile `PROFILE.proposer | PROFILE.founder`
+ * @param {string | null} sido `string | null`
+ * @param {string | null} sigungu `string | null`
+ * @param {string | null} eupmyundong `string | null`
  */
-const getProposalScrapList = async (profile, sido, sigungu, eupmyundong) => {
-  const params = new URLSearchParams();
-  params.append('sido', sido);
-  params.append('sigungu', sigungu);
-  params.append('eupmyundong', eupmyundong);
-  return await authClient.get(`/proposals/${profile}/scrap`, {
-    params: params,
+const useGetProposalScrapList = (profile, sido, sigungu, eupmyundong) => {
+  return useQuery({
+    queryKey: ['useGetProposalScrapList', profile, sido, sigungu, eupmyundong],
+    queryFn: () => {
+      const params = new URLSearchParams();
+      sido && params.append('sido', sido);
+      sigungu && params.append('sigungu', sigungu);
+      eupmyundong && params.append('eupmyundong', eupmyundong);
+      return authClient.get(`/proposals/${profile}/scrap`, {
+        params: params,
+      });
+    },
   });
 };
 
 export {
-  postProposal,
-  getProposalMap,
-  getProposalDetail,
-  getProposalMyCreatedList,
-  postProposalLike,
-  postProposalScrap,
-  getProposalScrapList,
+  usePostProposal,
+  useGetProposalMap,
+  useGetProposalDetail,
+  useGetProposalMyCreatedList,
+  usePostProposalLike,
+  usePostProposalScrap,
+  useGetProposalScrapList,
 };
