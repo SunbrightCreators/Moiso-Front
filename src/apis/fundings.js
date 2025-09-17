@@ -1,5 +1,7 @@
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { authClient } from './instance';
+
+const queryClient = useQueryClient();
 
 /**
  * 펀딩 지도 조회
@@ -112,6 +114,11 @@ const usePostFundingScrap = () => {
         { funding_id },
         { headers: { 'Content-Type': 'application/json' } },
       );
+    },
+    onSuccess: async (data, { profile }) => {
+      await queryClient.invalidateQueries({
+        queryKey: ['useGetFundingScrapList', profile],
+      });
     },
   });
 };

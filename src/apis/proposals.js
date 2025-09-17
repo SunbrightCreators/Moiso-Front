@@ -1,5 +1,7 @@
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { authClient } from './instance';
+
+const queryClient = useQueryClient();
 
 /**
  * 제안 추가
@@ -36,6 +38,16 @@ const usePostProposal = () => {
       return authClient.post(`/proposals`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+    },
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['useGetProposalMap'],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['useGetProposalMyCreatedList'],
+        }),
+      ]);
     },
   });
 };
@@ -148,6 +160,11 @@ const usePostProposalScrap = () => {
         { proposal_id },
         { headers: { 'Content-Type': 'application/json' } },
       );
+    },
+    onSuccess: async (data, { profile }) => {
+      await queryClient.invalidateQueries({
+        queryKey: ['useGetProposalScrapList', profile],
+      });
     },
   });
 };
