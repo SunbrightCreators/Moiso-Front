@@ -34,14 +34,14 @@ const useGetFundingMap = (
       industry,
     ],
     queryFn: () => {
+      const params = new URLSearchParams();
+      sido && params.append('sido', sido);
+      sigungu && params.append('sigungu', sigungu);
+      eupmyundong && params.append('eupmyundong', eupmyundong);
+      order && params.append('order', order);
+      industry && params.append('industry', industry);
       return authClient.get(`/fundings/${profile}/${zoom}`, {
-        params: new URLSearchParams({
-          sido: sido,
-          sigungu: sigungu,
-          eupmyundong: eupmyundong,
-          order: order,
-          industry: industry,
-        }),
+        params: params,
       });
     },
   });
@@ -134,12 +134,12 @@ const useGetFundingScrapList = (profile, sido, sigungu, eupmyundong) => {
   return useQuery({
     queryKey: ['useGetFundingScrapList', profile, sido, sigungu, eupmyundong],
     queryFn: () => {
+      const params = new URLSearchParams();
+      sido && params.append('sido', sido);
+      sigungu && params.append('sigungu', sigungu);
+      eupmyundong && params.append('eupmyundong', eupmyundong);
       return authClient.get(`/fundings/${profile}/scrap`, {
-        params: new URLSearchParams({
-          sido: sido,
-          sigungu: sigungu,
-          eupmyundong: eupmyundong,
-        }),
+        params: params,
       });
     },
   });
@@ -153,8 +153,10 @@ const useGetRewardList = (category) => {
   return useQuery({
     queryKey: ['useGetRewardList', category],
     queryFn: () => {
+      const params = new URLSearchParams();
+      category && params.set('category', category);
       return authClient.get(`/fundings/proposer/reward`, {
-        params: new URLSearchParams({ category: category }),
+        params: params,
       });
     },
   });

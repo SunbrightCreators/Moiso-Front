@@ -11,12 +11,18 @@ const useGetAddressToPosition = (sido, sigungu, eupmyundong) => {
   return useQuery({
     queryKey: ['useGetAddressToPosition', sido, sigungu, eupmyundong],
     queryFn: () => {
+      const params = new URLSearchParams();
+      if (sido || sigungu || eupmyundong) {
+        params.set(
+          'query',
+          [sido, sigungu, eupmyundong].filter(Boolean).join(' '),
+        );
+      }
       return client.get(`/maps/geocoding/position`, {
-        params: new URLSearchParams({
-          query: [sido, sigungu, eupmyundong].filter(Boolean).join(' '),
-        }),
+        params: params,
       });
     },
+    enabled: Boolean(sido || sigungu || eupmyundong),
   });
 };
 
@@ -34,6 +40,7 @@ const useGetAddressToLegal = (query) => {
         }),
       });
     },
+    enabled: Boolean(query),
   });
 };
 
@@ -59,13 +66,20 @@ const useGetAddressToFull = (
       filter_eupmyundong,
     ],
     queryFn: () => {
+      const params = new URLSearchParams({
+        query: query,
+      });
+      if (filter_sido && filter_sigungu && filter_eupmyundong) {
+        params.append(
+          'filter',
+          `${filter_sido} ${filter_sigungu} ${filter_eupmyundong}`,
+        );
+      }
       return client.get(`/maps/geocoding/full`, {
-        params: new URLSearchParams({
-          query: query,
-          filter: `${filter_sido} ${filter_sigungu} ${filter_eupmyundong}`,
-        }),
+        params: params,
       });
     },
+    enabled: Boolean(query),
   });
 };
 
@@ -85,6 +99,7 @@ const useGetPositionToLegal = (latitude, longitude) => {
         }),
       });
     },
+    enabled: Boolean(latitude || longitude),
   });
 };
 
@@ -113,14 +128,21 @@ const useGetPositionToFull = (
       filter_eupmyundong,
     ],
     queryFn: () => {
+      const params = new URLSearchParams({
+        latitude: latitude,
+        longitude: longitude,
+      });
+      if (filter_sido && filter_sigungu && filter_eupmyundong) {
+        params.append(
+          'filter',
+          `${filter_sido} ${filter_sigungu} ${filter_eupmyundong}`,
+        );
+      }
       return client.get(`/maps/reverse-geocoding/full`, {
-        params: new URLSearchParams({
-          latitude: latitude,
-          longitude: longitude,
-          filter: `${filter_sido} ${filter_sigungu} ${filter_eupmyundong}`,
-        }),
+        params: params,
       });
     },
+    enabled: Boolean(latitude || longitude),
   });
 };
 

@@ -83,14 +83,14 @@ const useGetProposalMap = (
       industry,
     ],
     queryFn: () => {
+      const params = new URLSearchParams();
+      sido && params.append('sido', sido);
+      sigungu && params.append('sigungu', sigungu);
+      eupmyundong && params.append('eupmyundong', eupmyundong);
+      order && params.append('order', order);
+      industry && params.append('industry', industry);
       return authClient.get(`/proposals/${profile}/${zoom}`, {
-        params: new URLSearchParams({
-          sido: sido,
-          sigungu: sigungu,
-          eupmyundong: eupmyundong,
-          order: order,
-          industry: industry,
-        }),
+        params: params,
       });
     },
   });
@@ -120,12 +120,12 @@ const useGetProposalMyCreatedList = (sido, sigungu, eupmyundong) => {
   return useQuery({
     queryKey: ['useGetProposalMyCreatedList', sido, sigungu, eupmyundong],
     queryFn: () => {
+      const params = new URLSearchParams();
+      sido && params.append('sido', sido);
+      sigungu && params.append('sigungu', sigungu);
+      eupmyundong && params.append('eupmyundong', eupmyundong);
       return authClient.get(`/proposals/proposer/my-created`, {
-        params: new URLSearchParams({
-          sido: sido,
-          sigungu: sigungu,
-          eupmyundong: eupmyundong,
-        }),
+        params: params,
       });
     },
   });
@@ -180,12 +180,12 @@ const useGetProposalScrapList = (profile, sido, sigungu, eupmyundong) => {
   return useQuery({
     queryKey: ['useGetProposalScrapList', profile, sido, sigungu, eupmyundong],
     queryFn: () => {
+      const params = new URLSearchParams();
+      sido && params.append('sido', sido);
+      sigungu && params.append('sigungu', sigungu);
+      eupmyundong && params.append('eupmyundong', eupmyundong);
       return authClient.get(`/proposals/${profile}/scrap`, {
-        params: new URLSearchParams({
-          sido: sido,
-          sigungu: sigungu,
-          eupmyundong: eupmyundong,
-        }),
+        params: params,
       });
     },
   });

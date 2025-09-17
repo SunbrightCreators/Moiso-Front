@@ -159,8 +159,10 @@ const useGetProfile = (profile, fieldList) => {
   return useQuery({
     queryKey: ['useGetProfile', profile, fieldList],
     queryFn: () => {
+      const params = new URLSearchParams();
+      fieldList && fieldList.forEach((field) => params.append('field', field));
       return authClient.get(`/accounts/${profile}`, {
-        params: new URLSearchParams(fieldList.map((field) => ['field', field])),
+        params: params,
       });
     },
   });
