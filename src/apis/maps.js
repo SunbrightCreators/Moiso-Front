@@ -11,12 +11,11 @@ const useGetAddressToPosition = (sido, sigungu, eupmyundong) => {
   return useQuery({
     queryKey: ['useGetAddressToPosition', sido, sigungu, eupmyundong],
     queryFn: () => {
-      const params = new URLSearchParams();
-      params.set(
-        'query',
-        [sido, sigungu, eupmyundong].filter(Boolean).join(' '),
-      );
-      return client.get(`/maps/geocoding/position`, { params: params });
+      return client.get(`/maps/geocoding/position`, {
+        params: new URLSearchParams({
+          query: [sido, sigungu, eupmyundong].filter(Boolean).join(' '),
+        }),
+      });
     },
   });
 };
@@ -29,9 +28,11 @@ const useGetAddressToLegal = (query) => {
   return useQuery({
     queryKey: ['useGetAddressToLegal', query],
     queryFn: () => {
-      const params = new URLSearchParams();
-      params.set('query', query);
-      return client.get(`/maps/geocoding/legal`, { params: params });
+      return client.get(`/maps/geocoding/legal`, {
+        params: new URLSearchParams({
+          query: query,
+        }),
+      });
     },
   });
 };
@@ -58,13 +59,12 @@ const useGetAddressToFull = (
       filter_eupmyundong,
     ],
     queryFn: () => {
-      const params = new URLSearchParams();
-      params.append('query', query);
-      params.append(
-        'filter',
-        `${filter_sido} ${filter_sigungu} ${filter_eupmyundong}`,
-      );
-      return client.get(`/maps/geocoding/full`, { params: params });
+      return client.get(`/maps/geocoding/full`, {
+        params: new URLSearchParams({
+          query: query,
+          filter: `${filter_sido} ${filter_sigungu} ${filter_eupmyundong}`,
+        }),
+      });
     },
   });
 };
@@ -78,10 +78,12 @@ const useGetPositionToLegal = (latitude, longitude) => {
   return useQuery({
     queryKey: ['useGetPositionToLegal', latitude, longitude],
     queryFn: () => {
-      const params = new URLSearchParams();
-      params.append('latitude', latitude);
-      params.append('longitude', longitude);
-      return client.get(`/maps/reverse-geocoding/legal`, { params: params });
+      return client.get(`/maps/reverse-geocoding/legal`, {
+        params: new URLSearchParams({
+          latitude: latitude,
+          longitude: longitude,
+        }),
+      });
     },
   });
 };
@@ -111,14 +113,13 @@ const useGetPositionToFull = (
       filter_eupmyundong,
     ],
     queryFn: () => {
-      const params = new URLSearchParams();
-      params.append('latitude', latitude);
-      params.append('longitude', longitude);
-      params.append(
-        'filter',
-        `${filter_sido} ${filter_sigungu} ${filter_eupmyundong}`,
-      );
-      return client.get(`/maps/reverse-geocoding/full`, { params: params });
+      return client.get(`/maps/reverse-geocoding/full`, {
+        params: new URLSearchParams({
+          latitude: latitude,
+          longitude: longitude,
+          filter: `${filter_sido} ${filter_sigungu} ${filter_eupmyundong}`,
+        }),
+      });
     },
   });
 };

@@ -71,14 +71,14 @@ const useGetProposalMap = (
       industry,
     ],
     queryFn: () => {
-      const params = new URLSearchParams();
-      params.append('sido', sido);
-      params.append('sigungu', sigungu);
-      params.append('eupmyundong', eupmyundong);
-      params.append('order', order);
-      params.append('industry', industry);
       return authClient.get(`/proposals/${profile}/${zoom}`, {
-        params: params,
+        params: new URLSearchParams({
+          sido: sido,
+          sigungu: sigungu,
+          eupmyundong: eupmyundong,
+          order: order,
+          industry: industry,
+        }),
       });
     },
   });
@@ -108,12 +108,12 @@ const useGetProposalMyCreatedList = (sido, sigungu, eupmyundong) => {
   return useQuery({
     queryKey: ['useGetProposalMyCreatedList', sido, sigungu, eupmyundong],
     queryFn: () => {
-      const params = new URLSearchParams();
-      params.append('sido', sido);
-      params.append('sigungu', sigungu);
-      params.append('eupmyundong', eupmyundong);
       return authClient.get(`/proposals/proposer/my-created`, {
-        params: params,
+        params: new URLSearchParams({
+          sido: sido,
+          sigungu: sigungu,
+          eupmyundong: eupmyundong,
+        }),
       });
     },
   });
@@ -163,12 +163,12 @@ const useGetProposalScrapList = (profile, sido, sigungu, eupmyundong) => {
   return useQuery({
     queryKey: ['useGetProposalScrapList', profile, sido, sigungu, eupmyundong],
     queryFn: () => {
-      const params = new URLSearchParams();
-      params.append('sido', sido);
-      params.append('sigungu', sigungu);
-      params.append('eupmyundong', eupmyundong);
       return authClient.get(`/proposals/${profile}/scrap`, {
-        params: params,
+        params: new URLSearchParams({
+          sido: sido,
+          sigungu: sigungu,
+          eupmyundong: eupmyundong,
+        }),
       });
     },
   });
