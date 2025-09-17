@@ -3,7 +3,13 @@ import { authClient } from './instance';
 
 /**
  * 펀딩 지도 조회
- * @param {str} profile `'proposer'` 또는 `'founder'`
+ * @param {PROFILE.proposer | PROFILE.founder} profile `PROFILE.proposer | PROFILE.founder`
+ * @param {ZOOM.M0 | ZOOM.M500 | ZOOM.M2000 | ZOOM.M10000} zoom `ZOOM.M0 | ZOOM.M500 | ZOOM.M2000 | ZOOM.M10000`
+ * @param {string | null} sido `string | null`
+ * @param {string | null} sigungu `string | null`
+ * @param {string | null} eupmyundong `string | null`
+ * @param {string | null} order `string | null`
+ * @param {INDUSTRY.value | null} industry `INDUSTRY.value | null`
  */
 const useGetFundingMap = (
   profile,
@@ -41,7 +47,8 @@ const useGetFundingMap = (
 
 /**
  * 펀딩 상세 조회
- * @param {str} profile `'proposer'` 또는 `'founder'`
+ * @param {number} funding_id `number`
+ * @param {PROFILE.proposer | PROFILE.founder} profile `PROFILE.proposer | PROFILE.founder`
  */
 const useGetFundingDetail = (funding_id, profile) => {
   return useQuery({
@@ -78,6 +85,7 @@ const useGetFundingMyPaidList = () => {
 
 /**
  * 펀딩 좋아요 추가/삭제
+ * @param {number} funding_id `number`
  */
 const usePostFundingLike = () => {
   return useMutation({
@@ -93,7 +101,8 @@ const usePostFundingLike = () => {
 
 /**
  * 펀딩 스크랩 추가/삭제
- * @param {str} profile `'proposer'` 또는 `'founder'`
+ * @param {PROFILE.proposer | PROFILE.founder} profile `PROFILE.proposer | PROFILE.founder`
+ * @param {number} funding_id `number`
  */
 const usePostFundingScrap = () => {
   return useMutation({
@@ -109,7 +118,10 @@ const usePostFundingScrap = () => {
 
 /**
  * 펀딩 스크랩 목록 조회
- * @param {str} profile `'proposer'` 또는 `'founder'`
+ * @param {PROFILE.proposer | PROFILE.founder} profile `PROFILE.proposer | PROFILE.founder`
+ * @param {string | null} sido `string | null`
+ * @param {string | null} sigungu `string | null`
+ * @param {string | null} eupmyundong `string | null`
  */
 const useGetFundingScrapList = (profile, sido, sigungu, eupmyundong) => {
   return useQuery({
@@ -126,6 +138,7 @@ const useGetFundingScrapList = (profile, sido, sigungu, eupmyundong) => {
 
 /**
  * 리워드 목록 조회
+ * @param {'LEVEL' | 'GIFT' | 'COUPON' | null} category `'LEVEL' | 'GIFT' | 'COUPON' | null`
  */
 const useGetRewardList = (category) => {
   return useQuery({

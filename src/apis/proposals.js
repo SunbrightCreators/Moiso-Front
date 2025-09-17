@@ -3,14 +3,14 @@ import { authClient } from './instance';
 
 /**
  * 제안 추가
- * @param {str} title
- * @param {str} content
- * @param {INDUSTRY.value} industry
- * @param {object} business_hours
- * @param {object} address
- * @param {object} position
- * @param {int} radius
- * @param {list} imageList fileInput.files
+ * @param {string} title `string`
+ * @param {string} content `string`
+ * @param {INDUSTRY.value} industry `INDUSTRY.value`
+ * @param {object} business_hours `object`
+ * @param {object} address `object`
+ * @param {object} position `object`
+ * @param {RADIUS.M0 | RADIUS.M250 | RADIUS.M500 | RADIUS.M750 | RADIUS.M1000} radius `RADIUS.M0 | RADIUS.M250 | RADIUS.M500 | RADIUS.M750 | RADIUS.M1000`
+ * @param {FileList | null} imageList `FileList | null` fileInput.files 또는 `null`
  */
 const usePostProposal = () => {
   return useMutation({
@@ -42,7 +42,13 @@ const usePostProposal = () => {
 
 /**
  * 제안 지도 조회
- * @param {str} profile `'proposer'` 또는 `'founder'`
+ * @param {PROFILE.proposer | PROFILE.founder} profile `PROFILE.proposer | PROFILE.founder`
+ * @param {ZOOM.M0 | ZOOM.M500 | ZOOM.M2000 | ZOOM.M10000} zoom `ZOOM.M0 | ZOOM.M500 | ZOOM.M2000 | ZOOM.M10000`
+ * @param {string | null} sido `string | null`
+ * @param {string | null} sigungu `string | null`
+ * @param {string | null} eupmyundong `string | null`
+ * @param {string | null} order `string | null`
+ * @param {INDUSTRY.value | null} industry `INDUSTRY.value | null`
  */
 const useGetProposalMap = (
   profile,
@@ -80,7 +86,8 @@ const useGetProposalMap = (
 
 /**
  * 제안 상세 조회
- * @param {str} profile `'proposer'` 또는 `'founder'`
+ * @param {number} proposal_id `number`
+ * @param {PROFILE.proposer | PROFILE.founder} profile `PROFILE.proposer | PROFILE.founder`
  */
 const useGetProposalDetail = (proposal_id, profile) => {
   return useQuery({
@@ -93,6 +100,9 @@ const useGetProposalDetail = (proposal_id, profile) => {
 
 /**
  * 내가 만든 제안 목록 조회
+ * @param {string | null} sido `string | null`
+ * @param {string | null} sigungu `string | null`
+ * @param {string | null} eupmyundong `string | null`
  */
 const useGetProposalMyCreatedList = (sido, sigungu, eupmyundong) => {
   return useQuery({
@@ -111,6 +121,7 @@ const useGetProposalMyCreatedList = (sido, sigungu, eupmyundong) => {
 
 /**
  * 제안 좋아요 추가/삭제
+ * @param {number} proposal_id `number`
  */
 const usePostProposalLike = () => {
   return useMutation({
@@ -126,7 +137,8 @@ const usePostProposalLike = () => {
 
 /**
  * 제안 스크랩 추가/삭제
- * @param {str} profile `'proposer'` 또는 `'founder'`
+ * @param {PROFILE.proposer | PROFILE.founder} profile `PROFILE.proposer | PROFILE.founder`
+ * @param {number} proposal_id `number`
  */
 const usePostProposalScrap = () => {
   return useMutation({
@@ -142,7 +154,10 @@ const usePostProposalScrap = () => {
 
 /**
  * 제안 스크랩 목록 조회
- * @param {str} profile `'proposer'` 또는 `'founder'`
+ * @param {PROFILE.proposer | PROFILE.founder} profile `PROFILE.proposer | PROFILE.founder`
+ * @param {string | null} sido `string | null`
+ * @param {string | null} sigungu `string | null`
+ * @param {string | null} eupmyundong `string | null`
  */
 const useGetProposalScrapList = (profile, sido, sigungu, eupmyundong) => {
   return useQuery({

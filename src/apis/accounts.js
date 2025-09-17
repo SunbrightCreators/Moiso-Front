@@ -3,6 +3,8 @@ import { client, authClient } from './instance';
 
 /**
  * 로그인
+ * @param {string} email `string`
+ * @param {string} password `string`
  */
 const usePostLogin = () => {
   return useMutation({
@@ -18,6 +20,8 @@ const usePostLogin = () => {
 
 /**
  * 엑세스 토큰 재발급
+ * @param {string} grant_type `string`
+ * @param {string} refresh_token `string`
  */
 const usePostAccessToken = () => {
   return useMutation({
@@ -33,8 +37,16 @@ const usePostAccessToken = () => {
 
 /**
  * 회원가입(회원 추가)
- * @param {list | null} target 창업자일 때만 지정
- * @param {object | null} business_hours 창업자일 때만 지정
+ * @param {string} email `string`
+ * @param {string} password `string`
+ * @param {string} name `string`
+ * @param {string} birth `string`
+ * @param {SEX.value} sex `SEX.value`
+ * @param {boolean} is_marketing_allowed `boolean`
+ * @param {Array<INDUSTRY.value>} industryList `Array<INDUSTRY.value>`
+ * @param {Array<object>} addressList `Array<object>`
+ * @param {Array<FOUNDER_TARGET.value> | null} targetList `Array<FOUNDER_TARGET.value> | null` 창업자일 때만 지정
+ * @param {object | null} business_hours `object | null` 창업자일 때만 지정
  */
 const usePostAccount = () => {
   return useMutation({
@@ -109,9 +121,11 @@ const useDeleteAccount = () => {
 
 /**
  * 프로필 추가
- * @param {str} profile `'proposer'` 또는 `'founder'`
- * @param {list | null} target 창업자일 때만 지정
- * @param {object | null} business_hours 창업자일 때만 지정
+ * @param {PROFILE.proposer | PROFILE.founder} profile `PROFILE.proposer | PROFILE.founder`
+ * @param {Array<INDUSTRY.value>} industryList `Array<INDUSTRY.value>`
+ * @param {Array<object>} addressList `Array<object>`
+ * @param {Array<FOUNDER_TARGET.value> | null} targetList `Array<FOUNDER_TARGET.value> | null` 창업자일 때만 지정
+ * @param {object | null} business_hours `object | null` 창업자일 때만 지정
  */
 const usePostProfile = () => {
   return useMutation({
@@ -138,8 +152,8 @@ const usePostProfile = () => {
 
 /**
  * 프로필 조회
- * @param {str} profile `'proposer'` 또는 `'founder'`
- * @param {list} fieldList Response Body에 포함할 필드
+ * @param {PROFILE.proposer | PROFILE.founder} profile `PROFILE.proposer | PROFILE.founder`
+ * @param {Array<string> | null} fieldList `Array<string> | null` Response Body에 포함할 필드. `null`은 전체.
  */
 const useGetProfile = (profile, fieldList) => {
   return useQuery({
@@ -154,6 +168,10 @@ const useGetProfile = (profile, fieldList) => {
 
 /**
  * GPS 위치기록 추가
+ * @param {number} timestamp `number`
+ * @param {number} latitude `number`
+ * @param {number} longitude `number`
+ * @param {number} accuracy `number`
  */
 const usePostLocationHistory = () => {
   return useMutation({

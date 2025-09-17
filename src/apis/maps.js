@@ -3,9 +3,9 @@ import { client } from './instance';
 
 /**
  * 주소 → 좌표 변환
- * @param {str | null} sido str 또는 null
- * @param {str | null} sigungu str 또는 null
- * @param {str | null} eupmyundong str 또는 null
+ * @param {string | null} sido `string | null`
+ * @param {string | null} sigungu `string | null`
+ * @param {string | null} eupmyundong `string | null`
  */
 const useGetAddressToPosition = (sido, sigungu, eupmyundong) => {
   return useQuery({
@@ -23,6 +23,7 @@ const useGetAddressToPosition = (sido, sigungu, eupmyundong) => {
 
 /**
  * 일부 주소 → 법정동 주소 검색
+ * @param {string} query `string`
  */
 const useGetAddressToLegal = (query) => {
   return useQuery({
@@ -37,6 +38,10 @@ const useGetAddressToLegal = (query) => {
 
 /**
  * 일부 주소 → 전체 주소 검색
+ * @param {string} query `string`
+ * @param {string | null} filter_sido `string | null`
+ * @param {string | null} filter_sigungu `string | null`
+ * @param {string | null} filter_eupmyundong `string | null`
  */
 const useGetAddressToFull = (
   query,
@@ -66,6 +71,8 @@ const useGetAddressToFull = (
 
 /**
  * 좌표 → 법정동 주소 변환
+ * @param {number} latitude `number`
+ * @param {number} longitude `number`
  */
 const useGetPositionToLegal = (latitude, longitude) => {
   return useQuery({
@@ -81,6 +88,11 @@ const useGetPositionToLegal = (latitude, longitude) => {
 
 /**
  * 좌표 → 전체 주소 변환
+ * @param {number} latitude `number`
+ * @param {number} longitude `number`
+ * @param {string | null} filter_sido `string | null`
+ * @param {string | null} filter_sigungu `string | null`
+ * @param {string | null} filter_eupmyundong `string | null`
  */
 const useGetPositionToFull = (
   latitude,
