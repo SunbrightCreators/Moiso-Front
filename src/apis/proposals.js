@@ -1,8 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { authClient } from './instance';
 
-const queryClient = useQueryClient();
-
 /**
  * 제안 추가
  * @param {string} title `string`
@@ -15,6 +13,8 @@ const queryClient = useQueryClient();
  * @param {FileList | null} imageList `FileList | null` fileInput.files 또는 `null`
  */
 const usePostProposal = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: ({
       title,
@@ -153,6 +153,8 @@ const usePostProposalLike = () => {
  * @param {number} proposal_id `number`
  */
 const usePostProposalScrap = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: ({ profile, proposal_id }) => {
       return authClient.post(
