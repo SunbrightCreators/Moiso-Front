@@ -1,8 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { authClient } from './instance';
 
-const queryClient = useQueryClient();
-
 /**
  * 펀딩 지도 조회
  * @param {PROFILE.proposer | PROFILE.founder} profile `PROFILE.proposer | PROFILE.founder`
@@ -107,6 +105,8 @@ const usePostFundingLike = () => {
  * @param {number} funding_id `number`
  */
 const usePostFundingScrap = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: ({ profile, funding_id }) => {
       return authClient.post(
