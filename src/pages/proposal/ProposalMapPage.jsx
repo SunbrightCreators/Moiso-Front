@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { getPositionToLegal } from '../../apis/maps';
-import { getProposalMap } from '../../apis/proposals';
+import { useGetPositionToLegal } from '../../apis/maps';
+import { useGetProposalMap } from '../../apis/proposals';
 import { MapBottomsheet } from '../../components/common';
 import {
   TopNavigation,
@@ -167,20 +167,19 @@ const ProposalMapPage = () => {
 
   // 현재 화면 중심의 지역 정보 업데이트
   const updateCurrentRegion = async (mapInstance) => {
-    try {
-      const center = mapInstance.getCenter();
-      const response = await getPositionToLegal(center.lat(), center.lng());
-
-      if (response.data) {
-        setCurrentRegion({
-          sido: response.data.sido || '',
-          sigungu: response.data.sigungu || '',
-          eupmyundong: response.data.eupmyundong || '',
-        });
-      }
-    } catch (error) {
-      console.error('현재 지역 정보 업데이트 실패:', error);
-    }
+    // try {
+    //   const center = mapInstance.getCenter();
+    //   const response = await getPositionToLegal(center.lat(), center.lng());
+    //   if (response.data) {
+    //     setCurrentRegion({
+    //       sido: response.data.sido || '',
+    //       sigungu: response.data.sigungu || '',
+    //       eupmyundong: response.data.eupmyundong || '',
+    //     });
+    //   }
+    // } catch (error) {
+    //   console.error('현재 지역 정보 업데이트 실패:', error);
+    // }
   };
 
   // 마커 선택 상태 업데이트
@@ -231,48 +230,48 @@ const ProposalMapPage = () => {
       const profile = isProposerMode ? 'proposer' : 'founder';
 
       // API 호출
-      const response = await getProposalMap(
-        profile,
-        zoomParam,
-        currentRegion.sido || '',
-        currentRegion.sigungu || '',
-        currentRegion.eupmyundong || '',
-        sortOrder,
-        selectedIndustry,
-      );
+      // const response = await getProposalMap(
+      //   profile,
+      //   zoomParam,
+      //   currentRegion.sido || '',
+      //   currentRegion.sigungu || '',
+      //   currentRegion.eupmyundong || '',
+      //   sortOrder,
+      //   selectedIndustry,
+      // );
 
       let processedData = [];
 
-      if (zoomParam === 0) {
-        // 동이하지도 - 개별 제안글 데이터 (API 명세서 구조 그대로 사용)
-        processedData = response.data.flatMap((item) =>
-          item.proposals.map((proposal) => ({
-            // API 응답 데이터 그대로 사용 (ProposalRecPage.jsx와 동일한 구조)
-            ...proposal,
-            // 지도 표시를 위한 최소한의 추가 필드만
-            position: item.position,
-            markerType: isOurNeighborhood(proposal.address) ? 1 : 2,
-          })),
-        );
-      } else {
-        // 집계된 지역 데이터 (도지도, 구지도, 동지도)
-        processedData = response.data.map((item) => ({
-          id: item.id,
-          title: item.address,
-          count: item.number,
-          position: item.position,
-          isAddressData: item.is_address,
-          // 마커 표시를 위한 기본 정보
-          address: {
-            sido:
-              item.address.includes('특별시') || item.address.includes('광역시')
-                ? item.address
-                : '',
-            sigungu: item.address.includes('구') ? item.address : '',
-            eupmyundong: item.address.includes('동') ? item.address : '',
-          },
-        }));
-      }
+      // if (zoomParam === 0) {
+      //   // 동이하지도 - 개별 제안글 데이터 (API 명세서 구조 그대로 사용)
+      //   processedData = response.data.flatMap((item) =>
+      //     item.proposals.map((proposal) => ({
+      //       // API 응답 데이터 그대로 사용 (ProposalRecPage.jsx와 동일한 구조)
+      //       ...proposal,
+      //       // 지도 표시를 위한 최소한의 추가 필드만
+      //       position: item.position,
+      //       markerType: isOurNeighborhood(proposal.address) ? 1 : 2,
+      //     })),
+      //   );
+      // } else {
+      //   // 집계된 지역 데이터 (도지도, 구지도, 동지도)
+      //   processedData = response.data.map((item) => ({
+      //     id: item.id,
+      //     title: item.address,
+      //     count: item.number,
+      //     position: item.position,
+      //     isAddressData: item.is_address,
+      //     // 마커 표시를 위한 기본 정보
+      //     address: {
+      //       sido:
+      //         item.address.includes('특별시') || item.address.includes('광역시')
+      //           ? item.address
+      //           : '',
+      //       sigungu: item.address.includes('구') ? item.address : '',
+      //       eupmyundong: item.address.includes('동') ? item.address : '',
+      //     },
+      //   }));
+      // }
 
       // 상태 업데이트
       setMapData(processedData);
