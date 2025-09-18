@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { TopNavigation } from '../../components/common/navigation';
 import useModeStore from '../../stores/useModeStore';
-import EmptyProposer from '../../assets/EmptyProposer.svg';
-import EmptySupporter from '../../assets/EmptySupporter.svg';
+import { ReactComponent as Frown } from '../../assets/icons/frown.svg';
+import { EmptyState } from '@chakra-ui/react';
 
 const MyFundingPage = () => {
   const { isProposerMode } = useModeStore();
@@ -45,17 +45,31 @@ const MyFundingPage = () => {
     };
   }, [data]);
   const isEmpty = data.length === 0;
-  const emptyImage = isProposerMode ? EmptySupporter : EmptyProposer;
-
   return (
     <Page>
       {/* ScrollArea 안에 TopNavigation을 넣어야 sticky가 제대로 작동 */}
       <ScrollArea>
         <TopNavigation left='back' title={title} />
         {isEmpty ? (
-          <EmptyWrap>
-            <EmptyImg src={emptyImage} alt='empty' />
-          </EmptyWrap>
+          <FundingEmpty aria-label='내 펀딩 목록이 비어있음'>
+            <EmptyState.Content>
+              <EmptyState.Indicator>
+                <Frown width={32} height={32} />
+              </EmptyState.Indicator>
+
+              <CustomTitle>
+                {isProposerMode
+                  ? '아직 후원한 프로젝트가 없어요'
+                  : '아직 등록된 펀딩 프로젝트가 없어요'}
+              </CustomTitle>
+
+              <CustomDesc>
+                {isProposerMode
+                  ? '마음을 움직이는 프로젝트를 찾아 후원해 보세요.'
+                  : '마음에 드는 제안을 선택해 펀딩을 열어보세요.'}
+              </CustomDesc>
+            </EmptyState.Content>
+          </FundingEmpty>
         ) : (
           <>
             <Section>
@@ -154,11 +168,7 @@ const SectionTitle = styled.h3`
   color: var(--colors-text-default, #27272a);
 
   /* md/semibold */
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-md, 1rem);
-  font-style: normal;
-  font-weight: var(--font-weights-semibold, 600);
-  line-height: var(--line-heights-md, 1.5rem);
+  font: var(--text-md-semibold);
 `;
 
 const List = styled.div`
@@ -180,39 +190,41 @@ const Title = styled.p`
   white-space: nowrap;
 
   /* sm/medium */
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-sm, 0.875rem);
-  font-style: normal;
-  font-weight: var(--font-weights-medium, 500);
-  line-height: var(--line-heights-sm, 1.25rem);
+
+  font: var(--text-sm-medium);
 `;
 
 const Meta = styled.p`
   color: var(--colors-text-subtle, #a1a1aa);
 
   /* xs/normal */
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-xs, 0.75rem);
-  font-style: normal;
-  font-weight: var(--font-weights-normal, 400);
-  line-height: var(--line-heights-xs, 1rem);
+  font: var(--text-xs-normal);
 `;
 
-const EmptyWrap = styled.div`
-  padding: 1.5rem 1rem; /* 24px 16px */
+const FundingEmpty = styled(EmptyState.Root)`
+  padding: 3rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem; /* 12px */
   text-align: center;
 `;
 
-const EmptyImg = styled.img`
-  width: 13.75rem; /* 220px */
-  max-width: 80%;
-  height: auto;
-  opacity: 0.95;
+const CustomTitle = styled(EmptyState.Title)`
+  color: var(--colors-text-default, #27272a);
+  text-align: center;
+
+  /* md/semibold */
+
+  font: var(--text-md-semibold);
+`;
+
+const CustomDesc = styled(EmptyState.Description)`
+  color: var(--colors-text-muted, #52525b);
+  text-align: center;
+
+  /* sm/normal */
+  font: var(--text-sm-normal);
 `;
 
 //더미 데이터 (실데이터로 교체)
