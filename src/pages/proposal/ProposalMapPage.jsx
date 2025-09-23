@@ -21,7 +21,7 @@ import { ROUTE_PATH } from '../../constants/route';
 import {
   loadNaverMapScript,
   removeNaverMapScript,
-} from '../../apis/naverMapLoader';
+} from '../../apis/NaverMapLoader';
 import useModeStore from '../../stores/useModeStore';
 import PencilIcon from '../../assets/icons/pencil.svg';
 
