@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { authClient } from './instance';
+import { ZOOM } from '../constants/enum';
 
 /**
  * 제안 추가
@@ -93,6 +94,7 @@ const useGetProposalMap = (
         params: params,
       });
     },
+    enabled: [ZOOM.M0, ZOOM.M500, ZOOM.M2000, ZOOM.M10000].includes(zoom),
   });
 };
 

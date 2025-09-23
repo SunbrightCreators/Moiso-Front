@@ -1,5 +1,6 @@
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { client, authClient } from './instance';
+import useModeStore from '../../stores/useModeStore';
 
 /**
  * 로그인
@@ -7,6 +8,8 @@ import { client, authClient } from './instance';
  * @param {string} password `string`
  */
 const usePostLogin = () => {
+  const { setIsProposerMode } = useModeStore();
+
   return useMutation({
     mutationFn: ({ email, password }) => {
       return client.post(
@@ -14,6 +17,10 @@ const usePostLogin = () => {
         { email, password },
         { headers: { 'Content-Type': 'application/json' } },
       );
+    },
+    onSuccess: ({ profile, ...token }) => {
+      localStorage.setItem('token', JSON.stringify(token));
+      setIsProposerMode(profile.includes('proposer'));
     },
   });
 };
@@ -31,6 +38,9 @@ const usePostAccessToken = () => {
         { grant_type, refresh_token },
         { headers: { 'Content-Type': 'application/json' } },
       );
+    },
+    onSuccess: (token) => {
+      localStorage.setItem('token', JSON.stringify(token));
     },
   });
 };
@@ -91,6 +101,10 @@ const usePostAccount = () => {
         },
         { headers: { 'Content-Type': 'application/json' } },
       );
+    },
+    onSuccess: ({ profile, ...token }) => {
+      localStorage.setItem('token', JSON.stringify(token));
+      setIsProposerMode(profile.includes('proposer'));
     },
   });
 };
