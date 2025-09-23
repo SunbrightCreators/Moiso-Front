@@ -1,15 +1,14 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { EmptyState } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Carousel } from '../../components/common';
+import { BottomNavigation } from '../../components/common/navigation';
+import { BigCard, SmallCard } from '../../components/proposal';
 import { ROUTE_PATH } from '../../constants/route';
-import Carousel from '../../components/common/Carousel';
-import BottomNavigation from '../../components/common/navigation/BottomNavigation';
 import { ReactComponent as Sparkle } from '../../assets/icons/sparkle.svg';
 import img_sandwich from '../../assets/sandwich.jpg';
 import img_toast from '../../assets/toast.jpg';
-
-import { BigCard, SmallCard } from '../../components/proposal/index';
 
 /* =========================== 컴포넌트 =========================== */
 const ProposalRecPage = () => {
