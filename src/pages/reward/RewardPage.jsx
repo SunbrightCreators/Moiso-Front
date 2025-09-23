@@ -1,10 +1,10 @@
 import styled from 'styled-components';
+import { EmptyState } from '@chakra-ui/react';
 import {
   TopNavigation,
   BottomNavigation,
-} from '../../components/common/navigation/index';
+} from '../../components/common/navigation';
 import { ReactComponent as Reward } from '../../assets/icons/rewardempty.svg';
-import { EmptyState } from '@chakra-ui/react';
 
 const RewardPage = () => {
   return (
