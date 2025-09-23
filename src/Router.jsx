@@ -51,7 +51,7 @@ const Router = () => {
         <Route path={ROUTE_PATH.MY_UPDATE} element={<div></div>} />
         <Route path={ROUTE_PATH.MY_UPDATE_ADDRESS} element={<div></div>} />
         <Route path={ROUTE_PATH.MY_UPDATE_INDUSTRY} element={<div></div>} />
-        <Route path={ROUTE_PATH.MY_SCRAP} element={<div></div>} />
+        <Route path={ROUTE_PATH.MY_SCRAP} element={<MyScrap />} />
         <Route path={ROUTE_PATH.MY_PROPOSAL} element={<MyProposal />} />
         <Route path={ROUTE_PATH.MY_FUNDING} element={<MyFunding />} />
         <Route path={ROUTE_PATH.LEVEL} element={<Level />} />
