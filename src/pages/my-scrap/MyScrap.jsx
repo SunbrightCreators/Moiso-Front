@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { TopNavigation } from '../../components/common/navigation';
-import ProposalItem from '../../components/proposal/ProposalItem';
-import FundingItem from '../../components/funding/FundingItem';
-import { ReactComponent as Frown } from '../../assets/icons/frown.svg';
 import styled from 'styled-components';
 import { Tabs, EmptyState } from '@chakra-ui/react';
+import { TopNavigation } from '../../components/common/navigation';
+import { ProposalItem } from '../../components/proposal';
+import { FundingItem } from '../../components/funding';
+import { ReactComponent as Frown } from '../../assets/icons/frown.svg';
 
 export default function MyScrap() {
   const isProposerMode = true;
