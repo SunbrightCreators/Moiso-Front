@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useGetPositionToLegal } from '../../apis/maps';
 import { useGetProposalMap } from '../../apis/proposals';
@@ -16,6 +17,11 @@ import {
   ZOOM_DISTANCE_MAPPING,
 } from '../../components/map';
 import { INDUSTRY } from '../../constants/enum';
+import { ROUTE_PATH } from '../../constants/route';
+import {
+  loadNaverMapScript,
+  removeNaverMapScript,
+} from '../../apis/naverMapLoader';
 import useModeStore from '../../stores/useModeStore';
 import PencilIcon from '../../assets/icons/pencil.svg';
 
@@ -91,70 +97,60 @@ const ProposalMapPage = () => {
 
   // 네이버 지도 초기화
   useEffect(() => {
-    // DOM이 준비되면 지도 초기화
-    const timer = setTimeout(() => {
-      initializeMap();
-    }, 100);
+    (async () => {
+      try {
+        await loadNaverMapScript();
+        initializeMap();
+      } catch (error) {
+        console.error('네이버 지도 API 로드 오류:', error);
+      }
+    })();
 
-    return () => clearTimeout(timer);
+    // 컴포넌트 언마운트 시 스크립트 태그 정리
+    return () => {
+      removeNaverMapScript();
+    };
   }, []);
 
   // 지도 초기화 함수
   const initializeMap = () => {
-    const checkNaverMaps = () => {
-      if (
-        window.naver &&
-        window.naver.maps &&
-        window.naver.maps.Map &&
-        mapRef.current
-      ) {
-        try {
-          const mapInstance = new naver.maps.Map(mapRef.current, {
-            center: new naver.maps.LatLng(
-              currentLocation.lat,
-              currentLocation.lng,
-            ),
-            zoom: zoomLevel,
-            mapTypeControl: true,
-            mapTypeControlOptions: {
-              style: naver.maps.MapTypeControlStyle.BUTTON,
-              position: naver.maps.Position.TOP_RIGHT,
-            },
-            zoomControl: true,
-            zoomControlOptions: {
-              style: naver.maps.ZoomControlStyle.SMALL,
-              position: naver.maps.Position.TOP_RIGHT,
-            },
-          });
-          setMap(mapInstance);
+    if (!mapRef.current) {
+      console.error('지도 컨테이너가 준비되지 않음');
+      return;
+    }
 
-          // 지도 줌 변경 이벤트 리스너 추가
-          naver.maps.Event.addListener(mapInstance, 'zoom_changed', () => {
-            const mapZoom = mapInstance.getZoom();
-            setZoomLevel(mapZoom);
-          });
+    try {
+      const mapInstance = new naver.maps.Map(mapRef.current, {
+        center: new naver.maps.LatLng(currentLocation.lat, currentLocation.lng),
+        zoom: zoomLevel,
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+          style: naver.maps.MapTypeControlStyle.BUTTON,
+          position: naver.maps.Position.TOP_RIGHT,
+        },
+        zoomControl: true,
+        zoomControlOptions: {
+          style: naver.maps.ZoomControlStyle.SMALL,
+          position: naver.maps.Position.TOP_RIGHT,
+        },
+      });
+      setMap(mapInstance);
 
-          // 지도 중심 변경 이벤트 리스너 추가 (현재 지역 정보 업데이트)
-          naver.maps.Event.addListener(mapInstance, 'center_changed', () => {
-            updateCurrentRegion(mapInstance);
-          });
+      // 지도 줌 변경 이벤트 리스너 추가
+      naver.maps.Event.addListener(mapInstance, 'zoom_changed', () => {
+        const mapZoom = mapInstance.getZoom();
+        setZoomLevel(mapZoom);
+      });
 
-          console.log('네이버 지도 초기화 성공');
-        } catch (error) {
-          console.error('지도 초기화 실패:', error);
-        }
-      } else {
-        // 100ms 후 다시 시도 (최대 50번)
-        const retryCount = checkNaverMaps.retryCount || 0;
-        if (retryCount < 50) {
-          checkNaverMaps.retryCount = retryCount + 1;
-          setTimeout(checkNaverMaps, 100);
-        } else {
-          console.error('네이버 지도 API 로드 오류');
-        }
-      }
-    };
-    checkNaverMaps();
+      // 지도 중심 변경 이벤트 리스너 추가 (현재 지역 정보 업데이트)
+      naver.maps.Event.addListener(mapInstance, 'center_changed', () => {
+        updateCurrentRegion(mapInstance);
+      });
+
+      console.log('네이버 지도 초기화 성공');
+    } catch (error) {
+      console.error('지도 초기화 실패:', error);
+    }
   };
 
   // 슬라이더 줌 레벨 변경 핸들러
@@ -579,10 +575,9 @@ const ProposalMapPage = () => {
         {/* 제안자 모드일 때만 : 플로팅 버튼으로, '제안하기' - 화면상 고정 위치 */}
         {isProposerMode && (
           <SProposeButton
+            as={Link}
+            to={ROUTE_PATH.PROPOSAL_CREATE}
             $bottomsheetLevel={bottomsheetLevel}
-            onClick={() => {
-              /* 페이지 이동 : 구현해야 됨! */
-            }}
           >
             <img
               src={PencilIcon}
