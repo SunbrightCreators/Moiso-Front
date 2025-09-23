@@ -63,11 +63,11 @@ const MyFundingPage = () => {
                   : '아직 등록된 펀딩 프로젝트가 없어요'}
               </CustomTitle>
 
-              <CustomDesc>
+              <CustomDescription>
                 {isProposerMode
                   ? '마음을 움직이는 프로젝트를 찾아 후원해 보세요.'
                   : '마음에 드는 제안을 선택해 펀딩을 열어보세요.'}
-              </CustomDesc>
+              </CustomDescription>
             </EmptyState.Content>
           </FundingEmpty>
         ) : (
@@ -219,7 +219,7 @@ const CustomTitle = styled(EmptyState.Title)`
   font: var(--text-md-semibold);
 `;
 
-const CustomDesc = styled(EmptyState.Description)`
+const CustomDescription = styled(EmptyState.Description)`
   color: var(--colors-text-muted, #52525b);
   text-align: center;
 
