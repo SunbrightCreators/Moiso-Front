@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Button } from '@chakra-ui/react';
+import { usePostLocationHistory } from '../../apis/accounts';
+import { useGetPositionToLegal } from '../../apis/maps';
 import { Dialog } from '../../components/common';
 import { InputSearch } from '../../components/common/input';
 import { TopNavigation } from '../../components/common/navigation';
 import useDialogStore from '../../stores/useDialogStore';
 import useModeStore from '../../stores/useModeStore';
-import { usePostLocationHistory } from '../../apis/accounts';
-import { useGetPositionToLegal } from '../../apis/maps';
 
 const NeighborhoodSettingsPage = ({ onNextStep }) => {
   const { setConfirmDialog, setAlertDialog } = useDialogStore();
