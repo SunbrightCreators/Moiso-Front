@@ -39,6 +39,9 @@ const usePostAccessToken = () => {
         { headers: { 'Content-Type': 'application/json' } },
       );
     },
+    onSuccess: (token) => {
+      localStorage.setItem('token', JSON.stringify(token));
+    },
   });
 };
 
