@@ -102,6 +102,10 @@ const usePostAccount = () => {
         { headers: { 'Content-Type': 'application/json' } },
       );
     },
+    onSuccess: ({ profile, ...token }) => {
+      localStorage.setItem('token', JSON.stringify(token));
+      setIsProposerMode(profile.includes('proposer'));
+    },
   });
 };
 
