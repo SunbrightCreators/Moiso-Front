@@ -5,9 +5,10 @@ import { TopNavigation } from '../../components/common/navigation';
 import { ProposalItem } from '../../components/proposal';
 import { FundingItem } from '../../components/funding';
 import { ReactComponent as Frown } from '../../assets/icons/frown.svg';
+import useModeStore from '../../stores/useModeStore';
 
-export default function MyScrap() {
-  const isProposerMode = true;
+const MyScrap = () => {
+  const { isProposerMode } = useModeStore(); // true=제안자, false=창업자
   const profile = isProposerMode ? 'proposer' : 'founder';
 
   // 탭
@@ -191,7 +192,9 @@ export default function MyScrap() {
       </Tabs.Root>
     </>
   );
-}
+};
+
+export default MyScrap;
 
 /* ---------------- styled-components ---------------- */
 
