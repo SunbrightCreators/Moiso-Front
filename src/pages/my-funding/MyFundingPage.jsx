@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { EmptyState } from '@chakra-ui/react';
 import { TopNavigation } from '../../components/common/navigation';
 import useModeStore from '../../stores/useModeStore';
 import { ReactComponent as Frown } from '../../assets/icons/frown.svg';
-import { EmptyState } from '@chakra-ui/react';
 
 const MyFundingPage = () => {
   const { isProposerMode } = useModeStore();
