@@ -1,6 +1,6 @@
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { client, authClient } from './instance';
-import useModeStore from '../../stores/useModeStore';
+import useModeStore from '../stores/useModeStore';
 
 /**
  * 로그인
