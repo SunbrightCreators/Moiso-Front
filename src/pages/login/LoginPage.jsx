@@ -5,12 +5,10 @@ import { Button, Field, Input } from '@chakra-ui/react';
 import { usePostLogin } from '../../apis/accounts';
 import { TopNavigation } from '../../components/common/navigation';
 import { ROUTE_PATH } from '../../constants/route';
-import useModeStore from '../../stores/useModeStore';
 import logo from '../../assets/icons/symbol.svg';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { setIsProposerMode } = useModeStore();
   const {
     register,
     handleSubmit,
@@ -21,10 +19,7 @@ const LoginPage = () => {
 
   const onSubmit = async (data) => {
     try {
-      // const response = await postLogin(data.email, data.password);
-      // const { profile, ...token } = response.data;
-      // localStorage.setItem('token', JSON.stringify(token));
-      // setIsProposerMode(profile.includes('proposer'));
+      // 여기에 API 연결하기
       navigate(ROUTE_PATH.PROPOSAL);
     } catch (error) {}
   };
