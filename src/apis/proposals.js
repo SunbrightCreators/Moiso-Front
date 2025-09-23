@@ -165,7 +165,7 @@ const usePostProposalScrap = () => {
         { headers: { 'Content-Type': 'application/json' } },
       );
     },
-    onSuccess: async (data, { profile }) => {
+    onSuccess: async (response, { profile }) => {
       await queryClient.invalidateQueries({
         queryKey: ['useGetProposalScrapList', profile],
       });

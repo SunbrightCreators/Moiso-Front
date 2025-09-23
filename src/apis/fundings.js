@@ -117,7 +117,7 @@ const usePostFundingScrap = () => {
         { headers: { 'Content-Type': 'application/json' } },
       );
     },
-    onSuccess: async (data, { profile }) => {
+    onSuccess: async (response, { profile }) => {
       await queryClient.invalidateQueries({
         queryKey: ['useGetFundingScrapList', profile],
       });

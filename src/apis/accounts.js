@@ -18,7 +18,8 @@ const usePostLogin = () => {
         { headers: { 'Content-Type': 'application/json' } },
       );
     },
-    onSuccess: ({ profile, ...token }) => {
+    onSuccess: (response) => {
+      const { profile, ...token } = response.data;
       localStorage.setItem('token', JSON.stringify(token));
       setIsProposerMode(profile.includes('proposer'));
     },
@@ -39,7 +40,8 @@ const usePostAccessToken = () => {
         { headers: { 'Content-Type': 'application/json' } },
       );
     },
-    onSuccess: (token) => {
+    onSuccess: (response) => {
+      const token = response.data;
       localStorage.setItem('token', JSON.stringify(token));
     },
   });
@@ -102,7 +104,8 @@ const usePostAccount = () => {
         { headers: { 'Content-Type': 'application/json' } },
       );
     },
-    onSuccess: ({ profile, ...token }) => {
+    onSuccess: (response) => {
+      const { profile, ...token } = response.data;
       localStorage.setItem('token', JSON.stringify(token));
       setIsProposerMode(profile.includes('proposer'));
     },
