@@ -158,9 +158,7 @@ const ProposalRecPage = () => {
         </Section>
       </Page>
 
-      <BottomBarWrap>
-        <BottomNavigation />
-      </BottomBarWrap>
+      <BottomNavigation />
     </>
   );
 };

@@ -26,6 +26,12 @@ const founderNavItems = [
   { path: ROUTE_PATH.MY, label: '마이', Icon: MyIcon },
 ];
 const SNavigationContainer = styled.nav`
+  position:sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
   width: 100%;
   background-color: white;
   border-top: 0.5px solid #e4e4e7;
