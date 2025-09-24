@@ -18,12 +18,10 @@ const NeighborhoodSettingsPage = ({ onNextStep }) => {
   const { isProposerMode } = useModeStore();
 
   const postLocationHistoryMutation = usePostLocationHistory();
-  const {
-    data: addressData,
-    isLoading: isLoadingAddress,
-    error: addressError,
-    refetch: refetchAddress,
-  } = useGetPositionToLegal(coordinates?.latitude, coordinates?.longitude);
+  const { refetch: refetchAddress } = useGetPositionToLegal(
+    coordinates?.latitude,
+    coordinates?.longitude,
+  );
 
   const topNavTitle = isProposerMode ? '제안자 가입' : '창업자 가입';
   const topNavSubTitle = isProposerMode ? '제안 동네 설정' : '관심 동네 설정';
@@ -77,7 +75,7 @@ const NeighborhoodSettingsPage = ({ onNextStep }) => {
         return result.data;
       } else {
         console.error('Invalid response format:', result.data);
-        throw new Error('주소 변환에 실패했습니다.');
+        throw new Error('Invalid response format.');
       }
     } catch (error) {
       console.error('Address conversion error:', error);
@@ -90,15 +88,15 @@ const NeighborhoodSettingsPage = ({ onNextStep }) => {
     try {
       const location = await getCurrentLocation();
 
-      const adressData = await convertCoordinatesToAddress(
+      const addressData = await convertCoordinatesToAddress(
         location.latitude,
         location.longitude,
       );
 
-      const currentAddress = `${adressData.sido} ${adressData.sigungu} ${adressData.eupmyundong}`;
+      const currentAddress = `${addressData.sido} ${addressData.sigungu} ${addressData.eupmyundong}`;
 
       try {
-        await postLocationHistoryMutation.mutateAsync({
+        await postLocationHistoryMutation.mutate({
           timestamp: location.timestamp,
           latitude: location.latitude,
           longitude: location.longitude,
@@ -122,7 +120,7 @@ const NeighborhoodSettingsPage = ({ onNextStep }) => {
       } else {
         setAlertDialog({
           title: '현재 위치로 인증할 수 없어요',
-          content: `현재 위치가 '신사동'이에요.\n동네 인증은 ${neighborhood}에서만 할 수 있어요.`,
+          content: `현재 위치가 '${currentAddress}'이에요.\n동네 인증은 ${neighborhood}에서만 할 수 있어요.`,
           actionText: '확인',
         });
       }
