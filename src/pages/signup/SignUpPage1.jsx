@@ -20,7 +20,7 @@ const SignUpPage1 = ({ onNextStep }) => {
     <Flex direction='column' minH='100%' font='font: var(--text-sm-semibold);'>
       <VStack spacing={4} flex='1' justify='center'>
         <LogoBox>
-          <img src={logo} alt='서비스 로고' />
+          <LogoImg src={logo} alt='서비스 로고' />
         </LogoBox>
       </VStack>
 
@@ -82,10 +82,15 @@ const LogoBox = styled(Box)`
   width: 13.4375rem;
   height: 10.875rem;
   flex-shrink: 0;
-  padding: 3.25rem;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
   border-radius: 0.4375rem;
   background: var(--Surface, #ffffffff);
+`;
+
+const LogoImg = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 `;
