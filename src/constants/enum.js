@@ -1,3 +1,7 @@
+const PROFILE = Object.freeze({
+  proposer: 'proposer',
+  founder: 'founder',
+});
 const SEX = Object.freeze([
   { value: 'WOMAN', label: '여성' },
   { value: 'MAN', label: '남성' },
@@ -27,6 +31,19 @@ const INDUSTRY = Object.freeze([
   { value: 'OTHER_RETAIL', label: '기타 판매업', icon: '…' },
   { value: 'OTHER_SERVICE', label: '기타 서비스업', icon: '…' },
 ]);
+const RADIUS = Object.freeze({
+  M0: 0,
+  M250: 250,
+  M500: 500,
+  M750: 750,
+  M1000: 1000,
+});
+const ZOOM = Object.freeze({
+  M0: 0,
+  M500: 500,
+  M2000: 2000,
+  M10000: 10000,
+});
 const FOUNDER_TARGET = Object.freeze([
   { value: 'LOCAL', label: '동네주민' },
   { value: 'STRANGER', label: '외부인' },
@@ -42,4 +59,13 @@ const REWARD_AMOUNT = Object.freeze([
   { value: 50000, label: `${(50000).toLocaleString('ko-KR')}원` },
 ]);
 
-export { SEX, INDUSTRY, FOUNDER_TARGET, BANK_CATEGORY, REWARD_AMOUNT };
+export {
+  PROFILE,
+  SEX,
+  INDUSTRY,
+  RADIUS,
+  ZOOM,
+  FOUNDER_TARGET,
+  BANK_CATEGORY,
+  REWARD_AMOUNT,
+};

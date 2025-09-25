@@ -2,15 +2,13 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import { Button, Field, Input } from '@chakra-ui/react';
-import { postLogin } from '../../apis/accounts';
+import { usePostLogin } from '../../apis/accounts';
 import { TopNavigation } from '../../components/common/navigation';
 import { ROUTE_PATH } from '../../constants/route';
-import useModeStore from '../../stores/useModeStore';
 import logo from '../../assets/icons/symbol.svg';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { setIsProposerMode } = useModeStore();
   const {
     register,
     handleSubmit,
@@ -19,14 +17,21 @@ const LoginPage = () => {
     mode: 'onBlur',
   });
 
+  const { mutate: postLogin } = usePostLogin();
+
   const onSubmit = async (data) => {
-    try {
-      const response = await postLogin(data.email, data.password);
-      const { profile, ...token } = response.data;
-      localStorage.setItem('token', JSON.stringify(token));
-      setIsProposerMode(profile.includes('proposer'));
-      navigate(ROUTE_PATH.PROPOSAL);
-    } catch (error) {}
+    postLogin(
+      { email: data.email, password: data.password },
+      {
+        onSuccess: () => {
+          console.log('login success:', data);
+          navigate(ROUTE_PATH.PROPOSAL);
+        },
+        onError: (err) => {
+          console.error('login failed:', err);
+        },
+      },
+    );
   };
 
   return (
