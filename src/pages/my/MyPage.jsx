@@ -142,6 +142,7 @@ const MyPage = () => {
               <LevelSub>
                 LV. {level.next}까지 {level.remainingPoints}점 남았어요!
               </LevelSub>
+              <VisitVerifyButton>우리 동네 방문 인증</VisitVerifyButton>
             </LevelCard>
           )}
         </AccountSection>
@@ -301,6 +302,25 @@ const Name = styled.div`
 const Email = styled.div`
   font-size: 12px;
   color: #9ca3af;
+`;
+
+const VisitVerifyButton = styled(Button)`
+  display: flex;
+  height: var(--sizes-8, 2rem);
+  min-width: var(--sizes-8, 2rem);
+  padding: 0.125rem var(--spacing-2_5, 0.625rem);
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  justify-content: center;
+
+  border-radius: var(--radii-full, 624.9375rem);
+  background: var(--colors-gray-subtle, #f4f4f5);
+
+  color: var(--colors-gray-fg, #27272a);
+
+  /* xs/medium */
+  font: var(--text-xs-medium);
 `;
 
 /* 계정설정 - 지역주민 추가부분 */
