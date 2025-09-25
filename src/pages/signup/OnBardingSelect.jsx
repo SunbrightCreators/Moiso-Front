@@ -53,14 +53,14 @@ const OnBoardingSelect = ({ onNextStep }) => {
                   value={item.value}
                 >
                   <CheckboxCard.HiddenInput />
-                  <CheckboxCard.Content>
+                  <StyledCheckboxCardContent>
                     <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>
                       {item.icon}
                     </div>
                     <CheckboxCard.Label style={{ fontSize: '0.875rem' }}>
                       {item.label}
                     </CheckboxCard.Label>
-                  </CheckboxCard.Content>
+                  </StyledCheckboxCardContent>
                 </StyledCheckboxCard>
               );
             })}
@@ -172,6 +172,16 @@ const StyledCheckboxCard = styled(CheckboxCard.Root)`
     outline: none !important;
     box-shadow: none !important;
   }
+`;
+
+const StyledCheckboxCardContent = styled(CheckboxCard.Content)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  height: 100%;
 `;
 
 const StyledButton = styled(Button)`
