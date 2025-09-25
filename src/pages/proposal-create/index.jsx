@@ -2,13 +2,17 @@
 import React, { useMemo, useState } from 'react';
 import ProposalCreatePage from './ProposalCreatePage';
 import PlaceSearchPage from './PlaceSearchPage';
+import CreateProposalMapPage from './CreateProposalMapPage';
 
 export default function ProposalIndex() {
   // 0: 생성(추천) 화면, 1: 장소검색 화면
   const [currentStep, setCurrentStep] = useState(0);
   const [data, setData] = useState({ location: '' }); // 스텝 간 공유 데이터
 
-  const steps = useMemo(() => [ProposalCreatePage, PlaceSearchPage], []);
+  const steps = useMemo(
+    () => [ProposalCreatePage, PlaceSearchPage, CreateProposalMapPage],
+    [],
+  );
   const Current = steps[currentStep];
 
   const merge = (payload) => {

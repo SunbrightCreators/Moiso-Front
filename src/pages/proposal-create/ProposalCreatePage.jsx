@@ -205,7 +205,7 @@ const ProposalCreatePage = ({ data, onNextStep }) => {
               placeholder='지도에서 설정'
               readOnly
               value={watch('location') || ''} // RHF 쓰는 중이면 그대로
-              onClick={() => onNextStep && onNextStep()} // ← placeSearch로 이동
+              onClick={() => navigate(ROUTE_PATH.PROPOSAL_CREATE_MAP)} // ← CreateProposalMapPage로 직접 이동
             />
             {errors.location && (
               <Field.ErrorText>{errors.location.message}</Field.ErrorText>

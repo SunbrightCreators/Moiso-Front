@@ -8,7 +8,7 @@ import {
 } from '../../apis/maps';
 import { TopNavigation } from '../../components/common/navigation';
 import { createTypedCircle, createTypedMarker } from '../../components/map';
-import CurrentLocation from '../../assets/icons/CreateProposalMapPage_target.svg';
+import CurrentLocation from '../../assets/icons/target.svg';
 
 /**
  * 제안글 등록 시 장소 선택 페이지
