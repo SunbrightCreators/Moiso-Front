@@ -17,11 +17,21 @@ const LoginPage = () => {
     mode: 'onBlur',
   });
 
+  const { mutate: postLogin } = usePostLogin();
+
   const onSubmit = async (data) => {
-    try {
-      // 여기에 API 연결하기
-      navigate(ROUTE_PATH.PROPOSAL);
-    } catch (error) {}
+    postLogin(
+      { email: data.email, password: data.password },
+      {
+        onSuccess: () => {
+          console.log('login success:', data);
+          navigate(ROUTE_PATH.PROPOSAL);
+        },
+        onError: (err) => {
+          console.error('login failed:', err);
+        },
+      },
+    );
   };
 
   return (
