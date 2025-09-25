@@ -124,11 +124,7 @@ const SectionTitle = styled.h2`
   color: var(--colors-text-default, #27272a);
 
   /* sm/semibold */
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-sm, 0.875rem);
-  font-style: normal;
-  font-weight: var(--font-weights-semibold, 600);
-  line-height: var(--line-heights-sm, 1.25rem); /* 142.857% */
+  font: var(--text-sm-semibold);
 `;
 
 const SectionDesc = styled.p`
@@ -136,11 +132,7 @@ const SectionDesc = styled.p`
   color: var(--colors-text-subtle, #a1a1aa);
 
   /* xs/normal */
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-xs, 0.75rem);
-  font-style: normal;
-  font-weight: var(--font-weights-normal, 400);
-  line-height: var(--line-heights-xs, 1rem); /* 133.333% */
+  font: var(--text-xs-normal);
 `;
 
 const CardList = styled.div`
@@ -169,22 +161,13 @@ const LvLabel = styled.div`
   color: var(--colors-text-default, #27272a);
 
   /* sm/semibold */
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-sm, 0.875rem);
-  font-style: normal;
-  font-weight: var(--font-weights-semibold, 600);
-  line-height: var(--line-heights-sm, 1.25rem); /* 142.857% */
+  font: var(--text-sm-semibold);
 `;
 
 const CardLine = styled.p`
   color: var(--colors-text-muted, #52525b);
-
   /* sm/normal */
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-sm, 0.875rem);
-  font-style: normal;
-  font-weight: var(--font-weights-normal, 400);
-  line-height: var(--line-heights-sm, 1.25rem); /* 142.857% */
+  font: var(--text-sm-normal);
 `;
 
 const CardIcon = styled.div`
@@ -210,13 +193,8 @@ const CardIcon = styled.div`
 
 const LevelTitle = styled.div`
   color: var(--colors-text-subtle, #a1a1aa);
-
-  /* xs/semibold */
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-xs, 0.75rem);
-  font-style: normal;
-  font-weight: var(--font-weights-semibold, 600);
-  line-height: var(--line-heights-xs, 1rem); /* 133.333% */
+  /* sm/normal */
+  font: var(--text-xs-semibold);
 
   margin-bottom: 1.5rem;
 `;
@@ -224,11 +202,7 @@ const RuleList = styled.ul`
   color: var(--colors-text-subtle, #6b7280);
 
   /* xs/normal */
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-xs, 0.75rem);
-  font-style: normal;
-  font-weight: var(--font-weights-normal, 400);
-  line-height: var(--line-heights-xs, 1.5);
+  font: var(--text-xs-normal);
 
   margin: 0;
   padding-left: 1rem;

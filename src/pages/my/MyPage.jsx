@@ -113,6 +113,7 @@ const MyPage = () => {
               height='var(--sizes-6, 1.5rem)'
               gap=' var(--spacing-1, 0.25rem)'
               font='var(--text-xs-medium)'
+              onClick={() => navigate(ROUTE_PATH.LEVEL)}
             >
               계정설정
             </Button>
@@ -373,11 +374,7 @@ const SLabel = styled.span`
   color: bg/default;
 
   /* sm/semibold */
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-sm, 0.875rem);
-  font-style: normal;
-  font-weight: var(--font-weights-semibold, 600);
-  line-height: var(--line-heights-sm, 1.25rem); /* 142.857% */
+  font: var(--text-sm-semibold);
 `;
 
 const SChevronLink = styled(Link)`
