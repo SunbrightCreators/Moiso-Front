@@ -272,6 +272,5 @@ const RewardCode = styled.code`
     'Courier New', monospace;
   background: #f4f4f5;
   padding: 0.25rem 0.5rem;
-  border-radius: 6px;
   color: #27272a;
 `;
