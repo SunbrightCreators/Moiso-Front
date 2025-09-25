@@ -34,23 +34,23 @@ const Router = () => {
         <Route path={ROUTE_PATH.ROOT} element={<Root />} />
         <Route path={ROUTE_PATH.LOGIN} element={<Login />} />
         <Route path={ROUTE_PATH.SIGNUP} element={<Signup />} />
-        <Route path={ROUTE_PATH.SIGNUP_PROPOSER} element={<div></div>} />
-        <Route path={ROUTE_PATH.SIGNUP_FOUNDER} element={<div></div>} />
+        <Route path={ROUTE_PATH.SIGNUP_PROPOSER} element={<SignupProposer />} />
+        <Route path={ROUTE_PATH.SIGNUP_FOUNDER} element={<SignupFounder />} />
         <Route path={ROUTE_PATH.PROPOSAL_CREATE} element={<ProposalCreate />} />
         <Route path={ROUTE_PATH.PROPOSAL} element={<Proposal />} />
         <Route
           path={ROUTE_PATH.PROPOSAL_DETAIL(':proposalId')}
-          element={<div></div>}
+          element={<ProposalDetail />}
         />
-        <Route path={ROUTE_PATH.FUNDING_CREATE} element={<div></div>} />
-        <Route path={ROUTE_PATH.FUNDING} element={<div></div>} />
+        <Route path={ROUTE_PATH.FUNDING_CREATE} element={<FundingCreate />} />
+        <Route path={ROUTE_PATH.FUNDING} element={<Funding />} />
         <Route
           path={ROUTE_PATH.FUNDING_DETAIL(':fundingId')}
-          element={<div></div>}
+          element={<FundingDetail />}
         />
         <Route
           path={ROUTE_PATH.FUNDING_DETAIL_PLEDGE(':fundingId')}
-          element={<div></div>}
+          element={<FundingDetailPledge />}
         />
         <Route
           path={ROUTE_PATH.RECOMMENDATION_PROPOSAL}
@@ -59,17 +59,23 @@ const Router = () => {
         <Route path={ROUTE_PATH.REWARD} element={<Reward />} />
         <Route
           path={ROUTE_PATH.REWARD_DETAIL(':rewardId')}
-          element={<div></div>}
+          element={<RewardDetail />}
         />
         <Route path={ROUTE_PATH.MY} element={<My />} />
-        <Route path={ROUTE_PATH.MY_UPDATE} element={<div></div>} />
-        <Route path={ROUTE_PATH.MY_UPDATE_ADDRESS} element={<div></div>} />
-        <Route path={ROUTE_PATH.MY_UPDATE_INDUSTRY} element={<div></div>} />
+        <Route path={ROUTE_PATH.MY_UPDATE} element={<MyUpdate />} />
+        <Route
+          path={ROUTE_PATH.MY_UPDATE_ADDRESS}
+          element={<MyUpdateAddress />}
+        />
+        <Route
+          path={ROUTE_PATH.MY_UPDATE_INDUSTRY}
+          element={<MyUpdateIndustry />}
+        />
         <Route path={ROUTE_PATH.MY_SCRAP} element={<MyScrap />} />
         <Route path={ROUTE_PATH.MY_PROPOSAL} element={<MyProposal />} />
         <Route path={ROUTE_PATH.MY_FUNDING} element={<MyFunding />} />
         <Route path={ROUTE_PATH.LEVEL} element={<Level />} />
-        <Route path={ROUTE_PATH.NOTIFICATION} element={<div></div>} />
+        <Route path={ROUTE_PATH.NOTIFICATION} element={<Notification />} />
       </Routes>
     </BrowserRouter>
   );
