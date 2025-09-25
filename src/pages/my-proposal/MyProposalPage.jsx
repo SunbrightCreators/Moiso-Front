@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { EmptyState } from '@chakra-ui/react';
 import { TopNavigation } from '../../components/common/navigation';
-import emptyImg from '../../assets/EmptyState (5).svg';
+import { ReactComponent as Frown } from '../../assets/icons/frown.svg';
 
 const MyProposalPage = () => {
   const total = 3;
@@ -98,7 +99,17 @@ const MyProposalPage = () => {
 
           {items.length === 0 && (
             <Empty>
-              <EmptyImg src={emptyImg} alt='작성한 제안글 없음' />
+              <EmptyState.Root>
+                <EmptyState.Content>
+                  <EmptyState.Indicator>
+                    <Frown width={32} height={32} />
+                  </EmptyState.Indicator>
+                  <CustomTitle>아직 작성한 제안글이 없어요 </CustomTitle>
+                  <CustomDescription>
+                    우리 동네에 생기길 바라는 가게를 제안해 보세요.
+                  </CustomDescription>
+                </EmptyState.Content>
+              </EmptyState.Root>
             </Empty>
           )}
         </List>
@@ -133,11 +144,8 @@ const Toolbar = styled.div`
 
 const Count = styled.span`
   color: var(--colors-fg-subtle, #a1a1aa);
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-sm, 0.875rem);
-  font-style: normal;
-  font-weight: var(--font-weights-normal, 400);
-  line-height: var(--line-heights-sm, 1.25rem);
+  /* sm/normal */
+  font: var(--text-sm-normal);
 `;
 
 const List = styled.div`
@@ -157,20 +165,12 @@ const Item = styled.div`
 `;
 
 const Title = styled.p`
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-sm, 0.875rem);
-  font-style: normal;
-  font-weight: var(--font-weights-medium, 500);
-  line-height: var(--line-heights-sm, 1.25rem);
+  font: var(--text-sm-medium);
 `;
 
 const Meta = styled.p`
   color: var(--colors-text-subtle, #a1a1aa);
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-xs, 0.75rem);
-  font-style: normal;
-  font-weight: var(--font-weights-normal, 400);
-  line-height: var(--line-heights-xs, 1rem);
+  font: var(--text-xs-normal);
 `;
 
 const Dropdown = styled.div`
@@ -246,10 +246,20 @@ const Empty = styled.div`
   text-align: center;
 `;
 
-const EmptyImg = styled.img`
-  width: 100%; /* ← 세미콜론 추가 */
-  height: auto;
-  opacity: 0.95;
+const CustomTitle = styled(EmptyState.Title)`
+  color: var(--colors-text-default, #27272a);
+  text-align: center;
+
+  /* md/semibold */
+  font: var(--text-md-semibold);
+`;
+
+const CustomDescription = styled(EmptyState.Description)`
+  color: var(--colors-text-muted, #52525b);
+  text-align: center;
+
+  /* sm/normal */
+  font: var(--text-sm-normal);
 `;
 
 /*목데이터 */

@@ -1,9 +1,10 @@
 import styled from 'styled-components';
+import { EmptyState } from '@chakra-ui/react';
 import {
   TopNavigation,
   BottomNavigation,
 } from '../../components/common/navigation';
-import EmptyIllust from '../../assets/EmptyReward.svg';
+import { ReactComponent as Reward } from '../../assets/icons/rewardempty.svg';
 
 const RewardPage = () => {
   return (
@@ -20,7 +21,14 @@ const RewardPage = () => {
             </SectionDesc>
           </SectionHeader>
           <EmptyCard aria-label='펀딩 리워드 비어있음'>
-            <img src={EmptyIllust} alt='' />
+            <BorderedEmpty>
+              <EmptyState.Content>
+                <EmptyState.Indicator>
+                  <Reward width={32} height={32} />
+                </EmptyState.Indicator>
+                <CustomTitle>아직 발급된 리워드가 없어요</CustomTitle>
+              </EmptyState.Content>
+            </BorderedEmpty>
           </EmptyCard>
         </Section>
 
@@ -35,9 +43,14 @@ const RewardPage = () => {
             </SectionDesc>
           </SectionHeader>
 
-          <EmptyCard aria-label='레벨 리워드 비어있음'>
-            <img src={EmptyIllust} alt='' />
-          </EmptyCard>
+          <BorderedEmpty>
+            <EmptyState.Content>
+              <EmptyState.Indicator>
+                <Reward width={32} height={32} />
+              </EmptyState.Indicator>
+              <CustomTitle>아직 발급된 리워드가 없어요</CustomTitle>
+            </EmptyState.Content>
+          </BorderedEmpty>
         </Section>
       </Main>
 
@@ -77,11 +90,7 @@ const SectionTitle = styled.h2`
   color: var(--colors-text-default, #27272a);
 
   /* md/semibold */
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-md, 1rem);
-  font-style: normal;
-  font-weight: var(--font-weights-semibold, 600);
-  line-height: var(--line-heights-md, 1.5rem); /* 150% */
+  font: var(--text-md-semibold);
 `;
 
 const SectionDesc = styled.p`
@@ -89,13 +98,24 @@ const SectionDesc = styled.p`
   color: var(--colors-text-subtle, #a1a1aa);
 
   /* sm/normal */
-  font-family: var(--fonts-body, Inter);
-  font-size: var(--font-sizes-sm, 0.875rem);
-  font-style: normal;
-  font-weight: var(--font-weights-normal, 400);
-  line-height: var(--line-heights-sm, 1.25rem); /* 142.857% */
+  font: var(--text-sm-normal);
 `;
 
+const BorderedEmpty = styled(EmptyState.Root)`
+  display: flex;
+  width: 22.375rem;
+  height: 10.5rem;
+  margin: 0 auto;
+  padding: var(--spacing-12, 3rem);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-4, 1rem);
+  align-self: stretch;
+
+  border: 0.5px solid var(--colors-border-default, #e4e4e7);
+  border-radius: var(--radii-lg, 0.5rem);
+`;
 const EmptyCard = styled.div`
   border-radius: 0.75rem;
 
@@ -104,6 +124,12 @@ const EmptyCard = styled.div`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+`;
+const CustomTitle = styled(EmptyState.Title)`
+  color: var(--colors-text-subtle, #a1a1aa);
+  text-align: center;
+
+  font: var(--text-md-medium);
 `;
 
 const Divider = styled.hr`
