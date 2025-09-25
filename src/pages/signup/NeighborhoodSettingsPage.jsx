@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Button } from '@chakra-ui/react';
+import { usePostLocationHistory } from '../../apis/accounts';
+import { client } from '../../apis/instance';
 import { Dialog } from '../../components/common';
 import { InputSearch } from '../../components/common/input';
 import { TopNavigation } from '../../components/common/navigation';
@@ -14,14 +16,98 @@ const NeighborhoodSettingsPage = ({ onNextStep }) => {
 
   const { isProposerMode } = useModeStore();
 
+  const postLocationHistoryMutation = usePostLocationHistory();
+
   const topNavTitle = isProposerMode ? '제안자 가입' : '창업자 가입';
   const topNavSubTitle = isProposerMode ? '제안 동네 설정' : '관심 동네 설정';
 
-  const handleAuthentication = (neighborhood) => {
-    setTimeout(() => {
-      const isSuccess = Math.random() > 0.2; //시뮬레이션용 !!!!
+  // —————————————————————————————————————————————————————————
 
-      if (isSuccess) {
+  const getCurrentLocation = () => {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject(new Error('Geolocation is not supported by this browser.'));
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          resolve({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            accuracy: position.coords.accuracy,
+            timestamp: position.timestamp,
+          });
+        },
+        (error) => {
+          reject(error);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 60000,
+        },
+      );
+    });
+  };
+
+  // —————————————————————————————————————————————————————————
+  const convertCoordinatesToAddress = async (latitude, longitude) => {
+    try {
+      console.log('Converting coordinates:', { latitude, longitude });
+
+      // 직접 API 호출
+      const response = await client.get(`/maps/reverse-geocoding/legal`, {
+        params: new URLSearchParams({
+          latitude: latitude.toString(),
+          longitude: longitude.toString(),
+        }),
+      });
+
+      console.log('API response:', response);
+
+      const addressData = response.data;
+
+      if (
+        addressData?.sido &&
+        addressData?.sigungu &&
+        addressData?.eupmyundong
+      ) {
+        return addressData;
+      } else {
+        console.error('Invalid response format:', response.data);
+        throw new Error('Invalid response format.');
+      }
+    } catch (error) {
+      console.error('Address conversion error:', error);
+      throw new Error('주소 변환에 실패했습니다.');
+    }
+  };
+  // —————————————————————————————————————————————————————————
+
+  const handleAuthentication = async (neighborhood) => {
+    try {
+      const location = await getCurrentLocation();
+
+      const addressData = await convertCoordinatesToAddress(
+        location.latitude,
+        location.longitude,
+      );
+
+      const currentAddress = `${addressData.sido} ${addressData.sigungu} ${addressData.eupmyundong}`;
+
+      try {
+        await postLocationHistoryMutation.mutate({
+          timestamp: location.timestamp,
+          latitude: location.latitude,
+          longitude: location.longitude,
+          accuracy: location.accuracy,
+        });
+      } catch (error) {
+        console.error('위치 기록 전송 실패:', error);
+      }
+
+      if (currentAddress === neighborhood) {
         setAlertDialog({
           title: '동네 인증이 완료되었어요',
           content: `현재 위치가 '${neighborhood}'으로 확인되었습니다.\n이제 동네 활동을 시작할 수 있어요.`,
@@ -35,11 +121,32 @@ const NeighborhoodSettingsPage = ({ onNextStep }) => {
       } else {
         setAlertDialog({
           title: '현재 위치로 인증할 수 없어요',
-          content: `현재 위치가 '신사동'이에요.\n동네 인증은 ${neighborhood}에서만 할 수 있어요.`,
+          content: `현재 위치가 '${currentAddress}'이에요.\n동네 인증은 ${neighborhood}에서만 할 수 있어요.`,
           actionText: '확인',
         });
       }
-    }, 1000);
+    } catch (error) {
+      console.error('인증 오류:', error);
+
+      let errorText = '동네 인증에 실패했어요.';
+
+      if (error.code === 1) {
+        errorText = '위치 정보 사용이 거부되었어요.\n위치 권한을 허용해주세요.';
+      } else if (error.code === 2) {
+        errorText = '현재 위치를 찾을 수 없어요.\n 잠시 후 다시 시도해주세요.';
+      } else if (error.code === 3) {
+        errorText =
+          '위치 정보를 가져오는 데 시간이 초과되었어요.\n 잠시 후 다시 시도해주세요.';
+      } else if (error.message) {
+        errorText = error.message;
+      }
+
+      setAlertDialog({
+        title: '인증 실패',
+        content: errorText,
+        actionText: '확인',
+      });
+    }
   };
 
   const handleItemClick = (neighborhood) => {
@@ -196,14 +303,14 @@ const Tag = styled.div`
 `;
 
 const neighborhoods = [
-  '서울 서대문구 대현동',
-  '서울 서대문구 대신동',
-  '서울 서대문구 대신동',
-  '서울 서대문구 대신동',
-  '서울 서대문구 대신동',
-  '서울 서대문구 대신동',
-  '서울 서대문구 대신동',
-  '서울 서대문구 대신동',
-  '서울 서대문구 대신동',
-  '서울 서대문구 대신동',
+  '서울특별시 서대문구 대현동',
+  '서울특별시 서대문구 대신동',
+  '서울특별시 서대문구 신촌동',
+  '서울특별시 서대문구 연희동',
+  '서울특별시 서대문구 북아현동',
+  '서울특별시 서대문구 홍제동',
+  '서울특별시 서대문구 봉원동',
+  '서울특별시 서대문구 창천동',
+  '서울특별시 서대문구 홍은동',
+  '서울특별시 서대문구 남가좌동',
 ];
