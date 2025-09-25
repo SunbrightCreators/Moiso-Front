@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { Button } from '@chakra-ui/react';
 import { usePostLocationHistory } from '../../apis/accounts';
-import { useGetPositionToLegal } from '../../apis/maps';
+import { client } from '../../apis/instance';
 import { Dialog } from '../../components/common';
 import { InputSearch } from '../../components/common/input';
 import { TopNavigation } from '../../components/common/navigation';
@@ -13,15 +13,10 @@ const NeighborhoodSettingsPage = ({ onNextStep }) => {
   const { setConfirmDialog, setAlertDialog } = useDialogStore();
   const [isAuthComplete, setIsAuthComplete] = useState(false);
   const [selectedNeighborhoods, setSelectedNeighborhoods] = useState([]);
-  const [coordinates, setCoordinates] = useState(null);
 
   const { isProposerMode } = useModeStore();
 
   const postLocationHistoryMutation = usePostLocationHistory();
-  const { refetch: refetchAddress } = useGetPositionToLegal(
-    coordinates?.latitude,
-    coordinates?.longitude,
-  );
 
   const topNavTitle = isProposerMode ? '제안자 가입' : '창업자 가입';
   const topNavSubTitle = isProposerMode ? '제안 동네 설정' : '관심 동네 설정';
@@ -60,21 +55,27 @@ const NeighborhoodSettingsPage = ({ onNextStep }) => {
   const convertCoordinatesToAddress = async (latitude, longitude) => {
     try {
       console.log('Converting coordinates:', { latitude, longitude });
-      // 좌표 상태 설정하여 useGetPositionToLegal hook 트리거
-      setCoordinates({ latitude, longitude });
 
-      // 쿼리가 실행되고 결과를 받을 때까지 기다림
-      const result = await refetchAddress();
-      console.log('API response:', result);
+      // 직접 API 호출
+      const response = await client.get(`/maps/reverse-geocoding/legal`, {
+        params: new URLSearchParams({
+          latitude: latitude.toString(),
+          longitude: longitude.toString(),
+        }),
+      });
+
+      console.log('API response:', response);
+
+      const addressData = response.data;
 
       if (
-        result.data?.sido &&
-        result.data?.sigungu &&
-        result.data?.eupmyundong
+        addressData?.sido &&
+        addressData?.sigungu &&
+        addressData?.eupmyundong
       ) {
-        return result.data;
+        return addressData;
       } else {
-        console.error('Invalid response format:', result.data);
+        console.error('Invalid response format:', response.data);
         throw new Error('Invalid response format.');
       }
     } catch (error) {
