@@ -38,17 +38,29 @@ const Router = () => {
         <Route path={ROUTE_PATH.SIGNUP_FOUNDER} element={<div></div>} />
         <Route path={ROUTE_PATH.PROPOSAL_CREATE} element={<ProposalCreate />} />
         <Route path={ROUTE_PATH.PROPOSAL} element={<Proposal />} />
-        <Route path='/proposal/:proposalId' element={<div></div>} />
+        <Route
+          path={ROUTE_PATH.PROPOSAL_DETAIL(':proposalId')}
+          element={<div></div>}
+        />
         <Route path={ROUTE_PATH.FUNDING_CREATE} element={<div></div>} />
         <Route path={ROUTE_PATH.FUNDING} element={<div></div>} />
-        <Route path='/funding/:fundingId' element={<div></div>} />
-        <Route path='/funding/:fundingId/pledge' element={<div></div>} />
+        <Route
+          path={ROUTE_PATH.FUNDING_DETAIL(':fundingId')}
+          element={<div></div>}
+        />
+        <Route
+          path={ROUTE_PATH.FUNDING_DETAIL_PLEDGE(':fundingId')}
+          element={<div></div>}
+        />
         <Route
           path={ROUTE_PATH.RECOMMENDATION_PROPOSAL}
           element={<RecommendationProposal />}
         />
         <Route path={ROUTE_PATH.REWARD} element={<Reward />} />
-        <Route path='/reward/:rewardId' element={<div></div>} />
+        <Route
+          path={ROUTE_PATH.REWARD_DETAIL(':rewardId')}
+          element={<div></div>}
+        />
         <Route path={ROUTE_PATH.MY} element={<My />} />
         <Route path={ROUTE_PATH.MY_UPDATE} element={<div></div>} />
         <Route path={ROUTE_PATH.MY_UPDATE_ADDRESS} element={<div></div>} />
