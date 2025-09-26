@@ -96,15 +96,21 @@ const ProposalCreatePage = ({ data, onNextStep }) => {
     console.log('submit:', values);
   };
 
+  // 지도에서 받은 위치 데이터 처리
   useEffect(() => {
-    if (data?.location) {
-      setValue('location', data.location, {
+    const locationData = location?.state;
+    if (locationData?.locationData) {
+      // 표시용 주소 설정
+      setValue('location', locationData.displayAddress, {
         shouldValidate: true,
         shouldTouch: true,
         shouldDirty: true,
       });
+
+      // 실제 위치 데이터 저장 (폼 제출 시 사용)
+      // 이 데이터는 locationData.locationData에 API 명세서 형식으로 저장됨
     }
-  }, [data?.location, setValue]);
+  }, [location?.state, setValue]);
 
   return (
     <Page>

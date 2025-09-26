@@ -1,11 +1,33 @@
 import { useState, useMemo } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { InputSearch } from '../../components/common/input';
+import { ROUTE_PATH } from '../../constants/route';
 
 const PlaceSearchPage = ({ onPrevStep }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const stateData = location.state || {};
+
   const pick = (item) => {
-    const label = `${item.title} ${item.sub}`; // 저장할 문자열 형태
-    onPrevStep?.({ location: label }); // 값 저장 + 생성페이지로 복귀
+    const selectedAddress = `${item.title} ${item.sub}`;
+
+    // CreateProposalMapPage로 돌아가면서 선택된 주소 정보 전달
+    if (stateData.returnTo === 'map') {
+      navigate('/proposal-create/map', {
+        state: {
+          ...stateData,
+          searchResult: {
+            address: selectedAddress,
+            title: item.title,
+            sub: item.sub,
+          },
+        },
+      });
+    } else {
+      // 기존 동작 유지 (다른 페이지에서 호출된 경우)
+      onPrevStep?.({ location: selectedAddress });
+    }
   };
   const [query, setQuery] = useState('');
 
@@ -18,7 +40,17 @@ const PlaceSearchPage = ({ onPrevStep }) => {
   return (
     <Page>
       <Header>
-        <BackBtn type='button' aria-label='뒤로가기' onClick={onPrevStep}>
+        <BackBtn
+          type='button'
+          aria-label='뒤로가기'
+          onClick={() => {
+            if (stateData.returnTo === 'map') {
+              navigate('/proposal-create/map', { state: stateData });
+            } else {
+              onPrevStep?.();
+            }
+          }}
+        >
           {/* 간단한 기호로 아이콘 대체 (디자인 아이콘 있으면 교체) */}‹
         </BackBtn>
 
