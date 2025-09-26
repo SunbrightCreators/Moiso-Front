@@ -64,24 +64,22 @@ const useGetFundingDetail = (funding_id, profile) => {
 /**
  * 내가 만든 펀딩 목록 조회
  */
-const useGetFundingMyCreatedList = () => {
+const useGetFundingMyCreatedList = (isProposerMode) => {
   return useQuery({
     queryKey: ['useGetFundingMyCreatedList'],
-    queryFn: () => {
-      return authClient.get(`/fundings/founder/my-created`);
-    },
+    queryFn: () => authClient.get(`/fundings/founder/my-created`),
+    enabled: !isProposerMode,
   });
 };
 
 /**
  * 내가 후원한 펀딩 목록 조회
  */
-const useGetFundingMyPaidList = () => {
+const useGetFundingMyPaidList = (isProposerMode) => {
   return useQuery({
     queryKey: ['useGetFundingMyPaidList'],
-    queryFn: () => {
-      return authClient.get(`/fundings/proposer/my-paid`);
-    },
+    queryFn: () => authClient.get(`/fundings/proposer/my-paid`),
+    enabled: isProposerMode,
   });
 };
 

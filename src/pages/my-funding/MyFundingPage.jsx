@@ -1,23 +1,97 @@
 import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { EmptyState } from '@chakra-ui/react';
+import { ROUTE_PATH } from '../../constants/route';
 import { TopNavigation } from '../../components/common/navigation';
 import useModeStore from '../../stores/useModeStore';
 import { ReactComponent as Frown } from '../../assets/icons/frown.svg';
 
+import {
+  useGetFundingMyCreatedList,
+  useGetFundingMyPaidList,
+} from '../../apis/fundings';
+
 const MyFundingPage = () => {
   const { isProposerMode } = useModeStore();
 
-  const navigate = useNavigate();
-  const goFundingDetail = (id) => navigate(`/funding/${id}`);
+  const toArray = (res) => {
+    const d = res?.data ?? res;
+
+    //  서버가 상태별 키로 준 경우: 평탄화 + status 주입
+    if (
+      d &&
+      typeof d === 'object' &&
+      (Array.isArray(d.in_progress) ||
+        Array.isArray(d.succeeded) ||
+        Array.isArray(d.failed))
+    ) {
+      const add = (arr, st) =>
+        Array.isArray(arr)
+          ? arr.map((x) => ({ ...x, status: x.status ?? st }))
+          : [];
+      return [
+        ...add(d.in_progress, 'ing'),
+        ...add(d.succeeded, 'ok'),
+        ...add(d.failed, 'fail'),
+      ];
+    }
+
+    const walk = (x) => {
+      if (!x) return null;
+      if (Array.isArray(x)) return x;
+      if (typeof x === 'object') {
+        for (const k of [
+          'data',
+          'content',
+          'items',
+          'list',
+          'results',
+          'records',
+          'rows',
+        ]) {
+          const got = walk(x[k]);
+          if (got) return got;
+        }
+      }
+      return null;
+    };
+    return walk(d) ?? [];
+  };
+  console.log('isProposerMode:', isProposerMode);
+  const {
+    data: createdRes,
+    isLoading: createdLoading,
+    isError: createdError,
+  } = useGetFundingMyCreatedList(isProposerMode);
+  const {
+    data: paidRes,
+    isLoading: paidLoading,
+    isError: paidError,
+  } = useGetFundingMyPaidList(isProposerMode);
+
+  const raw = isProposerMode ? toArray(paidRes) : toArray(createdRes);
+  const loading = isProposerMode ? paidLoading : createdLoading;
+  const error = isProposerMode ? paidError : createdError;
+  const data = raw;
+  console.log('createdRes:', createdRes?.data ?? createdRes);
+  console.log('paidRes:', paidRes?.data ?? paidRes);
 
   // '2025. 8. 25 마감 예정' 형태 → 타임스탬프
   const toTs = (s) => {
-    const m = s.match(/(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
-    if (!m) return 0;
-    const [, Y, M, D] = m;
-    return new Date(+Y, +M - 1, +D).getTime();
+    if (!s) return 0;
+    const m1 = s.match(/(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
+    if (m1) {
+      const [, Y, M, D] = m1;
+      return new Date(+Y, +M - 1, +D).getTime();
+    }
+    const m2 = s.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if (m2) {
+      const [, Y, M, D] = m2;
+      return new Date(+Y, +M - 1, +D).getTime();
+    }
+    const t = Date.parse(s);
+    return Number.isNaN(t) ? 0 : t;
   };
 
   // 페이지 타이틀 & 섹션 라벨
@@ -28,21 +102,18 @@ const MyFundingPage = () => {
     ? { ing: '후원 진행 중', ok: '후원 성공', fail: '후원 실패' }
     : { ing: '펀딩 진행 중', ok: '펀딩 성공', fail: '펀딩 실패' };
 
-  const SUPPORTED = OWNED; // 필요하면 주민용 배열 따로 세팅
-
-  const data = isProposerMode ? SUPPORTED : OWNED;
-
   const groups = useMemo(() => {
+    const list = Array.isArray(data) ? data : [];
     const byStatus = (st) =>
-      data
+      list
         .filter((v) => v.status === st)
-        .sort((a, b) => toTs(b.when) - toTs(a.when)); // 최신순
-
-    return {
-      ing: byStatus('ing'),
-      ok: byStatus('ok'),
-      fail: byStatus('fail'),
-    };
+        // 정렬 기준: schedule.end 우선, 없으면 when(문자열) 백업
+        .sort(
+          (a, b) =>
+            toTs(b?.schedule?.end ?? b?.when) -
+            toTs(a?.schedule?.end ?? a?.when),
+        );
+    return { ing: byStatus('ing'), ok: byStatus('ok'), fail: byStatus('fail') };
   }, [data]);
   const isEmpty = data.length === 0;
   return (
@@ -50,7 +121,20 @@ const MyFundingPage = () => {
       {/* ScrollArea 안에 TopNavigation을 넣어야 sticky가 제대로 작동 */}
       <ScrollArea>
         <TopNavigation left='back' title={title} />
-        {isEmpty ? (
+        {loading ? (
+          <FundingEmpty>
+            <EmptyState.Content>로딩 중…</EmptyState.Content>
+          </FundingEmpty>
+        ) : error ? (
+          <FundingEmpty>
+            <EmptyState.Content>
+              <EmptyState.Title>목록을 불러오지 못했어요</EmptyState.Title>
+              <EmptyState.Description>
+                잠시 후 다시 시도해 주세요.
+              </EmptyState.Description>
+            </EmptyState.Content>
+          </FundingEmpty>
+        ) : isEmpty ? (
           <FundingEmpty aria-label='내 펀딩 목록이 비어있음'>
             <EmptyState.Content>
               <EmptyState.Indicator>
@@ -78,17 +162,11 @@ const MyFundingPage = () => {
               </SectionTitle>
               <List>
                 {groups.ing.map((item) => (
-                  <Item
-                    key={item.id}
-                    role='button'
-                    tabIndex={0}
-                    onClick={() => goFundingDetail(item.id)}
-                    onKeyDown={(e) =>
-                      e.key === 'Enter' && goFundingDetail(item.id)
-                    }
-                  >
-                    <Title>{item.title}</Title>
-                    <Meta>{item.when}</Meta>
+                  <Item key={item.id}>
+                    <ItemLink to={ROUTE_PATH.FUNDING_DETAIL(item.id)}>
+                      <Title>{item.title}</Title>
+                      <Meta>{item?.schedule?.end ?? item?.when}</Meta>
+                    </ItemLink>
                   </Item>
                 ))}
               </List>
@@ -100,17 +178,11 @@ const MyFundingPage = () => {
               </SectionTitle>
               <List>
                 {groups.ok.map((item) => (
-                  <Item
-                    key={item.id}
-                    role='button'
-                    tabIndex={0}
-                    onClick={() => goFundingDetail(item.id)}
-                    onKeyDown={(e) =>
-                      e.key === 'Enter' && goFundingDetail(item.id)
-                    }
-                  >
-                    <Title>{item.title}</Title>
-                    <Meta>{item.when}</Meta>
+                  <Item key={item.id}>
+                    <ItemLink to={ROUTE_PATH.FUNDING_DETAIL(item.id)}>
+                      <Title>{item.title}</Title>
+                      <Meta>{item?.schedule?.end ?? item?.when}</Meta>
+                    </ItemLink>
                   </Item>
                 ))}
               </List>
@@ -122,17 +194,11 @@ const MyFundingPage = () => {
               </SectionTitle>
               <List>
                 {groups.fail.map((item) => (
-                  <Item
-                    key={item.id}
-                    role='button'
-                    tabIndex={0}
-                    onClick={() => goFundingDetail(item.id)}
-                    onKeyDown={(e) =>
-                      e.key === 'Enter' && goFundingDetail(item.id)
-                    }
-                  >
-                    <Title>{item.title}</Title>
-                    <Meta>{item.when}</Meta>
+                  <Item key={item.id}>
+                    <ItemLink to={ROUTE_PATH.FUNDING_DETAIL(item.id)}>
+                      <Title>{item.title}</Title>
+                      <Meta>{item?.schedule?.end ?? item?.when}</Meta>
+                    </ItemLink>
                   </Item>
                 ))}
               </List>
@@ -188,14 +254,21 @@ const Title = styled.p`
   color: var(--colors-text-default, #27272a);
   text-overflow: ellipsis;
   white-space: nowrap;
+  -webkit-line-clamp: 2;
 
   /* sm/medium */
 
   font: var(--text-sm-medium);
 `;
 
+const ItemLink = styled(Link)`
+  display: block;
+  width: 100%;
+`;
+
 const Meta = styled.p`
   color: var(--colors-text-subtle, #a1a1aa);
+  -webkit-line-clamp: 2;
 
   /* xs/normal */
   font: var(--text-xs-normal);
@@ -226,61 +299,3 @@ const CustomDescription = styled(EmptyState.Description)`
   /* sm/normal */
   font: var(--text-sm-normal);
 `;
-
-//더미 데이터 (실데이터로 교체)
-const OWNED = [
-  {
-    id: 1,
-    title: '크라우드 펀딩 제목',
-    status: 'ing',
-    when: '2025. 8. 25 마감 예정',
-  },
-  {
-    id: 2,
-    title: '크라우드 펀딩 제목',
-    status: 'ing',
-    when: '2025. 9. 25 마감 예정',
-  },
-  {
-    id: 3,
-    title: '크라우드 펀딩 제목',
-    status: 'ing',
-    when: '2025. 10. 25 마감 예정',
-  },
-  {
-    id: 4,
-    title: '크라우드 펀딩 제목',
-    status: 'ok',
-    when: '2025. 7. 25 종료',
-  },
-  {
-    id: 5,
-    title: '크라우드 펀딩 제목',
-    status: 'ok',
-    when: '2025. 6. 25 종료',
-  },
-  {
-    id: 6,
-    title: '크라우드 펀딩 제목',
-    status: 'ok',
-    when: '2025. 5. 25 종료',
-  },
-  {
-    id: 7,
-    title: '크라우드 펀딩 제목',
-    status: 'fail',
-    when: '2025. 7. 25 종료',
-  },
-  {
-    id: 8,
-    title: '크라우드 펀딩 제목',
-    status: 'fail',
-    when: '2025. 6. 25 종료',
-  },
-  {
-    id: 9,
-    title: '크라우드 펀딩 제목',
-    status: 'fail',
-    when: '2025. 5. 25 종료',
-  },
-];
