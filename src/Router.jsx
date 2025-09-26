@@ -7,7 +7,6 @@ import SignupProposer from './pages/signup-proposer';
 import SignupFounder from './pages/signup-founder';
 import ProposalCreate from './pages/proposal-create';
 import CreateProposalMapPage from './pages/proposal-create/CreateProposalMapPage';
-import PlaceSearchPage from './pages/proposal-create/PlaceSearchPage';
 import Proposal from './pages/proposal';
 import ProposalDetail from './pages/proposal-detail';
 import FundingCreate from './pages/funding-create';
@@ -37,15 +36,7 @@ const Router = () => {
         <Route path={ROUTE_PATH.SIGNUP_PROPOSER} element={<div></div>} />
         <Route path={ROUTE_PATH.SIGNUP_FOUNDER} element={<div></div>} />
         <Route path={ROUTE_PATH.PROPOSAL_CREATE} element={<ProposalCreate />} />
-        <Route
-          path={ROUTE_PATH.PROPOSAL_CREATE_MAP}
-          element={<CreateProposalMapPage />}
-        />
-        <Route
-          path='/proposal-create/place-search'
-          element={<PlaceSearchPage />}
-        />
-        <Route path={ROUTE_PATH.PROPOSAL} element={<Proposal />} />
+        <Route path={ROUTE_PATH.PROPOSAL_CREATE_MAP} element={<CreateProposalMapPage />} />        <Route path={ROUTE_PATH.PROPOSAL} element={<Proposal />} />
         <Route path='/proposal/:proposalId' element={<div></div>} />
         <Route path={ROUTE_PATH.FUNDING_CREATE} element={<div></div>} />
         <Route path={ROUTE_PATH.FUNDING} element={<div></div>} />
