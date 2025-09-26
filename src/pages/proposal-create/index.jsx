@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react';
 import ProposalCreatePage from './ProposalCreatePage';
 import PlaceSearchPage from './PlaceSearchPage';
 
-export default function ProposalIndex() {
+const ProposalIndex = () => {
   // 0: 생성(추천) 화면, 1: 장소검색 화면
   const [currentStep, setCurrentStep] = useState(0);
   const [data, setData] = useState({ location: '' }); // 스텝 간 공유 데이터
@@ -30,4 +30,6 @@ export default function ProposalIndex() {
   return (
     <Current data={data} onNextStep={onNextStep} onPrevStep={onPrevStep} />
   );
-}
+};
+
+export { ProposalIndex as Component };

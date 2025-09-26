@@ -2,4 +2,4 @@ const ProposalDetail = () => {
   return <div>준비 중</div>;
 };
 
-export default ProposalDetail;
+export { ProposalDetail as Component };

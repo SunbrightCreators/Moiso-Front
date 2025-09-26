@@ -12,7 +12,7 @@ import FounderTarget from '../signup-founder/FounderTarget';
 import FounderTime from '../signup-founder/FounderTime';
 import WelcomePage from './WelcomePage';
 
-function SignUpIndex() {
+const SignUpIndex = () => {
   const navigate = useNavigate();
   const { isProposerMode } = useModeStore(); // true=제안자, false=창업자
   const [currentStep, setCurrentStep] = useState(0);
@@ -105,6 +105,6 @@ function SignUpIndex() {
       isLastStep={isLast}
     />
   );
-}
+};
 
-export default SignUpIndex;
+export { SignUpIndex as Component };

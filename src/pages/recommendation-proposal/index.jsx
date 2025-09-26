@@ -1,3 +1,3 @@
 import ProposalRecPage from './ProposalRecPage';
 
-export default ProposalRecPage;
+export { ProposalRecPage as Component };

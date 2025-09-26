@@ -1,3 +1,3 @@
 import MyPage from './MyPage';
 
-export default MyPage;
+export { MyPage as Component };

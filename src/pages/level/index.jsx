@@ -1,3 +1,3 @@
 import LevelInfoPage from './LevelInfoPage';
 
-export default LevelInfoPage;
+export { LevelInfoPage as Component };

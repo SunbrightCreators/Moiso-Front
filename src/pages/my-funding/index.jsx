@@ -1,3 +1,3 @@
 import MyFundingPage from './MyFundingPage';
 
-export default MyFundingPage;
+export { MyFundingPage as Component };

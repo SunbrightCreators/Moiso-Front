@@ -1,3 +1,3 @@
 import ProposalMapPage from './ProposalMapPage';
 
-export default ProposalMapPage;
+export { ProposalMapPage as Component };

@@ -1,3 +1,3 @@
 import MyProposalPage from './MyProposalPage';
 
-export default MyProposalPage;
+export { MyProposalPage as Component };

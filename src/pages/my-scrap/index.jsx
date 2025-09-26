@@ -1,3 +1,3 @@
 import MyScrap from './MyScrap';
 
-export default MyScrap;
+export { MyScrap as Component };

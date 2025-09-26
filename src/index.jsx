@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ChakraProvider from './styles/provider';
-import Router from './routers/Router';
+import router from './routers/Router';
 import { ModalBottomsheet } from './components/common/Bottomsheet';
 import Dialog from './components/common/Dialog';
 import { Toaster } from './components/common/toaster';
@@ -20,7 +21,7 @@ root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <ChakraProvider>
-        <Router />
+        <RouterProvider router={router} />
         <ModalBottomsheet />
         <Dialog />
         <Toaster />
