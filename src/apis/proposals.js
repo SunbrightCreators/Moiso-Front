@@ -118,7 +118,7 @@ const useGetProposalDetail = (proposal_id, profile) => {
  * @param {string | null} sigungu `string | null`
  * @param {string | null} eupmyundong `string | null`
  */
-const useGetProposalMyCreatedList = (sido, sigungu, eupmyundong) => {
+const useGetProposalMyCreatedList = (sido, sigungu, eupmyundong, options) => {
   return useQuery({
     queryKey: ['useGetProposalMyCreatedList', sido, sigungu, eupmyundong],
     queryFn: () => {
@@ -130,6 +130,7 @@ const useGetProposalMyCreatedList = (sido, sigungu, eupmyundong) => {
         params: params,
       });
     },
+    enabled: options.enabled ?? true,
   });
 };
 
