@@ -1,33 +1,28 @@
 import { useState, useMemo } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { InputSearch } from '../../components/common/input';
-import { ROUTE_PATH } from '../../constants/route';
 
-const PlaceSearchPage = ({ onPrevStep }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const stateData = location.state || {};
-
+const PlaceSearchPage = ({ data, onShowMapView, onUpdateData }) => {
   const pick = (item) => {
     const selectedAddress = `${item.title} ${item.sub}`;
 
-    // CreateProposalMapPage로 돌아가면서 선택된 주소 정보 전달
-    if (stateData.returnTo === 'map') {
-      navigate('/proposal-create/map', {
-        state: {
-          ...stateData,
-          searchResult: {
-            address: selectedAddress,
-            title: item.title,
-            sub: item.sub,
-          },
+    // 검색 결과를 데이터에 저장하고 지도 페이지로 돌아감
+    onUpdateData({
+      searchResult: {
+        address: selectedAddress,
+        title: item.title,
+        sub: item.sub,
+      },
+      // 기존 location 데이터 유지하면서 주소만 업데이트
+      location: {
+        ...data.location,
+        address: {
+          ...data.location.address,
+          road_detail: selectedAddress,
         },
-      });
-    } else {
-      // 기존 동작 유지 (다른 페이지에서 호출된 경우)
-      onPrevStep?.({ location: selectedAddress });
-    }
+      },
+    });
+    onShowMapView();
   };
   const [query, setQuery] = useState('');
 
@@ -43,13 +38,7 @@ const PlaceSearchPage = ({ onPrevStep }) => {
         <BackBtn
           type='button'
           aria-label='뒤로가기'
-          onClick={() => {
-            if (stateData.returnTo === 'map') {
-              navigate('/proposal-create/map', { state: stateData });
-            } else {
-              onPrevStep?.();
-            }
-          }}
+          onClick={() => onShowMapView()}
         >
           {/* 간단한 기호로 아이콘 대체 (디자인 아이콘 있으면 교체) */}‹
         </BackBtn>
