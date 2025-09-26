@@ -7,6 +7,7 @@ import { ProposalItem } from '../../components/proposal';
 import { FundingItem } from '../../components/funding';
 import { ReactComponent as Frown } from '../../assets/icons/frown.svg';
 import useModeStore from '../../stores/useModeStore';
+import { ROUTE_PATH } from '../../constants/route';
 
 import { useGetProposalScrapList } from '../../apis/proposals';
 import { useGetFundingScrapList } from '../../apis/fundings';
@@ -164,7 +165,15 @@ const MyScrap = () => {
               <List>
                 {proposals.map((item) => (
                   <Item key={item.id}>
-                    <ProposalItem proposal={item} profile={profile} />
+                    <Link
+                      to={ROUTE_PATH.PROPOSAL_DETAIL(item.id)}
+                      aria-label={`${item.title} 상세로 이동`}
+                      onClick={(e) => {
+                        if (e.target.closest('.action-btn')) e.preventDefault(); // 내부 버튼 클릭 시 이동 막기
+                      }}
+                    >
+                      <ProposalItem proposal={item} profile={profile} />
+                    </Link>
                   </Item>
                 ))}
               </List>
@@ -245,7 +254,17 @@ const MyScrap = () => {
               <List>
                 {fundings.map((item) => (
                   <Item key={item.id}>
-                    <FundingItem funding={item} profile={profile} />
+                    <Link
+                      to={ROUTE_PATH.FUNDING_DETAIL(item.id)}
+                      aria-label={`${item.title} 상세로 이동`}
+                      onClick={(e) => {
+                        if (e.target.closest('.action-btn')) {
+                          e.preventDefault();
+                        }
+                      }}
+                    >
+                      <FundingItem funding={item} profile={profile} />
+                    </Link>
                   </Item>
                 ))}
               </List>
