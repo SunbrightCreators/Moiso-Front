@@ -421,12 +421,12 @@ const Info = styled.div`
 `;
 
 const Name = styled.div`
-  font-weight: 700;
+  font: var(--text-md-medium);
 `;
 
 const Email = styled.div`
-  font-size: 12px;
-  color: #9ca3af;
+  color: var(--colors-text-subtle, #a1a1aa);
+  font: var(--text-sm-normal);
 `;
 
 const VisitVerifyButton = styled(Button)`
@@ -512,7 +512,7 @@ const SIconWrap = styled.span`
 const SLabel = styled.span`
   flex: 1;
   color: bg/default;
-  font: var(--text-sm-semibold);
+  font: var(--text-sm-medium);
 `;
 
 const SChevronLink = styled(Link)`
