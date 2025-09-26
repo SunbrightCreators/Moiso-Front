@@ -1,7 +1,8 @@
-import { useCallback } from 'react';
+// src/pages/mypage/MyPage.jsx
+import { useCallback, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { Avatar, Button, Progress, Switch } from '@chakra-ui/react';
+import { Avatar, Button, Switch } from '@chakra-ui/react';
 import {
   TopNavigation,
   BottomNavigation,
@@ -9,6 +10,7 @@ import {
 import { ROUTE_PATH } from '../../constants/route';
 import useDialogStore from '../../stores/useDialogStore';
 import useModeStore from '../../stores/useModeStore';
+import { useGetProfile, useGetProfileList } from '../../apis/accounts'; // ✅ API 연동
 import ToFounder from '../../assets/icons/change_to_founder.svg';
 import ToProposer from '../../assets/icons/change_to_proposer.svg';
 import ChevronRight from '../../assets/icons/chevron_right.svg';
@@ -19,19 +21,127 @@ import MyFundingIcon from '../../assets/icons/funding.svg';
 import MyProposalIcon from '../../assets/icons/proposal.svg';
 import ScrapIcon from '../../assets/icons/scrap_default.svg';
 
+// 제안자 프로필에서 레벨 (가장 높은 레벨 선택)
+const pickProposerLevel = (d) => {
+  const pp =
+    d?.proposer_profile ??
+    d?.profile?.proposer_profile ?? // 혹시 profile 아래로 내려오는 경우 대비
+    null;
+
+  const arr = Array.isArray(pp?.proposer_level) ? pp.proposer_level : [];
+  if (!arr.length) return null;
+
+  // 레벨 가장 높은 항목을 대표로 선택
+  const best = arr.reduce(
+    (a, b) => (Number(b?.level || 0) > Number(a?.level || 0) ? b : a),
+    arr[0],
+  );
+  const addr =
+    Array.isArray(best?.address) && best.address[0] ? best.address[0] : {};
+
+  return {
+    current: Number(best?.level) || 0,
+    district: addr.eupmyundong || addr.sigungu || addr.sido || '',
+  };
+};
+
+// 프로필 응답
+const normalizeProfileList = (raw) => {
+  const d = raw?.data ?? raw;
+
+  // 1) ["proposer","founder"]
+  if (Array.isArray(d)) return d.map((x) => String(x).toLowerCase());
+
+  if (Array.isArray(d?.profile)) {
+    return d.profile.map((x) => String(x).toLowerCase());
+  }
+  if (Array.isArray(d?.profiles)) {
+    return d.profiles.map((x) => String(x).toLowerCase());
+  }
+
+  const out = [];
+  if (d?.profiles && typeof d.profiles === 'object') {
+    Object.entries(d.profiles).forEach(
+      ([k, v]) => v && out.push(String(k).toLowerCase()),
+    );
+  }
+  if (d?.proposer) out.push('proposer');
+  if (d?.founder) out.push('founder');
+
+  return out;
+};
+
+const LEVEL_ICON = { 1: Lv1, 2: Lv2, 3: Lv3 };
+
 const MyPage = () => {
   const { isProposerMode, setIsProposerMode } = useModeStore();
   const { setConfirmDialog } = useDialogStore();
-  const imgSrc = isProposerMode ? ToFounder : ToProposer;
   const navigate = useNavigate();
 
+  // 1) 현재 사용자가 보유한 프로필 목록 조회
+  const {
+    data: profileListRes,
+    isLoading: isProfileListLoading,
+    isError: isProfileListError,
+  } = useGetProfileList();
+
+  const profileList = useMemo(
+    () => normalizeProfileList(profileListRes),
+    [profileListRes],
+  );
+
+  const hasProposer = profileList.some(
+    (v) =>
+      String(v).toLowerCase().includes('proposer') ||
+      String(v).toLowerCase().includes('resident'),
+  );
+  const hasFounder = profileList.some((v) =>
+    String(v).toLowerCase().includes('founder'),
+  );
+
+  // 2) 현재 모드에 맞춰 필요한 필드만 쿼리 파라미터로 요청
+  const proposerFields = [
+    'name',
+    'email',
+    'address',
+    'profile_image',
+    'level', // proposer 전용
+  ];
+  const founderFields = ['name', 'email', 'address', 'profile_image'];
+
+  const activeProfile = isProposerMode ? 'proposer' : 'founder';
+  const fieldList = isProposerMode ? proposerFields : founderFields;
+
+  const {
+    data: profileRes,
+    isLoading: isProfileLoading,
+    isError: isProfileError,
+  } = useGetProfile(activeProfile, fieldList);
+
+  // 3) 화면용 user 모델 매핑 (숫자/객체 스키마 모두 대응)
+  const user = useMemo(() => {
+    const d = profileRes?.data ?? profileRes;
+    if (!d) return null;
+    const level = isProposerMode ? pickProposerLevel(d) : null;
+    return {
+      name: d.name ?? '',
+      email: d.email ?? '',
+      avatarUrl: d.profile_image ?? '',
+      level,
+    };
+  }, [profileRes, isProposerMode]);
+
+  const imgSrc = isProposerMode ? ToFounder : ToProposer;
+
+  // 4) 모드 스위치 클릭 로직 (실제 보유 프로필 기준)
   const SwitchClick = useCallback(
     (e) => {
-      e.preventDefault(); // 스위치 토글 방지(디자인만)
+      e.preventDefault(); // 스위치 자체 토글 방지(디자인만)
+
       if (isProposerMode) {
-        const hasFounder = !!user?.membership?.founder;
+        // 현재 제안자 모드 → 창업자 모드로 전환
         if (hasFounder) {
-          setIsProposerMode(false); // 바로 전환
+          setIsProposerMode(false);
           return;
         }
         setConfirmDialog({
@@ -39,15 +149,12 @@ const MyPage = () => {
           content: '창업자 모드 이용을 위해 최초 1회 가입이 필요해요.',
           actionText: '회원가입',
           showCancelButton: true,
-          onAction: () => {
-            navigate(ROUTE_PATH.SIGNUP_FOUNDER);
-            /* TODO: 가입 플로우 진입 후 전환 */
-          },
+          onAction: () => navigate(ROUTE_PATH.SIGNUP),
         });
       } else {
-        const hasProposer = !!user?.membership?.proposer;
+        // 현재 창업자 모드 → 제안자 모드로 전환
         if (hasProposer) {
-          setIsProposerMode(true); // 바로 전환
+          setIsProposerMode(true);
           return;
         }
         setConfirmDialog({
@@ -55,32 +162,53 @@ const MyPage = () => {
           content: '지역주민 모드 이용을 위해 최초 1회 가입이 필요해요.',
           actionText: '회원가입',
           showCancelButton: true,
-          onAction: () => {
-            navigate(ROUTE_PATH.SIGNUP_PROPOSER);
-            /* TODO: 가입 플로우 진입 후 전환 */
-          },
+          onAction: () => navigate(ROUTE_PATH.SIGNUP),
         });
       }
     },
-    [isProposerMode, setConfirmDialog],
+    [
+      isProposerMode,
+      hasFounder,
+      hasProposer,
+      navigate,
+      setConfirmDialog,
+      setIsProposerMode,
+    ],
   );
 
-  const LEVEL_ICON = {
-    1: Lv1,
-    2: Lv2,
-    3: Lv3,
-  };
+  const levelIconSrc =
+    isProposerMode && user?.level?.current
+      ? LEVEL_ICON[user.level.current]
+      : undefined;
 
-  const user = MOCK_USER;
-  const level = user.level;
-
-  const levelIconSrc = level ? LEVEL_ICON[level.current] : undefined;
+  // 5) 로딩/에러 처리(짧게)
+  if (isProfileListLoading || isProfileLoading) {
+    return (
+      <PageWrapper>
+        <TopNavigation title='마이페이지' />
+        <Scontent style={{ padding: 16 }}>불러오는 중…</Scontent>
+        <BottomNavigation />
+      </PageWrapper>
+    );
+  }
+  if (isProfileListError || isProfileError) {
+    return (
+      <PageWrapper>
+        <TopNavigation title='마이페이지' />
+        <Scontent style={{ padding: 16 }}>
+          정보를 불러오지 못했습니다. 다시 시도해 주세요.
+        </Scontent>
+        <BottomNavigation />
+      </PageWrapper>
+    );
+  }
 
   return (
     <PageWrapper>
       <TopNavigation title='마이페이지' />
 
       <Scontent>
+        {/* 모드 전환 영역 */}
         <ModChangeSection>
           <Left>
             <BadgeImg src={imgSrc} />
@@ -93,16 +221,17 @@ const MyPage = () => {
           </Right>
         </ModChangeSection>
 
+        {/* 계정 영역 */}
         <AccountSection>
           <AccountCard>
             <AccountLeft>
               <Avatar.Root shape='full' size='xl'>
-                <Avatar.Fallback name={user.name} />
-                <Avatar.Image src={user.avatarUrl} />
+                <Avatar.Fallback name={user?.name ?? ''} />
+                <Avatar.Image src={user?.avatarUrl} />
               </Avatar.Root>
               <Info>
-                <Name>{user.name}</Name>
-                <Email>{user.email}</Email>
+                <Name>{user?.name}</Name>
+                <Email>{user?.email}</Email>
               </Info>
             </AccountLeft>
             <Button
@@ -119,34 +248,29 @@ const MyPage = () => {
             </Button>
           </AccountCard>
 
+          {/* 제안자 모드일 때 레벨 카드/동네인증 항상 노출 (값은 가드 처리) */}
           {isProposerMode && (
             <LevelCard>
               <LevelHead>
-                <LevelIcon src={levelIconSrc} alt={`LV.${level.current}`} />
+                {levelIconSrc && (
+                  <LevelIcon
+                    src={levelIconSrc}
+                    alt={`LV.${user?.level?.current ?? '-'}`}
+                  />
+                )}
                 <LevelTitle>
-                  현재 {level.district} LV. {level.current}에 있어요!
+                  {user?.level?.district
+                    ? `현재 ${user.level.district} `
+                    : '현재 '}
+                  LV. {user?.level?.current ?? ''}에 있어요!
                 </LevelTitle>
               </LevelHead>
-
-              <Progress.Root
-                colorPalette='yellow'
-                variant='outline'
-                shape='rounded'
-                size='xs'
-              >
-                <Progress.Track>
-                  <Progress.Range />
-                </Progress.Track>
-              </Progress.Root>
-
-              <LevelSub>
-                LV. {level.next}까지 {level.remainingPoints}점 남았어요!
-              </LevelSub>
               <VisitVerifyButton>우리 동네 방문 인증</VisitVerifyButton>
             </LevelCard>
           )}
         </AccountSection>
 
+        {/* 메뉴 */}
         <MenuSection>
           {isProposerMode ? (
             <>
@@ -220,6 +344,7 @@ const MyPage = () => {
           )}
         </MenuSection>
       </Scontent>
+
       <BottomNavigation />
     </PageWrapper>
   );
@@ -227,6 +352,7 @@ const MyPage = () => {
 
 export default MyPage;
 
+// ---------------- styled-components (기존 그대로) ----------------
 const PageWrapper = styled.div`
   display: flex;
   flex-flow: column nowrap;
@@ -242,7 +368,6 @@ const Scontent = styled.main`
 `;
 
 /* 모드변환부분 */
-
 const ModChangeSection = styled.div`
   display: flex;
   height: 2.75rem;
@@ -313,18 +438,13 @@ const VisitVerifyButton = styled(Button)`
   align-items: center;
   align-self: stretch;
   justify-content: center;
-
   border-radius: var(--radii-full, 624.9375rem);
   background: var(--colors-gray-subtle, #f4f4f5);
-
   color: var(--colors-gray-fg, #27272a);
-
-  /* xs/medium */
   font: var(--text-xs-medium);
 `;
 
 /* 계정설정 - 지역주민 추가부분 */
-
 const LevelCard = styled.section`
   margin-top: 10px;
   background: #fff;
@@ -392,8 +512,6 @@ const SIconWrap = styled.span`
 const SLabel = styled.span`
   flex: 1;
   color: bg/default;
-
-  /* sm/semibold */
   font: var(--text-sm-semibold);
 `;
 
@@ -408,22 +526,3 @@ const SChevronLink = styled(Link)`
     display: block;
   }
 `;
-
-/** 목데이터 */
-const MOCK_USER = {
-  id: 'u_001',
-  name: '김이화',
-  email: 'ewha123@gmail.com',
-  avatarUrl: 'https://bit.ly/sage-adebayo',
-  membership: {
-    proposer: true, // 지역주민 프로필 보유 여부
-    founder: true, // 창업자 프로필 보유 여부
-  },
-  level: {
-    district: '대현동',
-    current: 1, // 1|2|3 ...
-    next: 2,
-    progressPercent: 35, // 0~100
-    remainingPoints: 15,
-  },
-};
