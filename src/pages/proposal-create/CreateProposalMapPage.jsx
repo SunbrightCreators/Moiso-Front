@@ -9,6 +9,10 @@ import {
   loadNaverMapScript,
   removeNaverMapScript,
 } from '../../apis/NaverMapLoader';
+import { RADIUS } from '../../constants/enum';
+
+// 반경 값 배열 - RADIUS enum을 배열로 변환
+const RADIUS_VALUES = [RADIUS.M0, RADIUS.M250, RADIUS.M500, RADIUS.M750];
 
 /**
  * 제안글 등록 시 장소 선택 페이지
@@ -25,7 +29,7 @@ const CreateProposalMapPage = ({
   const [selectedCircle, setSelectedCircle] = useState(null);
   const [zoomLevel, setZoomLevel] = useState(15);
 
-  // Slider로 Radius 설정 (0, 250, 500, 750) - props에서 가져옴
+  // Slider로 Radius 설정 - RADIUS_VALUES에서 기본값 가져옴
   const [radius, setRadius] = useState(data?.location?.radius || 250);
 
   // 현위치
@@ -352,8 +356,7 @@ const CreateProposalMapPage = ({
   const handleRadiusChange = (event) => {
     const sliderValue = parseInt(event.target.value);
     // 슬라이더 값(0-3)을 실제 반경 값으로 변환
-    const radiusValues = [0, 250, 500, 750];
-    const newRadius = radiusValues[sliderValue];
+    const newRadius = RADIUS_VALUES[sliderValue];
 
     setRadius(newRadius);
 
@@ -422,8 +425,7 @@ const CreateProposalMapPage = ({
   };
 
   const getSliderValueFromRadius = (radiusValue) => {
-    const radiusValues = [0, 250, 500, 750];
-    return radiusValues.indexOf(radiusValue);
+    return RADIUS_VALUES.indexOf(radiusValue);
   };
 
   return (
