@@ -1,7 +1,7 @@
-// pages/ProposalIndex.jsx
-import React, { useMemo, useState } from 'react';
-import ProposalCreatePage from './ProposalCreatePage';
-import PlaceSearchPage from './PlaceSearchPage';
+import { useState, useMemo, lazy } from 'react';
+
+const ProposalCreatePage = lazy(() => import('./ProposalCreatePage'));
+const PlaceSearchPage = lazy(() => import('./PlaceSearchPage'));
 
 export default function ProposalIndex() {
   // 0: 생성(추천) 화면, 1: 장소검색 화면
