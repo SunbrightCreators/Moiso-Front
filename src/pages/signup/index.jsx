@@ -1,16 +1,16 @@
-import React, { useMemo, useState } from 'react';
+import { useState, useMemo, lazy } from 'react';
 import useModeStore from '../../stores/useModeStore';
 import { usePostAccount } from '../../apis/accounts';
 import { useNavigate } from 'react-router-dom';
 import { ROUTE_PATH } from '../../constants/route';
 
-import SignUpPage1 from './SignUpPage1';
-import SignUpPage2 from './SignUpPage2';
-import OnBoardingSelect from './OnBardingSelect';
-import NeighborhoodSettingsPage from './NeighborhoodSettingsPage';
-import FounderTarget from '../signup-founder/FounderTarget';
-import FounderTime from '../signup-founder/FounderTime';
-import WelcomePage from './WelcomePage';
+const SignUpPage1 = lazy(() => import('./SignUpPage1'));
+const SignUpPage2 = lazy(() => import('./SignUpPage2'));
+const OnBoardingSelect = lazy(() => import('./OnBardingSelect'));
+const NeighborhoodSettingsPage = lazy(() => import('./NeighborhoodSettingsPage'));
+const FounderTarget = lazy(() => import('../signup-founder/FounderTarget'));
+const FounderTime = lazy(() => import('../signup-founder/FounderTime'));
+const WelcomePage = lazy(() => import('./WelcomePage'));
 
 function SignUpIndex() {
   const navigate = useNavigate();
