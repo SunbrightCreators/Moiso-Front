@@ -1,31 +1,31 @@
 import { lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { ROUTE_PATH } from './constants/route';
+import { ROUTE_PATH } from '../constants/route';
 
-const Root = lazy(() => import('./pages/root'));
-const Login = lazy(() => import('./pages/login'));
-const Signup = lazy(() => import('./pages/signup'));
-const SignupProposer = lazy(() => import('./pages/signup-proposer'));
-const SignupFounder = lazy(() => import('./pages/signup-founder'));
-const ProposalCreate = lazy(() => import('./pages/proposal-create'));
-const Proposal = lazy(() => import('./pages/proposal'));
-const ProposalDetail = lazy(() => import('./pages/proposal-detail'));
-const FundingCreate = lazy(() => import('./pages/funding-create'));
-const Funding = lazy(() => import('./pages/funding'));
-const FundingDetail = lazy(() => import('./pages/funding-detail'));
-const FundingDetailPledge = lazy(() => import('./pages/funding-detail-pledge'));
-const RecommendationProposal = lazy(() => import('./pages/recommendation-proposal'));
-const Reward = lazy(() => import('./pages/reward'));
-const RewardDetail = lazy(() => import('./pages/reward-detail'));
-const My = lazy(() => import('./pages/my'));
-const MyUpdate = lazy(() => import('./pages/my-update'));
-const MyUpdateAddress = lazy(() => import('./pages/my-update-address'));
-const MyUpdateIndustry = lazy(() => import('./pages/my-update-industry'));
-const MyScrap = lazy(() => import('./pages/my-scrap'));
-const MyProposal = lazy(() => import('./pages/my-proposal'));
-const MyFunding = lazy(() => import('./pages/my-funding'));
-const Level = lazy(() => import('./pages/level'));
-const Notification = lazy(() => import('./pages/notification'));
+const Root = lazy(() => import('../pages/root'));
+const Login = lazy(() => import('../pages/login'));
+const Signup = lazy(() => import('../pages/signup'));
+const SignupProposer = lazy(() => import('../pages/signup-proposer'));
+const SignupFounder = lazy(() => import('../pages/signup-founder'));
+const ProposalCreate = lazy(() => import('../pages/proposal-create'));
+const Proposal = lazy(() => import('../pages/proposal'));
+const ProposalDetail = lazy(() => import('../pages/proposal-detail'));
+const FundingCreate = lazy(() => import('../pages/funding-create'));
+const Funding = lazy(() => import('../pages/funding'));
+const FundingDetail = lazy(() => import('../pages/funding-detail'));
+const FundingDetailPledge = lazy(() => import('../pages/funding-detail-pledge'));
+const RecommendationProposal = lazy(() => import('../pages/recommendation-proposal'));
+const Reward = lazy(() => import('../pages/reward'));
+const RewardDetail = lazy(() => import('../pages/reward-detail'));
+const My = lazy(() => import('../pages/my'));
+const MyUpdate = lazy(() => import('../pages/my-update'));
+const MyUpdateAddress = lazy(() => import('../pages/my-update-address'));
+const MyUpdateIndustry = lazy(() => import('../pages/my-update-industry'));
+const MyScrap = lazy(() => import('../pages/my-scrap'));
+const MyProposal = lazy(() => import('../pages/my-proposal'));
+const MyFunding = lazy(() => import('../pages/my-funding'));
+const Level = lazy(() => import('../pages/level'));
+const Notification = lazy(() => import('../pages/notification'));
 
 const Router = () => {
   return (

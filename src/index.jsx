@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ChakraProvider from './styles/provider';
-import Router from './Router';
+import Router from './routers/Router';
 import { ModalBottomsheet } from './components/common/Bottomsheet';
 import Dialog from './components/common/Dialog';
 import { Toaster } from './components/common/toaster';
