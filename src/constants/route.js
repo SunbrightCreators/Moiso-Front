@@ -7,7 +7,6 @@ const ROUTE_PATH = Object.freeze({
   SIGNUP_FOUNDER: '/signup/founder', // 마이 페이지에서 창업자 프로필 추가 시
   /* 제안 */
   PROPOSAL_CREATE: '/proposal/create', // 제안 추가
-  PROPOSAL_CREATE_MAP: '/proposal/create/map', // 제안 추가 - 지도에서 위치 설정
   PROPOSAL: '/proposal', // 제안 탐색
   PROPOSAL_DETAIL: (proposalId) => `/proposal/${proposalId}`, // 제안 상세
   /* 펀딩 */
