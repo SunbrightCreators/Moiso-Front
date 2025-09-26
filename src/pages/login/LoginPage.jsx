@@ -39,12 +39,14 @@ const LoginPage = () => {
       <TopNavigation left='back' title='로그인 ' />
       <SMain>
         <SImg src={logo} alt='서비스 로고' />
-        <SForm onSubmit={handleSubmit(onSubmit)}>
-          <Field.Root>
-            <Field.Label>이메일</Field.Label>
+        <SForm onSubmit={handleSubmit(onSubmit)} noValidate>
+          <Field.Root invalid={!!errors.email}>
+            <Field.Label htmlFor='email'>이메일</Field.Label>
             <StyledInput
-              type='email'
+              id='email'
               placeholder='이메일 입력'
+              autoComplete='email'
+              aria-invalid={!!errors.email}
               {...register('email', {
                 required: '이메일을 입력해 주세요.',
                 pattern: {
@@ -53,15 +55,17 @@ const LoginPage = () => {
                 },
               })}
             />
-            <Field.ErrorText>
-              {errors.email && errors.email.message}
+            <Field.ErrorText id='email-error'>
+              {errors.email?.message}
             </Field.ErrorText>
           </Field.Root>
-          <Field.Root>
-            <Field.Label>비밀번호</Field.Label>
+          <Field.Root invalid={!!errors.password}>
+            <Field.Label htmlFor='password'>비밀번호</Field.Label>
             <StyledInput
               type='password'
               placeholder='비밀번호 입력'
+              autoComplete='current-password'
+              aria-invalid={!!errors.password}
               {...register('password', {
                 required: '비밀번호를 입력해 주세요.',
                 minLength: {
@@ -70,12 +74,12 @@ const LoginPage = () => {
                 },
               })}
             />
-            <Field.ErrorText>
-              {errors.password && errors.password.message}
+            <Field.ErrorText id='password-error'>
+              {errors.password?.message}
             </Field.ErrorText>
           </Field.Root>
           <LoginButton type='submit' mt='1.5rem'>
-            이메일 로그인
+            로그인
           </LoginButton>
         </SForm>
       </SMain>

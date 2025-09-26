@@ -1,244 +1,426 @@
-import { useState, Suspense, lazy, Component } from 'react';
+import { Link } from 'react-router-dom';
+import { useMemo, useState, useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import { Tabs, EmptyState, Spinner } from '@chakra-ui/react';
 import { TopNavigation } from '../../components/common/navigation';
-const ProposalItemLazy = lazy(
-  () => import('../../components/proposal/ProposalItem'),
-);
-const FundingItemLazy = lazy(
-  () => import('../../components/funding/FundingItem'),
-);
+import { ProposalItem } from '../../components/proposal';
+import { FundingItem } from '../../components/funding';
+import { ReactComponent as Frown } from '../../assets/icons/frown.svg';
 import useModeStore from '../../stores/useModeStore';
+import { ROUTE_PATH } from '../../constants/route';
 
-class ErrorBoundary extends Component {
-  constructor(p) {
-    super(p);
-    this.state = { hasError: false };
-  }
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-  render() {
-    return this.state.hasError
-      ? this.props.fallback || null
-      : this.props.children;
-  }
-}
+import { useGetProposalScrapList } from '../../apis/proposals';
+import { useGetFundingScrapList } from '../../apis/fundings';
 
 const MyScrap = () => {
   const { isProposerMode } = useModeStore(); // true=제안자, false=창업자
   const profile = isProposerMode ? 'proposer' : 'founder';
 
-  const proposalList = Array.from({ length: 3 }, (_, i) => ({
-    ...baseProposal,
-    id: `p${i + 1}`,
-  }));
-  const fundingList = Array.from({ length: 3 }, (_, i) => ({
-    ...baseFunding,
-    id: `f${i + 1}`,
-  }));
-
+  // 탭
   const [tab, setTab] = useState('proposal');
+  // 탭 변경
+  const handleTabChange = ({ value }) => {
+    setTab(value);
+  };
 
-  const showFundingTab = true;
-  const fundingTabLabel = profile === 'founder' ? '창업' : '펀딩';
+  // 제안/펀딩 지역 드롭다운
+  const [areaP, setAreaP] = useState('전체'); // 제안
+  const [areaF, setAreaF] = useState('전체'); // 펀딩
+  const [openP, setOpenP] = useState(false);
+  const [openF, setOpenF] = useState(false);
+  const menuRefP = useRef(null);
+  const menuRefF = useRef(null);
+
+  // 1) 전체 스크랩(필터 없이)으로 지역 목록 추출
+  const { data: pAllRes, isLoading: pAllLoading } = useGetProposalScrapList(
+    profile,
+    null,
+    null,
+    null,
+  );
+  const { data: fAllRes, isLoading: fAllLoading } = useGetFundingScrapList(
+    profile,
+    null,
+    null,
+    null,
+  );
+
+  const areaListP = useMemo(() => {
+    const list = pAllRes?.data || [];
+    const eup = new Set(
+      list.map((it) => it?.address?.eupmyundong).filter(Boolean),
+    );
+    return ['전체', ...Array.from(eup)];
+  }, [pAllRes]);
+
+  const areaListF = useMemo(() => {
+    const list = fAllRes?.data || [];
+    const eup = new Set(
+      list.map((it) => it?.address?.eupmyundong).filter(Boolean),
+    );
+    return ['전체', ...Array.from(eup)];
+  }, [fAllRes]);
+
+  // 2) 선택된 지역으로 서버 필터링된 목록 조회 (쿼리 키 자동 갱신)
+  const eupP = areaP === '전체' ? null : areaP;
+  const eupF = areaF === '전체' ? null : areaF;
+
+  const {
+    data: pRes,
+    isLoading: pLoading,
+    isError: pError,
+  } = useGetProposalScrapList(profile, null, null, eupP);
+  const {
+    data: fRes,
+    isLoading: fLoading,
+    isError: fError,
+  } = useGetFundingScrapList(profile, null, null, eupF);
+
+  const proposals = pRes?.data || [];
+  const fundings = fRes?.data || [];
+
+  const loading = pLoading || fLoading || pAllLoading || fAllLoading;
 
   return (
     <>
-      {/* 이 페이지 한정 모바일 오버플로우 방지 */}
-      <style>{`
-        #myscrap-root{max-width:100vw; overflow-x:hidden;}
-        #myscrap-root *{box-sizing:border-box;}
-        #myscrap-root img{max-width:100%; height:auto; display:block;}
-        #myscrap-root .fluid{min-width:0; max-width:100%;}
-      `}</style>
+      <TopNavigation left='back' title='스크랩' />
 
-      <div id='myscrap-root'>
-        <TopNavigation left='back' title='스크랩' />
+      <Tabs.Root value={tab} onValueChange={handleTabChange} variant='line'>
+        <TabsList>
+          <TabsTrigger value='proposal'>제안</TabsTrigger>
+          <TabsTrigger value='funding'>펀딩</TabsTrigger>
+          <TabsIndicator />
+        </TabsList>
 
-        {/* 탭 헤더 */}
-        <div
-          style={{
-            display: 'flex',
-            gap: 16,
-            padding: '8px 16px',
-            borderBottom: '1px solid #eee',
-          }}
-        >
-          <button
-            onClick={() => setTab('proposal')}
-            style={{ fontWeight: tab === 'proposal' ? 700 : 400 }}
-          >
-            제안
-          </button>
-          {showFundingTab && (
-            <button
-              onClick={() => setTab('funding')}
-              style={{ fontWeight: tab === 'funding' ? 700 : 400 }}
-            >
-              {fundingTabLabel}
-            </button>
-          )}
-        </div>
+        {/* 제안 탭 */}
+        <Tabs.Content value='proposal'>
+          <Toolbar>
+            <Count>총 {proposals.length}개</Count>
 
-        {/* 리스트 */}
-        <main style={{ padding: '12px 16px', display: 'grid', gap: 12 }}>
-          {/* 제안 */}
-          {tab === 'proposal' &&
-            (proposalList.length === 0 ? (
-              <Empty text='아직 스크랩한 글이 없어요' />
-            ) : (
-              <ul
-                style={{
-                  display: 'grid',
-                  gap: 12,
-                  listStyle: 'none',
-                  padding: 0,
-                  margin: 0,
-                }}
+            {/* 제안 드롭다운 */}
+            <Dropdown ref={menuRefP}>
+              <Trigger
+                type='button'
+                aria-haspopup='listbox'
+                aria-expanded={openP}
+                onClick={() => setOpenP((v) => !v)}
               >
-                {proposalList.map((item) => (
-                  <li key={item.id} className='fluid'>
-                    <ErrorBoundary fallback={<ProposalFallback data={item} />}>
-                      <Suspense fallback={<SkeletonCard />}>
-                        <ProposalItemLazy proposal={item} profile={profile} />
-                      </Suspense>
-                    </ErrorBoundary>
-                  </li>
-                ))}
-              </ul>
-            ))}
+                <span>{areaP}</span>
+                <Chevron $open={openP}>▾</Chevron>
+              </Trigger>
 
-          {/* 펀딩/창업 */}
-          {showFundingTab &&
-            tab === 'funding' &&
-            (fundingList.length === 0 ? (
-              <Empty text={`아직 스크랩한 ${fundingTabLabel}이 없어요`} />
+              {openP && (
+                <Menu role='listbox' tabIndex={-1}>
+                  {areaListP.map((name) => (
+                    <MenuItem key={`p-${name}`}>
+                      <button
+                        type='button'
+                        role='option'
+                        aria-selected={areaP === name}
+                        onClick={() => {
+                          setAreaP(name);
+                          setOpenP(false);
+                        }}
+                      >
+                        {name}
+                      </button>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              )}
+            </Dropdown>
+          </Toolbar>
+
+          <Main>
+            {loading ? (
+              <Spinner />
+            ) : pError ? (
+              <Empty>
+                <EmptyState.Root>
+                  <EmptyState.Content>
+                    <EmptyState.Title>
+                      제안 스크랩을 불러오지 못했어요
+                    </EmptyState.Title>
+                    <EmptyState.Description>
+                      잠시 후 다시 시도해 주세요.
+                    </EmptyState.Description>
+                  </EmptyState.Content>
+                </EmptyState.Root>
+              </Empty>
+            ) : proposals.length === 0 ? (
+              <Empty>
+                <EmptyState.Root>
+                  <EmptyState.Content>
+                    <EmptyState.Indicator>
+                      <Frown width={32} height={32} />
+                    </EmptyState.Indicator>
+                    <CustomTitle>아직 스크랩한 글이 없어요 </CustomTitle>
+                    <CustomDescription>
+                      마음에 드는 글을 찾아 스크립해 보세요.
+                    </CustomDescription>
+                  </EmptyState.Content>
+                </EmptyState.Root>
+              </Empty>
             ) : (
-              <ul
-                style={{
-                  display: 'grid',
-                  gap: 12,
-                  listStyle: 'none',
-                  padding: 0,
-                  margin: 0,
-                }}
-              >
-                {fundingList.map((item) => (
-                  <li key={item.id} className='fluid'>
-                    <ErrorBoundary fallback={<FundingFallback data={item} />}>
-                      <Suspense fallback={<SkeletonCard />}>
-                        <FundingItemLazy funding={item} profile={profile} />
-                      </Suspense>
-                    </ErrorBoundary>
-                  </li>
+              <List>
+                {proposals.map((item) => (
+                  <Item key={item.id}>
+                    <Link
+                      to={ROUTE_PATH.PROPOSAL_DETAIL(item.id)}
+                      aria-label={`${item.title} 상세로 이동`}
+                      onClick={(e) => {
+                        if (e.target.closest('.action-btn')) e.preventDefault(); // 내부 버튼 클릭 시 이동 막기
+                      }}
+                    >
+                      <ProposalItem proposal={item} profile={profile} />
+                    </Link>
+                  </Item>
                 ))}
-              </ul>
-            ))}
-        </main>
-      </div>
+              </List>
+            )}
+          </Main>
+        </Tabs.Content>
+
+        {/* 펀딩 탭 */}
+        <Tabs.Content value='funding'>
+          <Toolbar>
+            <Count>총 {fundings.length}개</Count>
+
+            {/* 펀딩 드롭다운 */}
+            <Dropdown ref={menuRefF}>
+              <Trigger
+                type='button'
+                aria-haspopup='listbox'
+                aria-expanded={openF}
+                onClick={() => setOpenF((v) => !v)}
+              >
+                <span>{areaF}</span>
+                <Chevron $open={openF}>▾</Chevron>
+              </Trigger>
+
+              {openF && (
+                <Menu role='listbox' tabIndex={-1}>
+                  {areaListF.map((name) => (
+                    <MenuItem key={`f-${name}`}>
+                      <button
+                        type='button'
+                        role='option'
+                        aria-selected={areaF === name}
+                        onClick={() => {
+                          setAreaF(name);
+                          setOpenF(false);
+                        }}
+                      >
+                        {name}
+                      </button>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              )}
+            </Dropdown>
+          </Toolbar>
+
+          <Main>
+            {loading ? (
+              <Spinner />
+            ) : fError ? (
+              <Empty>
+                <EmptyState.Root>
+                  <EmptyState.Content>
+                    <EmptyState.Title>
+                      펀딩 스크랩을 불러오지 못했어요
+                    </EmptyState.Title>
+                    <EmptyState.Description>
+                      잠시 후 다시 시도해 주세요.
+                    </EmptyState.Description>
+                  </EmptyState.Content>
+                </EmptyState.Root>
+              </Empty>
+            ) : proposals.length === 0 ? (
+              <Empty>
+                <EmptyState.Root>
+                  <EmptyState.Content>
+                    <EmptyState.Indicator>
+                      <Frown width={32} height={32} />
+                    </EmptyState.Indicator>
+                    <CustomTitle>아직 스크랩한 글이 없어요 </CustomTitle>
+                    <CustomDescription>
+                      마음에 드는 글을 찾아 스크립해 보세요.
+                    </CustomDescription>
+                  </EmptyState.Content>
+                </EmptyState.Root>
+              </Empty>
+            ) : (
+              <List>
+                {fundings.map((item) => (
+                  <Item key={item.id}>
+                    <Link
+                      to={ROUTE_PATH.FUNDING_DETAIL(item.id)}
+                      aria-label={`${item.title} 상세로 이동`}
+                      onClick={(e) => {
+                        if (e.target.closest('.action-btn')) {
+                          e.preventDefault();
+                        }
+                      }}
+                    >
+                      <FundingItem funding={item} profile={profile} />
+                    </Link>
+                  </Item>
+                ))}
+              </List>
+            )}
+          </Main>
+        </Tabs.Content>
+      </Tabs.Root>
     </>
   );
 };
 
 export default MyScrap;
 
-/* ===== Fallback & Skeleton & Empty ===== */
-function SkeletonCard() {
-  return (
-    <div style={{ padding: 16, border: '1px solid #eee', borderRadius: 12 }}>
-      <div
-        style={{ width: 80, height: 12, background: '#eee', marginBottom: 8 }}
-      />
-      <div
-        style={{ width: 180, height: 14, background: '#eee', marginBottom: 8 }}
-      />
-      <div
-        style={{
-          width: '100%',
-          height: 120,
-          background: '#f5f5f5',
-          borderRadius: 8,
-        }}
-      />
-    </div>
-  );
-}
-function Empty({ text }) {
-  return (
-    <div style={{ padding: '48px 0', textAlign: 'center', color: '#9CA3AF' }}>
-      {text}
-    </div>
-  );
-}
-function ProposalFallback({ data }) {
-  return (
-    <div style={{ padding: 16, border: '1px solid #eee', borderRadius: 12 }}>
-      <div style={{ fontSize: 12, color: '#999' }}>{data.label}</div>
-      <div style={{ fontWeight: 700, marginTop: 4 }}>{data.title}</div>
-      <div style={{ fontSize: 13, color: '#555', marginTop: 4 }}>
-        {data.description}
-      </div>
-      <div style={{ fontSize: 12, color: '#777', marginTop: 6 }}>
-        희망시간 {data.timeInput}~{data.timeInputEnd} · 희망장소{' '}
-        {data.locationInput} · {data.additionalText}
-      </div>
-    </div>
-  );
-}
-function FundingFallback({ data }) {
-  const ratio = Math.min(
-    100,
-    Math.round((data.FundingAmount / data.targetAmount) * 100),
-  );
-  return (
-    <div style={{ padding: 16, border: '1px solid #eee', borderRadius: 12 }}>
-      <div style={{ fontSize: 12, color: '#999' }}>{data.label}</div>
-      <div style={{ fontWeight: 700, marginTop: 4 }}>{data.title}</div>
-      <div style={{ fontSize: 13, color: '#555', marginTop: 4 }}>
-        {data.description}
-      </div>
-      <div style={{ fontSize: 12, color: '#d00', marginTop: 6 }}>
-        {ratio}% {data.FundingAmount.toLocaleString()}원
-      </div>
-    </div>
-  );
-}
+/* ---------------- styled-components ---------------- */
 
-/* -------------------- 목데이터 -------------------- */
-const baseProposal = {
-  id: 'p1',
-  label: 'Label',
-  title: '제안글 제목',
-  description: '제안을 실현할 작은 모임입니다.',
-  timeInput: '07:00',
-  timeInputEnd: '22:00',
-  locationInput: '신촌역',
-  additionalText: '500m',
-  imageList: [],
-  authorName: '홍길동',
-  timeAgo: '20분 전',
-  isLiked: false,
-  isScraped: true,
-  likeCount: 173,
-  scrapCount: 176,
-};
-const baseFunding = {
-  id: 'f1',
-  label: 'Label',
-  title: '런칭 프로젝트 제목',
-  description: '런칭 프로젝트 설명입니다.',
-  YearInput: 2025,
-  MonthInput: 8,
-  locationInput: '홍대입구역',
-  additionalText: '500m',
-  FundingAmount: 9257890,
-  targetAmount: 14500000,
-  end: '2025-12-31',
-  imageList: [],
-  authorName: '제안자A',
-  uploadDate: '2025년 08월 12일',
-  isLiked: true,
-  isScraped: true,
-  likeCount: 178,
-  scrapCount: 176,
-};
-/* ------------------------------------------------ */
+const TabsList = styled(Tabs.List)`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom-width: 1px;
+  position: sticky;
+  background: #fff;
+  z-index: 20;
+`;
+
+const TabsTrigger = styled(Tabs.Trigger)`
+  justify-content: center;
+  padding: 8px 0;
+  font-weight: ${(props) => (props['data-state'] === 'active' ? '700' : '400')};
+`;
+
+const TabsIndicator = styled(Tabs.Indicator)`
+  height: 2px;
+  background-color: var(--chakra-colors-gray-900);
+  bottom: -1px;
+`;
+
+const Toolbar = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.3rem 0.75rem;
+  background: #fff;
+`;
+
+const Count = styled.span`
+  color: var(--colors-fg-subtle, #a1a1aa);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+`;
+
+const Main = styled.main`
+  padding: 12px 16px;
+  display: grid;
+  gap: 12px;
+`;
+
+const List = styled.ul`
+  display: grid;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;
+
+const Item = styled.li`
+  min-width: 0;
+  max-width: 100%;
+`;
+
+/* --- 드롭다운 --- */
+const Dropdown = styled.div`
+  position: relative;
+`;
+
+const Trigger = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem; /* 6px */
+  padding: 0.375rem 0.625rem; /* 6px 10px */
+  border-radius: 0.5rem; /* 8px */
+  border: 0.0625rem solid #e5e7eb; /* 1px */
+  background: #fff;
+  font-size: 0.875rem;
+  color: #111827;
+  cursor: pointer;
+`;
+
+const Chevron = styled.span`
+  font-size: 0.75rem;
+  transition: transform 0.15s ease;
+  transform: ${({ $open }) => ($open ? 'rotate(180deg)' : 'rotate(0deg)')};
+  opacity: 0.7;
+`;
+
+const Menu = styled.ul`
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.375rem); /* +6px */
+  min-width: 8.75rem; /* 140px */
+  max-height: 20rem; /* 320px */
+  overflow: auto;
+  padding: 0.375rem;
+  margin: 0;
+  list-style: none;
+  border: 0.0625rem solid #e5e7eb; /* 1px */
+  border-radius: 0.625rem; /* 10px */
+  background: #fff;
+  box-shadow: 0 0.375rem 1.25rem rgba(17, 24, 39, 0.08);
+  z-index: 1000; /* 레이어 최상단 */
+  pointer-events: auto;
+`;
+
+const MenuItem = styled.li`
+  button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* 8px */
+    padding: 0.625rem 0.5rem; /* 10px 8px */
+    border: 0;
+    background: transparent;
+    font-size: 0.875rem;
+    color: #111827;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
+  button[aria-selected='true'] {
+    background: #f3f4f6;
+    font-weight: 600;
+  }
+  button:hover {
+    background: #f9fafb;
+  }
+`;
+/* --- Emptystate ---*/
+const Empty = styled.div`
+  padding: 4rem 1rem; /* 64px 16px */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem; /* 12px */
+  text-align: center;
+`;
+
+const CustomTitle = styled(EmptyState.Title)`
+  color: var(--colors-text-default, #27272a);
+  text-align: center;
+
+  /* md/semibold */
+  font: var(--text-md-semibold);
+`;
+
+const CustomDescription = styled(EmptyState.Description)`
+  color: var(--colors-text-muted, #52525b);
+  text-align: center;
+
+  /* sm/normal */
+  font: var(--text-sm-normal);
+`;
