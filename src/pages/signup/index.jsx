@@ -1,8 +1,8 @@
 import { useState, useMemo, lazy } from 'react';
-import useModeStore from '../../stores/useModeStore';
-import { usePostAccount } from '../../apis/accounts';
 import { useNavigate } from 'react-router-dom';
+import { usePostAccount } from '../../apis/accounts';
 import { ROUTE_PATH } from '../../constants/route';
+import useModeStore from '../../stores/useModeStore';
 
 const SignUpPage1 = lazy(() => import('./SignUpPage1'));
 const SignUpPage2 = lazy(() => import('./SignUpPage2'));
