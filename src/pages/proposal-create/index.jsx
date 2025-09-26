@@ -1,33 +1,94 @@
 // pages/ProposalIndex.jsx
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import ProposalCreatePage from './ProposalCreatePage';
 import PlaceSearchPage from './PlaceSearchPage';
+import CreateProposalMapPage from './CreateProposalMapPage';
 
 export default function ProposalIndex() {
-  // 0: 생성(추천) 화면, 1: 장소검색 화면
-  const [currentStep, setCurrentStep] = useState(0);
-  const [data, setData] = useState({ location: '' }); // 스텝 간 공유 데이터
+  // 현재 표시할 화면: 'create' | 'map' | 'search'
+  const [currentView, setCurrentView] = useState('create');
 
-  const steps = useMemo(() => [ProposalCreatePage, PlaceSearchPage], []);
-  const Current = steps[currentStep];
+  // 제안글 전체 데이터 (회원가입 패턴과 동일)
+  const [proposalData, setProposalData] = useState({
+    // 기본 제안글 정보
+    title: '',
+    content: '',
+    category: '',
 
-  const merge = (payload) => {
+    // 위치 정보
+    location: {
+      address: {
+        sido: '',
+        sigungu: '',
+        eupmyundong: '',
+        jibun_detail: '',
+        road_detail: '',
+      },
+      position: {
+        latitude: null,
+        longitude: null,
+      },
+      radius: 250,
+    },
+
+    // 기타 필요한 데이터들
+    searchResult: null,
+  });
+
+  // 데이터 업데이트 함수 (회원가입 패턴과 동일)
+  const updateProposalData = (payload) => {
     if (payload && typeof payload === 'object') {
-      setData((p) => ({ ...p, ...payload }));
+      setProposalData((prev) => ({ ...prev, ...payload }));
     }
   };
 
-  const onNextStep = (payload) => {
-    merge(payload);
-    setCurrentStep((s) => Math.min(s + 1, steps.length - 1));
+  // 화면 전환 함수들
+  const showCreateView = (payload) => {
+    updateProposalData(payload);
+    setCurrentView('create');
   };
 
-  const onPrevStep = (payload) => {
-    merge(payload);
-    setCurrentStep((s) => Math.max(s - 1, 0));
+  const showMapView = (payload) => {
+    updateProposalData(payload);
+    setCurrentView('map');
   };
 
-  return (
-    <Current data={data} onNextStep={onNextStep} onPrevStep={onPrevStep} />
-  );
+  const showSearchView = (payload) => {
+    updateProposalData(payload);
+    setCurrentView('search');
+  };
+
+  // 조건부 렌더링
+  if (currentView === 'create') {
+    return (
+      <ProposalCreatePage
+        data={proposalData}
+        onShowMapView={showMapView}
+        onUpdateData={updateProposalData}
+      />
+    );
+  }
+
+  if (currentView === 'map') {
+    return (
+      <CreateProposalMapPage
+        data={proposalData}
+        onShowCreateView={showCreateView}
+        onShowSearchView={showSearchView}
+        onUpdateData={updateProposalData}
+      />
+    );
+  }
+
+  if (currentView === 'search') {
+    return (
+      <PlaceSearchPage
+        data={proposalData}
+        onShowMapView={showMapView}
+        onUpdateData={updateProposalData}
+      />
+    );
+  }
+
+  return null;
 }

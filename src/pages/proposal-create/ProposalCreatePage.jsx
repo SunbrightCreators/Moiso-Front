@@ -10,7 +10,7 @@ import { ROUTE_PATH } from '../../constants/route';
 import useDialogStore from '../../stores/useDialogStore';
 import useModalBottomsheetStore from '../../stores/useModalBottomsheetStore';
 
-const ProposalCreatePage = ({ data, onNextStep }) => {
+const ProposalCreatePage = ({ data, onShowMapView, onUpdateData }) => {
   const open = useModalBottomsheetStore((s) => s.open);
   const close = useModalBottomsheetStore((s) => s.close);
 
@@ -36,11 +36,11 @@ const ProposalCreatePage = ({ data, onNextStep }) => {
   } = useForm({
     mode: 'all',
     defaultValues: {
-      title: '',
-      content: '',
-      industry: '',
-      operatingTime: '',
-      location: '',
+      title: data?.title || '',
+      content: data?.content || '',
+      industry: data?.industry || '',
+      operatingTime: data?.operatingTime || '',
+      location: data?.displayAddress || '',
     },
   });
 
@@ -96,15 +96,17 @@ const ProposalCreatePage = ({ data, onNextStep }) => {
     console.log('submit:', values);
   };
 
+  // 지도에서 받은 위치 데이터 처리
   useEffect(() => {
-    if (data?.location) {
-      setValue('location', data.location, {
+    if (data?.location?.address && data?.displayAddress) {
+      // 표시용 주소 설정
+      setValue('location', data.displayAddress, {
         shouldValidate: true,
         shouldTouch: true,
         shouldDirty: true,
       });
     }
-  }, [data?.location, setValue]);
+  }, [data?.location, data?.displayAddress, setValue]);
 
   return (
     <Page>
@@ -205,7 +207,17 @@ const ProposalCreatePage = ({ data, onNextStep }) => {
               placeholder='지도에서 설정'
               readOnly
               value={watch('location') || ''} // RHF 쓰는 중이면 그대로
-              onClick={() => onNextStep && onNextStep()} // ← placeSearch로 이동
+              onClick={() => {
+                // 현재 폼 데이터를 저장하고 지도 페이지로 이동
+                const currentFormData = watch();
+                onUpdateData({
+                  title: currentFormData.title,
+                  content: currentFormData.content,
+                  industry: currentFormData.industry,
+                  operatingTime: currentFormData.operatingTime,
+                });
+                onShowMapView();
+              }}
             />
             {errors.location && (
               <Field.ErrorText>{errors.location.message}</Field.ErrorText>

@@ -21,11 +21,15 @@ import { ReactComponent as CloseIcon } from '../../../assets/icons/exit.svg';
  * - Type 4: left='back'
  */
 
-const TopNavigation = ({ left, title, subTitle, right }) => {
+const TopNavigation = ({ left, title, subTitle, right, onBack }) => {
   const navigate = useNavigate();
 
   const handleBackClick = () => {
-    navigate(-1);
+    if (onBack) {
+      onBack();
+    } else {
+      navigate(-1);
+    }
   };
 
   const handleCloseClick = () => {

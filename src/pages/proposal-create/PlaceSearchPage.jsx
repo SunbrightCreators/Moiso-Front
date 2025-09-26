@@ -2,10 +2,27 @@ import { useState, useMemo } from 'react';
 import styled from 'styled-components';
 import { InputSearch } from '../../components/common/input';
 
-const PlaceSearchPage = ({ onPrevStep }) => {
+const PlaceSearchPage = ({ data, onShowMapView, onUpdateData }) => {
   const pick = (item) => {
-    const label = `${item.title} ${item.sub}`; // 저장할 문자열 형태
-    onPrevStep?.({ location: label }); // 값 저장 + 생성페이지로 복귀
+    const selectedAddress = `${item.title} ${item.sub}`;
+
+    // 검색 결과를 데이터에 저장하고 지도 페이지로 돌아감
+    onUpdateData({
+      searchResult: {
+        address: selectedAddress,
+        title: item.title,
+        sub: item.sub,
+      },
+      // 기존 location 데이터 유지하면서 주소만 업데이트
+      location: {
+        ...data.location,
+        address: {
+          ...data.location.address,
+          road_detail: selectedAddress,
+        },
+      },
+    });
+    onShowMapView();
   };
   const [query, setQuery] = useState('');
 
@@ -18,7 +35,11 @@ const PlaceSearchPage = ({ onPrevStep }) => {
   return (
     <Page>
       <Header>
-        <BackBtn type='button' aria-label='뒤로가기' onClick={onPrevStep}>
+        <BackBtn
+          type='button'
+          aria-label='뒤로가기'
+          onClick={() => onShowMapView()}
+        >
           {/* 간단한 기호로 아이콘 대체 (디자인 아이콘 있으면 교체) */}‹
         </BackBtn>
 
