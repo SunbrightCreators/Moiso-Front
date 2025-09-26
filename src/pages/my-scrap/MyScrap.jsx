@@ -1,11 +1,16 @@
-import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { Tabs, EmptyState } from '@chakra-ui/react';
+import { Tabs, EmptyState, Spinner } from '@chakra-ui/react';
 import { TopNavigation } from '../../components/common/navigation';
 import { ProposalItem } from '../../components/proposal';
 import { FundingItem } from '../../components/funding';
 import { ReactComponent as Frown } from '../../assets/icons/frown.svg';
 import useModeStore from '../../stores/useModeStore';
+import { ROUTE_PATH } from '../../constants/route';
+
+import { useGetProposalScrapList } from '../../apis/proposals';
+import { useGetFundingScrapList } from '../../apis/fundings';
 
 const MyScrap = () => {
   const { isProposerMode } = useModeStore(); // true=제안자, false=창업자
@@ -19,34 +24,63 @@ const MyScrap = () => {
   };
 
   // 제안/펀딩 지역 드롭다운
-
-  const AREAS = ['전체', '신촌동', '홍대입구'];
-  const [areaP, setAreaP] = useState(AREAS[0]); // 제안
-  const [areaF, setAreaF] = useState(AREAS[0]); // 펀딩
+  const [areaP, setAreaP] = useState('전체'); // 제안
+  const [areaF, setAreaF] = useState('전체'); // 펀딩
   const [openP, setOpenP] = useState(false);
   const [openF, setOpenF] = useState(false);
   const menuRefP = useRef(null);
   const menuRefF = useRef(null);
 
-  // 목데이터
-  const proposalList = Array.from({ length: 3 }, (_, i) => ({
-    ...baseProposal,
-    id: `p${i + 1}`,
-  }));
-  const fundingList = Array.from({ length: 3 }, (_, i) => ({
-    ...baseFunding,
-    id: `f${i + 1}`,
-  }));
-
-  // 제안
-  const proposals = proposalList.filter(
-    (it) => areaP === '전체' || it.address?.eupmyundong === areaP,
+  // 1) 전체 스크랩(필터 없이)으로 지역 목록 추출
+  const { data: pAllRes, isLoading: pAllLoading } = useGetProposalScrapList(
+    profile,
+    null,
+    null,
+    null,
+  );
+  const { data: fAllRes, isLoading: fAllLoading } = useGetFundingScrapList(
+    profile,
+    null,
+    null,
+    null,
   );
 
-  // 펀딩
-  const fundings = fundingList.filter(
-    (it) => areaF === '전체' || it.address?.eupmyundong === areaF,
-  );
+  const areaListP = useMemo(() => {
+    const list = pAllRes?.data || [];
+    const eup = new Set(
+      list.map((it) => it?.address?.eupmyundong).filter(Boolean),
+    );
+    return ['전체', ...Array.from(eup)];
+  }, [pAllRes]);
+
+  const areaListF = useMemo(() => {
+    const list = fAllRes?.data || [];
+    const eup = new Set(
+      list.map((it) => it?.address?.eupmyundong).filter(Boolean),
+    );
+    return ['전체', ...Array.from(eup)];
+  }, [fAllRes]);
+
+  // 2) 선택된 지역으로 서버 필터링된 목록 조회 (쿼리 키 자동 갱신)
+  const eupP = areaP === '전체' ? null : areaP;
+  const eupF = areaF === '전체' ? null : areaF;
+
+  const {
+    data: pRes,
+    isLoading: pLoading,
+    isError: pError,
+  } = useGetProposalScrapList(profile, null, null, eupP);
+  const {
+    data: fRes,
+    isLoading: fLoading,
+    isError: fError,
+  } = useGetFundingScrapList(profile, null, null, eupF);
+
+  const proposals = pRes?.data || [];
+  const fundings = fRes?.data || [];
+
+  const loading = pLoading || fLoading || pAllLoading || fAllLoading;
+
   return (
     <>
       <TopNavigation left='back' title='스크랩' />
@@ -77,7 +111,7 @@ const MyScrap = () => {
 
               {openP && (
                 <Menu role='listbox' tabIndex={-1}>
-                  {AREAS.map((name) => (
+                  {areaListP.map((name) => (
                     <MenuItem key={`p-${name}`}>
                       <button
                         type='button'
@@ -98,7 +132,22 @@ const MyScrap = () => {
           </Toolbar>
 
           <Main>
-            {proposals.length === 0 ? (
+            {loading ? (
+              <Spinner />
+            ) : pError ? (
+              <Empty>
+                <EmptyState.Root>
+                  <EmptyState.Content>
+                    <EmptyState.Title>
+                      제안 스크랩을 불러오지 못했어요
+                    </EmptyState.Title>
+                    <EmptyState.Description>
+                      잠시 후 다시 시도해 주세요.
+                    </EmptyState.Description>
+                  </EmptyState.Content>
+                </EmptyState.Root>
+              </Empty>
+            ) : proposals.length === 0 ? (
               <Empty>
                 <EmptyState.Root>
                   <EmptyState.Content>
@@ -116,7 +165,15 @@ const MyScrap = () => {
               <List>
                 {proposals.map((item) => (
                   <Item key={item.id}>
-                    <ProposalItem proposal={item} profile={profile} />
+                    <Link
+                      to={ROUTE_PATH.PROPOSAL_DETAIL(item.id)}
+                      aria-label={`${item.title} 상세로 이동`}
+                      onClick={(e) => {
+                        if (e.target.closest('.action-btn')) e.preventDefault(); // 내부 버튼 클릭 시 이동 막기
+                      }}
+                    >
+                      <ProposalItem proposal={item} profile={profile} />
+                    </Link>
                   </Item>
                 ))}
               </List>
@@ -143,7 +200,7 @@ const MyScrap = () => {
 
               {openF && (
                 <Menu role='listbox' tabIndex={-1}>
-                  {AREAS.map((name) => (
+                  {areaListF.map((name) => (
                     <MenuItem key={`f-${name}`}>
                       <button
                         type='button'
@@ -164,7 +221,22 @@ const MyScrap = () => {
           </Toolbar>
 
           <Main>
-            {fundings.length === 0 ? (
+            {loading ? (
+              <Spinner />
+            ) : fError ? (
+              <Empty>
+                <EmptyState.Root>
+                  <EmptyState.Content>
+                    <EmptyState.Title>
+                      펀딩 스크랩을 불러오지 못했어요
+                    </EmptyState.Title>
+                    <EmptyState.Description>
+                      잠시 후 다시 시도해 주세요.
+                    </EmptyState.Description>
+                  </EmptyState.Content>
+                </EmptyState.Root>
+              </Empty>
+            ) : proposals.length === 0 ? (
               <Empty>
                 <EmptyState.Root>
                   <EmptyState.Content>
@@ -182,7 +254,17 @@ const MyScrap = () => {
               <List>
                 {fundings.map((item) => (
                   <Item key={item.id}>
-                    <FundingItem funding={item} profile={profile} />
+                    <Link
+                      to={ROUTE_PATH.FUNDING_DETAIL(item.id)}
+                      aria-label={`${item.title} 상세로 이동`}
+                      onClick={(e) => {
+                        if (e.target.closest('.action-btn')) {
+                          e.preventDefault();
+                        }
+                      }}
+                    >
+                      <FundingItem funding={item} profile={profile} />
+                    </Link>
                   </Item>
                 ))}
               </List>
@@ -342,40 +424,3 @@ const CustomDescription = styled(EmptyState.Description)`
   /* sm/normal */
   font: var(--text-sm-normal);
 `;
-
-/* ---- 목데이터 ---- */
-const baseProposal = {
-  industry: 'Label',
-  title: '제안글 제목',
-  content: '제안을 실현할 작은 모임입니다.',
-  business_hours: { start: '07:00', end: '22:00' },
-  address: { sigungu: '서울 마포구', eupmyundong: '신촌동' },
-  radius: '500m',
-  image: [],
-  user: { name: '홍길동' },
-  created_at: '20분 전',
-  is_liked: false,
-  is_scrapped: true,
-  likes_count: 173,
-  scraps_count: 176,
-};
-const baseFunding = {
-  industry: 'Label',
-  title: '런칭 프로젝트 제목',
-  summary: '런칭 프로젝트 설명입니다.',
-  expected_opening_date: '2025-08',
-  address: { sigungu: '서울 마포구', eupmyundong: '홍대입구' },
-  radius: '500m',
-  progress: {
-    rate: Math.round((9_257_890 / 14_500_000) * 100),
-    amount: 9_257_890,
-  },
-  days_left: 100,
-  image: [],
-  founder: { name: '제안자A' },
-  schedule: { end: '2025-12-31' },
-  is_liked: true,
-  is_scrapped: true,
-  likes_count: 178,
-  scraps_count: 176,
-};
