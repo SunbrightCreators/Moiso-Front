@@ -9,7 +9,7 @@ const loadNaverMapScript = async () => {
   }
 
   const existingScript = document.querySelector(
-    'script[src*="openapi.map.naver.com"]',
+    'script[src*="oapi.map.naver.com"]',
   );
 
   if (existingScript) {
@@ -28,7 +28,7 @@ const loadNaverMapScript = async () => {
   await new Promise((resolve, reject) => {
     const script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${NCLOUD_CLIENT_ID}`;
+    script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${NCLOUD_CLIENT_ID}`;
 
     script.onload = () => {
       console.log('네이버 지도 API 로드 완료');
@@ -46,7 +46,7 @@ const loadNaverMapScript = async () => {
 
 const removeNaverMapScript = () => {
   const existingScript = document.querySelector(
-    'script[src*="openapi.map.naver.com"]',
+    'script[src*="oapi.map.naver.com"]',
   );
 
   if (existingScript) {
