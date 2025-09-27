@@ -55,7 +55,6 @@ const loadNaverMapScript = async () => {
     return;
   }
 
-  // 새로운 스크립트 생성 및 로드
   console.log('네이버 지도 API 스크립트 로드 시작...');
 
   const script = document.createElement('script');
