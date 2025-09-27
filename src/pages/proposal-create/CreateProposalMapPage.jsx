@@ -9,7 +9,7 @@ import {
   loadNaverMapScript,
   removeNaverMapScript,
 } from '../../apis/NaverMapLoader';
-import { RADIUS } from '../../constants/enum';
+import { RADIUS, PROFILE } from '../../constants/enum';
 
 // 반경 값 배열 - RADIUS enum을 배열로 변환
 const RADIUS_VALUES = [RADIUS.M0, RADIUS.M250, RADIUS.M500, RADIUS.M750];
@@ -48,12 +48,16 @@ const CreateProposalMapPage = ({
       '',
   });
 
-  // 프로필 정보 : '우리 동네' 가져오기!
-  const { data: profileData } = useGetProfile('proposer', 'address');
+  // API: 프로필 정보 조회 - '우리 동네' 가져오기
+  const { data: profileData, isLoading: isProfileLoading, error: profileError } = useGetProfile(
+    PROFILE.proposer, 
+    ['address']
+  );
+  
   const [nearbyNeighborhoods, setNearbyNeighborhoods] = useState([]);
   const [selectedNeighborhood, setSelectedNeighborhood] = useState(null);
 
-  // 프로필 데이터 : '우리 동네' 설정!
+  // 프로필 데이터 처리: '우리 동네' 설정
   useEffect(() => {
     if (profileData?.data?.proposer_profile?.proposer_level) {
       const neighborhoods =
@@ -73,7 +77,8 @@ const CreateProposalMapPage = ({
       if (neighborhoods.length > 0) {
         setSelectedNeighborhood(neighborhoods[0]);
       }
-    } else {
+    } else if (profileError) {
+      console.error('프로필 조회 실패:', profileError);
       // 프로필 데이터가 없을 경우 기본 동네 설정
       const fallbackNeighborhoods = [
         {
@@ -87,21 +92,20 @@ const CreateProposalMapPage = ({
       setNearbyNeighborhoods(fallbackNeighborhoods);
       setSelectedNeighborhood(fallbackNeighborhoods[0]);
     }
-  }, [profileData]);
+  }, [profileData, profileError]);
 
-  // 좌표 → 주소변환 API - 조건부 호출
-  const { data: addressData, isLoading: isAddressLoading } =
-    useGetPositionToFull(
-      selectedLocation.lat && selectedLocation.lng
-        ? selectedLocation.lat
-        : null,
-      selectedLocation.lat && selectedLocation.lng
-        ? selectedLocation.lng
-        : null,
-      selectedNeighborhood?.sido,
-      selectedNeighborhood?.sigungu,
-      selectedNeighborhood?.eupmyundong,
-    );
+  // API: 좌표 → 전체 주소변환 - 조건부 호출
+  const { 
+    data: addressData, 
+    isLoading: isAddressLoading,
+    error: addressError 
+  } = useGetPositionToFull(
+    selectedLocation.lat && selectedLocation.lng ? selectedLocation.lat : null,
+    selectedLocation.lat && selectedLocation.lng ? selectedLocation.lng : null,
+    selectedNeighborhood?.sido,
+    selectedNeighborhood?.sigungu,
+    selectedNeighborhood?.eupmyundong,
+  );
 
   // 로딩 상태
   const [loading, setLoading] = useState(false);
@@ -118,6 +122,7 @@ const CreateProposalMapPage = ({
         return () => clearTimeout(timer);
       } catch (error) {
         console.error('네이버 지도 API 로드 오류:', error);
+        setError('지도를 불러올 수 없습니다.');
       }
     })();
 
@@ -155,7 +160,7 @@ const CreateProposalMapPage = ({
     }
   }, [map, selectedLocation.lat, selectedLocation.lng, radius]);
 
-  // 주소 데이터 업데이트
+  // 주소 데이터 업데이트 처리
   useEffect(() => {
     if (addressData?.data) {
       setSelectedLocation((prev) => ({
@@ -163,8 +168,16 @@ const CreateProposalMapPage = ({
         address:
           addressData.data.road_detail || addressData.data.jibun_detail || '',
       }));
+    } else if (addressError) {
+      console.error('주소 변환 실패:', addressError);
+      // 에러 처리 - 사용자에게 알림
+      if (addressError.response?.status === 404) {
+        setError('핀을 우리 동네로 옮겨 주세요.');
+      } else {
+        setError('주소를 찾을 수 없어요.');
+      }
     }
-  }, [addressData]);
+  }, [addressData, addressError]);
 
   // 컴포넌트 언마운트 시 정리
   useEffect(() => {
@@ -220,10 +233,14 @@ const CreateProposalMapPage = ({
       console.log('네이버 지도 초기화 성공');
     } catch (error) {
       console.error('지도 초기화 실패:', error);
+      setError('지도 초기화에 실패했습니다.');
     }
   };
 
   const handleMapClick = (lat, lng) => {
+    // 기존 에러 메시지 클리어
+    setError(null);
+    
     setSelectedLocation({
       lat,
       lng,
@@ -269,6 +286,8 @@ const CreateProposalMapPage = ({
   const handleCurrentLocationClick = () => {
     if (navigator.geolocation) {
       setLoading(true);
+      setError(null); // 기존 에러 클리어
+      
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const lat = position.coords.latitude;
@@ -294,13 +313,18 @@ const CreateProposalMapPage = ({
             error,
           );
 
+          let errorMessage = '위치 정보를 가져올 수 없습니다.';
           if (error.code === error.PERMISSION_DENIED) {
-            setError(
-              '위치 권한이 필요합니다. n/브라우저 설정에서 위치 권한을 허용해주세요.',
-            );
+            errorMessage = '위치 권한이 필요합니다. 브라우저 설정에서 위치 권한을 허용해주세요.';
+          } else if (error.code === error.POSITION_UNAVAILABLE) {
+            errorMessage = '위치 정보를 사용할 수 없습니다.';
+          } else if (error.code === error.TIMEOUT) {
+            errorMessage = '위치 정보 요청이 시간 초과되었습니다.';
           }
+          
+          setError(errorMessage);
 
-          // 기본 위치로
+          // 기본 위치로 설정
           const defaultLocation = {
             lat: 37.5665,
             lng: 126.978,
@@ -324,11 +348,16 @@ const CreateProposalMapPage = ({
 
           setLoading(false);
         },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 60000
+        }
       );
     } else {
       setError('이 브라우저에서는 위치 서비스가 지원되지 않습니다.');
 
-      // 기본 위치로
+      // 기본 위치로 설정
       const defaultLocation = {
         lat: 37.5665,
         lng: 126.978,
@@ -391,6 +420,8 @@ const CreateProposalMapPage = ({
       (n) => n.value === e.target.value,
     );
     setSelectedNeighborhood(selected);
+    // 동네 변경시 기존 에러 클리어
+    setError(null);
   };
 
   // 설정 완료 핸들러 - 데이터를 저장하고 생성 페이지로 돌아감
@@ -400,11 +431,17 @@ const CreateProposalMapPage = ({
       return;
     }
 
+    if (!selectedNeighborhood) {
+      setError('동네를 선택해주세요.');
+      return;
+    }
+
+    // API 명세서에 따른 정확한 데이터 구조
     const locationData = {
       address: {
-        sido: selectedNeighborhood?.sido || '',
-        sigungu: selectedNeighborhood?.sigungu || '',
-        eupmyundong: selectedNeighborhood?.eupmyundong || '',
+        sido: selectedNeighborhood.sido,
+        sigungu: selectedNeighborhood.sigungu,
+        eupmyundong: selectedNeighborhood.eupmyundong,
         jibun_detail: addressData?.data?.jibun_detail || '',
         road_detail: addressData?.data?.road_detail || selectedLocation.address,
       },
@@ -419,7 +456,10 @@ const CreateProposalMapPage = ({
     onUpdateData({
       location: locationData,
       displayAddress:
-        selectedLocation.address || `${selectedNeighborhood?.label} 근처`,
+        selectedLocation.address || 
+        addressData?.data?.road_detail || 
+        addressData?.data?.jibun_detail ||
+        `${selectedNeighborhood.sigungu} ${selectedNeighborhood.eupmyundong}`,
     });
     onShowCreateView();
   };
@@ -427,6 +467,23 @@ const CreateProposalMapPage = ({
   const getSliderValueFromRadius = (radiusValue) => {
     return RADIUS_VALUES.indexOf(radiusValue);
   };
+
+  // 로딩 상태 처리
+  if (isProfileLoading) {
+    return (
+      <SLayout>
+        <TopNavigation
+          left='back'
+          title='희망 장소 설정'
+          right={null}
+          onBack={onShowCreateView}
+        />
+        <SLoadingOverlay>
+          <SLoadingText>프로필 정보를 불러오는 중...</SLoadingText>
+        </SLoadingOverlay>
+      </SLayout>
+    );
+  }
 
   return (
     <SLayout>
@@ -441,12 +498,17 @@ const CreateProposalMapPage = ({
         <SNeighborhoodSelect
           value={selectedNeighborhood?.value || ''}
           onChange={handleNeighborhoodChange}
+          disabled={nearbyNeighborhoods.length === 0}
         >
-          {nearbyNeighborhoods.map((neighborhood) => (
-            <option key={neighborhood.value} value={neighborhood.value}>
-              {neighborhood.label}
-            </option>
-          ))}
+          {nearbyNeighborhoods.length === 0 ? (
+            <option value="">동네 로딩중...</option>
+          ) : (
+            nearbyNeighborhoods.map((neighborhood) => (
+              <option key={neighborhood.value} value={neighborhood.value}>
+                {neighborhood.label}
+              </option>
+            ))
+          )}
         </SNeighborhoodSelect>
 
         <SSearchInput
@@ -458,7 +520,7 @@ const CreateProposalMapPage = ({
 
       <SMapContainer ref={mapRef} />
 
-      <SCurrentLocationButton onClick={handleCurrentLocationClick}>
+      <SCurrentLocationButton onClick={handleCurrentLocationClick} disabled={loading}>
         <img src={CurrentLocation} alt='현재 위치' />
       </SCurrentLocationButton>
 
@@ -466,10 +528,12 @@ const CreateProposalMapPage = ({
         {/* 위치 표시 */}
         <SLocationInfo>
           <SLocationText>
-            {selectedLocation.address ||
+            {isAddressLoading ? '주소 검색 중...' : (
+              selectedLocation.address ||
               addressData?.data?.road_detail ||
               addressData?.data?.jibun_detail ||
-              `${selectedNeighborhood?.sigungu || ''} ${selectedNeighborhood?.eupmyundong || ''}`}
+              `${selectedNeighborhood?.sigungu || ''} ${selectedNeighborhood?.eupmyundong || ''}`
+            )}
           </SLocationText>
           <SRadiusText>+ {radius}m</SRadiusText>
         </SLocationInfo>
@@ -495,7 +559,12 @@ const CreateProposalMapPage = ({
           <SSliderLabel>{radius}m</SSliderLabel>
         </SSliderContainer>
 
-        <SCompleteButton onClick={handleComplete}>설정 완료</SCompleteButton>
+        <SCompleteButton 
+          onClick={handleComplete}
+          disabled={!selectedLocation.lat || !selectedLocation.lng || isAddressLoading}
+        >
+          설정 완료
+        </SCompleteButton>
       </SBottomSheet>
 
       {loading && (
@@ -554,6 +623,12 @@ const SNeighborhoodSelect = styled.select`
     border-color: #27272a;
     box-shadow: 0 0 0 1px #27272a;
   }
+
+  &:disabled {
+    background-color: #f9fafb;
+    color: #9ca3af;
+    cursor: not-allowed;
+  }
 `;
 
 const SSearchInput = styled.input`
@@ -601,12 +676,17 @@ const SCurrentLocationButton = styled.button`
   cursor: pointer;
   z-index: 200;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: #f8fafc;
   }
 
-  &:active {
+  &:active:not(:disabled) {
     transform: scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 `;
 
@@ -751,12 +831,13 @@ const SCompleteButton = styled.button`
   cursor: pointer;
   transition: background-color 0.2s;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: #1f1f23;
   }
 
   &:disabled {
     background-color: #d1d5db;
+    color: #9ca3af;
     cursor: not-allowed;
   }
 `;
